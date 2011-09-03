@@ -7,11 +7,8 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+     Client c = new Client("localhost");
+     c.runClient();
+	}
 
-	}
-	private void Test()
-	{
-		//Just a test of upstream push
-	}
-	
 }
