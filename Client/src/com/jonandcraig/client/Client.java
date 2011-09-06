@@ -18,7 +18,9 @@ import javax.swing.SwingUtilities;
 
 public class Client extends JFrame 
 {
-   private JTextField enterField; // enters information from user
+
+	private static final long serialVersionUID = 7189340988809001708L;
+	private JTextField enterField; // enters information from user
    private JTextArea displayArea; // display information to user
    private ObjectOutputStream output; // output stream to server
    private ObjectInputStream input; // input stream from server
