@@ -18,9 +18,9 @@ import javax.swing.SwingUtilities;
 public class Server extends JFrame 
 {
 
-	private static final long serialVersionUID = -5693161904305556535L;
+   private static final long serialVersionUID = -5693161904305556535L;
 	
-	private JTextField enterField; // inputs message from user
+   private JTextField enterField; // inputs message from user
    private JTextArea displayArea; // display information to user
    private ObjectOutputStream output; // output stream to client
    private ObjectInputStream input; // input stream from client
