@@ -1,4 +1,4 @@
-package com.jonandcraig.client;
+package com.apps4you.client;
 
 //Client portion of a stream-socket connection between client and server.
 import java.io.EOFException;

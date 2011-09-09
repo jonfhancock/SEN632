@@ -1,4 +1,4 @@
-package com.jonandcraig.moderator;
+package com.apps4you.moderator;
 
 import java.io.EOFException;
 import java.io.IOException;

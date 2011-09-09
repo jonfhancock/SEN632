@@ -1,4 +1,4 @@
-package com.jonandcraig.moderator;
+package com.apps4you.moderator;
 
 public class Main {
 

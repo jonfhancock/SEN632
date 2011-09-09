@@ -1,4 +1,4 @@
-package com.jonandcraig.client;
+package com.apps4you.client;
 
 public class Main {
 
