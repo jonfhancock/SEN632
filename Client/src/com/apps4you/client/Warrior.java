@@ -3,6 +3,7 @@ package com.apps4you.client;
 import java.util.UUID;
 
 import com.apps4you.client.Client;
+import com.apps4you.shared.Origins;
 
 public class Warrior extends Client{
 
@@ -12,7 +13,7 @@ public class Warrior extends Client{
 	private UUID warriorId;
 	private String  name;
 	private int health;
-	private Origin origin;
+	private Origins origin;
 	private String description;
 	
 
@@ -21,7 +22,7 @@ public class Warrior extends Client{
 		super(host);
 		// TODO Auto-generated constructor stub
 	}
-	public Warrior(String host, UUID warriorId, String name, int health, Origin origin, String description){
+	public Warrior(String host, UUID warriorId, String name, int health, Origins origin, String description){
 		super(host);
 		this.warriorId = warriorId;
 		this.name = name;
@@ -32,49 +33,8 @@ public class Warrior extends Client{
 
 	
 
-	public static enum Origin{
-		JAGLANBETA("Jaglan Beta"),
-		ANTARES("Antares"),
-		KAKRAFOON("Kakraphoon"),
-		KRIKKIT("Krikkit"),
-		VOGSPHERE("Vogsphere"),
-		EARTH("Earth"),
-		BREQUINDA("Brequinda"),
-		MAGRATHEA("Magrathea");
-		
-		private final String origin;
-		
-		Origin(String origin){
-			this.origin = origin;
-		}
-		public String getOrigin(){
-			return origin;
-		}
-	}
+
 	
-	public enum Actions {
-		
-		SLASH("Slash"),
-		STAB("Stab"),
-		BLOCK("Block"),
-		SIDESTEP("Sidestep"),
-		LASER("Laser"),
-		PARTICLEBEAM("Particle Beam"),
-		RAILGUN("Rail-Gun"),
-		SHIELD("Shield"),
-		PUNCH("Punch"),
-		COUNTERPUNCH("Counter Punch"),
-		KICK("Kick");		
-		
-		private final String chosenAction;
-		
-		private Actions (String actionChoice)
-		{
-			this.chosenAction = actionChoice;
-		}
-		public String getAction(){
-			return this.chosenAction;
-		}
-	}	
+
 	
 }

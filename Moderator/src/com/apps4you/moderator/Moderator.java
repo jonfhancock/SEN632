@@ -1,6 +1,5 @@
 package com.apps4you.moderator;
 
-import com.apps4you.client.Warrior;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -9,7 +8,7 @@ import java.util.UUID;
 
 public class Moderator extends Server {
 
-private ArrayList warriorsList;
+private ArrayList<Warrior> warriorsList;
 
 private static final long serialVersionUID = 1712048162291486001L;
 
@@ -36,7 +35,7 @@ private static final long serialVersionUID = 1712048162291486001L;
 	{
 		this.warriorsList.remove(removeWarrior);
 	}	
-	public ArrayList sendWarriorList()
+	public ArrayList<Warrior> sendWarriorList()
 	{
 		return this.warriorsList;		
 	}

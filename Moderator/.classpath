@@ -7,5 +7,6 @@
 			<attribute name="javadoc_location" value="http://jackson.codehaus.org/1.8.4/javadoc"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/Client/src/com/apps4you/shared"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
