@@ -4,9 +4,11 @@ package com.apps4you.moderator;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import com.apps4you.shared.Warrior;
 
 
-public class Moderator extends Server {
+
+public class Moderator{
 
 private ArrayList<Warrior> warriorsList;
 

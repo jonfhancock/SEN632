@@ -1,14 +1,12 @@
-package com.apps4you.client;
+package com.apps4you.shared;
 
 import java.util.UUID;
 
 import com.apps4you.client.Client;
-import com.apps4you.shared.Origins;
 
-public class Warrior extends Client{
+public class Warrior{
 
 
-	private static final long serialVersionUID = 6227435703704943869L;
 
 	private UUID warriorId;
 	private String  name;
@@ -18,12 +16,12 @@ public class Warrior extends Client{
 	
 
 	
-	public Warrior(String host) {
-		super(host);
+	public Warrior() {
+	
 		// TODO Auto-generated constructor stub
 	}
-	public Warrior(String host, UUID warriorId, String name, int health, Origins origin, String description){
-		super(host);
+	public Warrior(UUID warriorId, String name, int health, Origins origin, String description){
+		
 		this.warriorId = warriorId;
 		this.name = name;
 		this.health = health;
