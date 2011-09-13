@@ -1,6 +1,7 @@
 package com.apps4you.moderator;
 
 import java.io.EOFException;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -9,13 +10,17 @@ import java.net.Socket;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-public class Server extends JFrame 
+public class Server extends JFrame implements ActionListener
 {
 
    private static final long serialVersionUID = -5693161904305556535L;
@@ -27,6 +32,15 @@ public class Server extends JFrame
    private ServerSocket server; // server socket
    private Socket connection; // connection to client
    private int counter = 1; // counter of number of connections
+   
+   
+   //New UI Pieces
+   private JFrame mainFrame = new JFrame("Apps4You - Server");
+   private JButton closeButton = new JButton("Close");
+   private JLabel welcomeLabel = new JLabel("Welcome to the Apps4You Server.");
+   private JTextArea combatantsConnectedArea = new JTextArea();
+   
+   
 
    // set up GUI
    public Server()
@@ -54,6 +68,13 @@ public class Server extends JFrame
 
       setSize( 300, 150 ); // set size of window
       setVisible( true ); // show window
+      
+
+      setupMainFrame(); //Setup the Window and start gathering info form the user
+          
+      combatantsConnectedArea.append("Combatants Connected:\n");            
+      
+      
    } // end Server constructor
 
    // set up and run server 
@@ -194,4 +215,40 @@ public class Server extends JFrame
          }  // end inner class
       ); // end call to SwingUtilities.invokeLater
    } // end method setTextFieldEditable
+   
+   
+   
+   
+
+   private void setupMainFrame()
+   {
+	   this.mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+	   this.mainFrame.getContentPane().add(closeButton, BorderLayout.SOUTH);
+       this.mainFrame.getContentPane().add(welcomeLabel,BorderLayout.PAGE_START);
+       this.mainFrame.getContentPane().add(new JScrollPane(combatantsConnectedArea), BorderLayout.CENTER);
+
+	   this.closeButton.setSize(100, 40);
+
+	   this.closeButton.addActionListener(this);
+       	   
+	   this.mainFrame.setSize( 500, 300 ); // set size of window
+	   this.mainFrame.setVisible( true ); // show window
+	   
+   }
+   
+
+   public void actionPerformed (ActionEvent e)
+   {
+	 //Handle Select button action.
+	    if (e.getSource() == closeButton)
+	    {
+	    	dispose();
+	    	System.exit(0);
+	    }
+   }
+   
+   
+   
+   
 } // end class Server
