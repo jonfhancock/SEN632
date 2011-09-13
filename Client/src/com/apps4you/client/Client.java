@@ -14,10 +14,14 @@ import java.awt.event.ActionListener;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 public class Client extends JFrame implements ActionListener
 {
@@ -30,18 +34,26 @@ public class Client extends JFrame implements ActionListener
    private String message = ""; // message from server
    private String chatServer; // host server for this application
    private Socket client; // socket to communicate with server
-   private String selectedFile;
+   
+   //New UI Pieces
+   private File selectedFile;
    private JFrame mainFrame = new JFrame("Apps4You - Client");
    private JButton selectDataFileButton = new JButton("Select File");
+   private JButton opponentButton = new JButton("Opponent");
    private JButton closeButton = new JButton("Close");
+   private JLabel welcomeLabel = new JLabel("Welcome to the Apps4You Client.");
+   private JLabel moderatorCommentsLabel = new JLabel("Moderator Comments:");
+   private JTextArea moderatorCommentsArea = new JTextArea();
    
    // initialize chatServer and set up GUI
    public Client( String host )
    {
       super( "Client" );
-
+      
       chatServer = host; // set server to which this client connects
 
+      //lookAndFeelSetup();
+      
       enterField = new JTextField(); // create enterField
       enterField.setEditable( false );
       enterField.addActionListener(
@@ -66,7 +78,7 @@ public class Client extends JFrame implements ActionListener
       
       setupMainFrame(); //Setup the Window and start gathering info form the user
           
-            
+      moderatorCommentsArea.append("Moderator Comments:\n");      
    } // end Client constructor
    
    // connect to server and process messages from server
@@ -202,18 +214,44 @@ public class Client extends JFrame implements ActionListener
       ); // end call to SwingUtilities.invokeLater
    } // end method setTextFieldEditable
 
-
+   private void lookAndFeelSetup()
+   {
+	   try {
+		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+		        if ("Nimbus".equals(info.getName())) {
+		        	UIManager.setLookAndFeel(info.getClassName());
+		        	System.out.println("\n Nimbus UI was selected.");
+		        	break;
+		            
+		        }
+		    }
+		} catch (Exception e) {
+		    // If Nimbus is not available, then use the system default.
+			System.out.println("\n Nimbus UI was not available \n");
+		}   
+   }
    
    private void setupMainFrame()
    {
 	   this.mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	   this.mainFrame.getContentPane().add(selectDataFileButton, BorderLayout.SOUTH);
+	   this.mainFrame.getContentPane().add(opponentButton, BorderLayout.SOUTH);
 	   this.mainFrame.getContentPane().add(closeButton, BorderLayout.SOUTH);
+       this.mainFrame.getContentPane().add(welcomeLabel,BorderLayout.PAGE_START);
+       this.mainFrame.getContentPane().add(new JScrollPane(moderatorCommentsArea), BorderLayout.EAST);
+	   this.mainFrame.getContentPane().add(new JLabel(""),BorderLayout.AFTER_LAST_LINE);
+	   
 	   this.selectDataFileButton.setSize(100, 40);
 	   this.closeButton.setSize(100, 40);
+	   this.opponentButton.setSize(100, 40);
 	   this.selectDataFileButton.addActionListener(this);
 	   this.closeButton.addActionListener(this);
-       this.mainFrame.setSize( 400, 250 ); // set size of window
+	   this.opponentButton.addActionListener(this);
+	   this.selectDataFileButton.setBounds(80, 60, 100, 30);
+	   this.closeButton.setBounds(80, 180, 100, 30);
+	   this.opponentButton.setBounds(80, 120, 100, 30);
+       	   
+	   this.mainFrame.setSize( 500, 300 ); // set size of window
 	   this.mainFrame.setVisible( true ); // show window
 	   
    }
@@ -229,15 +267,18 @@ public class Client extends JFrame implements ActionListener
 
 	        if (returnVal == JFileChooser.APPROVE_OPTION) 
 	        {
-	            File file = fc.getSelectedFile();
-	            this.selectedFile = file.getPath();
-	            displayArea.append("\n File " + file.getName() + " was selected.");
+	        	this.selectedFile = fc.getSelectedFile();
+	            displayArea.append("\n File " + this.selectedFile.getName() + " was selected.");
 	            this.selectDataFileButton.setEnabled(false);
 	        } else
 	        {
 	            displayArea.append("Open command cancelled by user./n");
 	        }	        
 	   }
+	    else if (e.getSource() == opponentButton)
+	    {
+	    	displayArea.append("\n Oppents Selection was chosen - Not implemented Yet. \n");
+	    }
 	    else if (e.getSource() == closeButton)
 	    {
 	    	dispose();
