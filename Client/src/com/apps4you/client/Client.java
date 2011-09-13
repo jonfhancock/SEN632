@@ -2,6 +2,7 @@ package com.apps4you.client;
 
 //Client portion of a stream-socket connection between client and server.
 import java.io.EOFException;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -10,24 +11,30 @@ import java.net.Socket;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-public class Client extends JFrame 
+public class Client extends JFrame implements ActionListener
 {
 
-	private static final long serialVersionUID = 7189340988809001708L;
-	private JTextField enterField; // enters information from user
+   private static final long serialVersionUID = 7189340988809001708L;
+   private JTextField enterField; // enters information from user
    private JTextArea displayArea; // display information to user
    private ObjectOutputStream output; // output stream to server
    private ObjectInputStream input; // input stream from server
    private String message = ""; // message from server
    private String chatServer; // host server for this application
    private Socket client; // socket to communicate with server
-
+   private String selectedFile;
+   private JFrame mainFrame = new JFrame("Apps4You - Client");
+   private JButton selectDataFileButton = new JButton("Select File");
+   private JButton closeButton = new JButton("Close");
+   
    // initialize chatServer and set up GUI
    public Client( String host )
    {
@@ -56,8 +63,12 @@ public class Client extends JFrame
 
       setSize( 300, 150 ); // set size of window
       setVisible( true ); // show window
+      
+      setupMainFrame(); //Setup the Window and start gathering info form the user
+          
+            
    } // end Client constructor
-
+   
    // connect to server and process messages from server
    public void runClient() 
    {
@@ -66,6 +77,8 @@ public class Client extends JFrame
          connectToServer(); // create a Socket to make connection
          getStreams(); // get the input and output streams
          processConnection(); // process connection
+         
+         
       } // end try
       catch ( EOFException eofException ) 
       {
@@ -189,4 +202,48 @@ public class Client extends JFrame
       ); // end call to SwingUtilities.invokeLater
    } // end method setTextFieldEditable
 
+
+   
+   private void setupMainFrame()
+   {
+	   this.mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	   this.mainFrame.getContentPane().add(selectDataFileButton, BorderLayout.SOUTH);
+	   this.mainFrame.getContentPane().add(closeButton, BorderLayout.SOUTH);
+	   this.selectDataFileButton.setSize(100, 40);
+	   this.closeButton.setSize(100, 40);
+	   this.selectDataFileButton.addActionListener(this);
+	   this.closeButton.addActionListener(this);
+       this.mainFrame.setSize( 400, 250 ); // set size of window
+	   this.mainFrame.setVisible( true ); // show window
+	   
+   }
+   
+
+   public void actionPerformed (ActionEvent e)
+   {
+	 //Handle Select button action.
+	    if (e.getSource() == selectDataFileButton) 
+	    {	    	
+	        final JFileChooser fc = new JFileChooser();	    	
+	        int returnVal = fc.showOpenDialog(this);
+
+	        if (returnVal == JFileChooser.APPROVE_OPTION) 
+	        {
+	            File file = fc.getSelectedFile();
+	            this.selectedFile = file.getPath();
+	            displayArea.append("\n File " + file.getName() + " was selected.");
+	            this.selectDataFileButton.setEnabled(false);
+	        } else
+	        {
+	            displayArea.append("Open command cancelled by user./n");
+	        }	        
+	   }
+	    else if (e.getSource() == closeButton)
+	    {
+	    	dispose();
+	    	System.exit(0);
+	    }
+   }
+   
+      
 } // end class Client
