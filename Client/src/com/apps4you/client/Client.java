@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.UUID;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,6 +23,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
+
+import com.apps4you.shared.*;
 
 public class Client extends JFrame implements ActionListener
 {
@@ -44,6 +47,8 @@ public class Client extends JFrame implements ActionListener
    private JLabel welcomeLabel = new JLabel("Welcome to the Apps4You Client.");
    private JLabel moderatorCommentsLabel = new JLabel("Moderator Comments:");
    private JTextArea moderatorCommentsArea = new JTextArea();
+   
+   private Warrior combatant;
    
    // initialize chatServer and set up GUI
    public Client( String host )
@@ -214,6 +219,19 @@ public class Client extends JFrame implements ActionListener
       ); // end call to SwingUtilities.invokeLater
    } // end method setTextFieldEditable
 
+   /*
+   private Warrior readFileToCreateCombatant(File file)
+   {
+	   //Setup reading of the serialized wdat file here
+	   
+	   
+	   //For now just going to construct a warrior as if it had been read in from the file
+	   Warrior w = new Warrior(new UUID, "Brainy Viking", 100, Origins.KRIKKIT, "Silly Viking you are supposed to be tough.");
+	   return w;
+	   
+   }
+   */
+   
    private void lookAndFeelSetup()
    {
 	   try {
@@ -269,6 +287,7 @@ public class Client extends JFrame implements ActionListener
 	        {
 	        	this.selectedFile = fc.getSelectedFile();
 	            displayArea.append("\n File " + this.selectedFile.getName() + " was selected.");
+	            //this.combatant= this.readFileToCreateCombatant(this.selectedFile);
 	            this.selectDataFileButton.setEnabled(false);
 	        } else
 	        {
