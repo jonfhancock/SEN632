@@ -112,27 +112,50 @@ public class ClientUI extends JFrame implements ActionListener
 	        }	        
 	   }
 	    else if (e.getSource() == opponentButton)
-	    {
-	    	System.out.println("\n Oppents Selection was chosen - Not implemented Yet. \n");
+	    {	    	
+	    	//Get a list of the possible opponents from the server and then 
+	    	Object[] possibilities = {"Zorg", "Woody", "Ham", "Buzz"};
+	    	String s = (String)JOptionPane.showInputDialog(
+	    	                    this,
+	    	                    "Please select your opponent:",
+	    	                    "Opponent Selection Dialog",
+	    	                    JOptionPane.PLAIN_MESSAGE,
+	    	                    null,
+	    	                    possibilities,
+	    	                    null);	    	
+	    	System.out.println("\n Opponent Selection was chosen - with an opponent of: " + s ); 
+
 	    	JOptionPane.showMessageDialog(this,
 	    		    "The Opponent button is not implemented, yet.",
 	    		    "Warning",
 	    		    JOptionPane.WARNING_MESSAGE);
+	    	
+	    	//TODO Update who was selected
 	    }
 
 	    else if (e.getSource() == connectButton)
 	    {
-	    	System.out.println("\n Connection Selection was chosen - Not implemented Yet. \n");
-	    	JOptionPane.showMessageDialog(this,
-	    		    "The Connection button is not implemented, yet.",
-	    		    "Warning",
-	    		    JOptionPane.WARNING_MESSAGE);	
-	    	/*
-	    	ConnectionDialog cd = new ConnectionDialog();
-	    	cd.setVisible(true);
-	    	connectToServer(cd.getHostTextField());
-	    	*/	 
-	     	 	
+	    	//Object[] possibilities = {"ham", "spam", "yam"};
+	    	String s = (String)JOptionPane.showInputDialog(
+	    	                    this,
+	    	                    "Please enter the server that you would like to connect to:",
+	    	                    "Connection Dialog",
+	    	                    JOptionPane.PLAIN_MESSAGE,
+	    	                    null,
+	    	                    null,
+	    	                    "localhost");
+
+	    	//If a string was returned, say so.
+	    	if ((s != null) && (s.length() > 0)&& (s.length()<=15)) 
+	    	{
+	    		System.out.println("\n Connection Selection was chosen - with a host of: " + s ); 
+		    	connectToServer(s);	    	
+		     	 
+	    	}
+	    	else
+	    	{
+	    		System.out.println("\n Connection to host is not valid with: " + s + " as a value.");	 
+	    	}
    	
 	    }
 	    else if (e.getSource() == closeButton)
@@ -140,7 +163,5 @@ public class ClientUI extends JFrame implements ActionListener
 	    	dispose();
 	    	System.exit(0);
 	    }
-   }
-   
-   
+   }   
 }
