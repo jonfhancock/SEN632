@@ -26,7 +26,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 
 import com.apps4you.shared.*;
 
-public class Client extends JFrame implements ActionListener
+public class Client extends JFrame 
 {
 
    private static final long serialVersionUID = 7189340988809001708L;
@@ -38,16 +38,6 @@ public class Client extends JFrame implements ActionListener
    private String chatServer; // host server for this application
    private Socket client; // socket to communicate with server
    
-   //New UI Pieces
-   private File selectedFile;
-   private JFrame mainFrame = new JFrame("Apps4You - Client");
-   private JButton selectDataFileButton = new JButton("Select File");
-   private JButton opponentButton = new JButton("Opponent");
-   private JButton closeButton = new JButton("Close");
-   private JLabel welcomeLabel = new JLabel("Welcome to the Apps4You Client.");
-   private JLabel moderatorCommentsLabel = new JLabel("Moderator Comments:");
-   private JTextArea moderatorCommentsArea = new JTextArea();
-   
    private Warrior combatant;
    
    // initialize chatServer and set up GUI
@@ -56,8 +46,6 @@ public class Client extends JFrame implements ActionListener
       super( "Client" );
       
       chatServer = host; // set server to which this client connects
-
-      //lookAndFeelSetup();
       
       enterField = new JTextField(); // create enterField
       enterField.setEditable( false );
@@ -80,10 +68,7 @@ public class Client extends JFrame implements ActionListener
 
       setSize( 300, 150 ); // set size of window
       setVisible( true ); // show window
-      
-      setupMainFrame(); //Setup the Window and start gathering info form the user
           
-      moderatorCommentsArea.append("Moderator Comments:\n");      
    } // end Client constructor
    
    // connect to server and process messages from server
@@ -192,7 +177,7 @@ public class Client extends JFrame implements ActionListener
    } // end method sendData
 
    // manipulates displayArea in the event-dispatch thread
-   private void displayMessage( final String messageToDisplay )
+   protected void displayMessage( final String messageToDisplay )
    {
       SwingUtilities.invokeLater(
          new Runnable()
@@ -220,90 +205,16 @@ public class Client extends JFrame implements ActionListener
    } // end method setTextFieldEditable
 
   
-   private Warrior readFileToCreateCombatant(File file)
+   protected void readFileToCreateCombatant(File file)
    {
 	   //Setup reading of the serialized wdat file here
 	   
 	   
 	   //For now just going to construct a warrior as if it had been read in from the file
 	   Warrior w = new Warrior(new UUID(4242L, 4240L), "Brainy Viking", 100, Origins.KRIKKIT, "Silly Viking you are supposed to be tough.");
-	   return w;
+	   this.combatant = w;
 	   
    }
- 
-   
-   private void lookAndFeelSetup()
-   {
-	   try {
-		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-		        if ("Nimbus".equals(info.getName())) {
-		        	UIManager.setLookAndFeel(info.getClassName());
-		        	System.out.println("\n Nimbus UI was selected.");
-		        	break;
-		            
-		        }
-		    }
-		} catch (Exception e) {
-		    // If Nimbus is not available, then use the system default.
-			System.out.println("\n Nimbus UI was not available \n");
-		}   
-   }
-   
-   private void setupMainFrame()
-   {
-	   this.mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	   this.mainFrame.getContentPane().add(selectDataFileButton, BorderLayout.SOUTH);
-	   this.mainFrame.getContentPane().add(opponentButton, BorderLayout.SOUTH);
-	   this.mainFrame.getContentPane().add(closeButton, BorderLayout.SOUTH);
-       this.mainFrame.getContentPane().add(welcomeLabel,BorderLayout.PAGE_START);
-       this.mainFrame.getContentPane().add(new JScrollPane(moderatorCommentsArea), BorderLayout.EAST);
-	   this.mainFrame.getContentPane().add(new JLabel(""),BorderLayout.AFTER_LAST_LINE);
-	   
-	   this.selectDataFileButton.setSize(100, 40);
-	   this.closeButton.setSize(100, 40);
-	   this.opponentButton.setSize(100, 40);
-	   this.selectDataFileButton.addActionListener(this);
-	   this.closeButton.addActionListener(this);
-	   this.opponentButton.addActionListener(this);
-	   this.selectDataFileButton.setBounds(80, 60, 100, 30);
-	   this.closeButton.setBounds(80, 180, 100, 30);
-	   this.opponentButton.setBounds(80, 120, 100, 30);
-       	   
-	   this.mainFrame.setSize( 500, 300 ); // set size of window
-	   this.mainFrame.setVisible( true ); // show window
-	   
-   }
-   
 
-   public void actionPerformed (ActionEvent e)
-   {
-	 //Handle Select button action.
-	    if (e.getSource() == selectDataFileButton) 
-	    {	    	
-	        final JFileChooser fc = new JFileChooser();	    	
-	        int returnVal = fc.showOpenDialog(this);
-
-	        if (returnVal == JFileChooser.APPROVE_OPTION) 
-	        {
-	        	this.selectedFile = fc.getSelectedFile();
-	            displayArea.append("\n File " + this.selectedFile.getName() + " was selected.");
-	            this.combatant= this.readFileToCreateCombatant(this.selectedFile);
-	            this.selectDataFileButton.setEnabled(false);
-	        } else
-	        {
-	            displayArea.append("Open command cancelled by user./n");
-	        }	        
-	   }
-	    else if (e.getSource() == opponentButton)
-	    {
-	    	displayArea.append("\n Oppents Selection was chosen - Not implemented Yet. \n");
-	    }
-	    else if (e.getSource() == closeButton)
-	    {
-	    	dispose();
-	    	System.exit(0);
-	    }
-   }
-   
       
 } // end class Client
