@@ -114,12 +114,12 @@ public class ClientUI extends JFrame implements ActionListener
 	    else if (e.getSource() == opponentButton)
 	    {	    	
 	    	//Get a list of the possible opponents from the server and then 
-	    	Object[] possibilities = {"Zorg", "Woody", "Ham", "Buzz"};
+	    	Object[] possibilities = {"Zerg", "Woody", "Ham", "Buzz"};
 	    	String s = (String)JOptionPane.showInputDialog(
 	    	                    this,
 	    	                    "Please select your opponent:",
 	    	                    "Opponent Selection Dialog",
-	    	                    JOptionPane.PLAIN_MESSAGE,
+	    	                    JOptionPane.QUESTION_MESSAGE,
 	    	                    null,
 	    	                    possibilities,
 	    	                    null);	    	
@@ -135,12 +135,12 @@ public class ClientUI extends JFrame implements ActionListener
 
 	    else if (e.getSource() == connectButton)
 	    {
-	    	//Object[] possibilities = {"ham", "spam", "yam"};
+
 	    	String s = (String)JOptionPane.showInputDialog(
 	    	                    this,
 	    	                    "Please enter the server that you would like to connect to:",
 	    	                    "Connection Dialog",
-	    	                    JOptionPane.PLAIN_MESSAGE,
+	    	                    JOptionPane.QUESTION_MESSAGE,
 	    	                    null,
 	    	                    null,
 	    	                    "localhost");
