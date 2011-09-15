@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JButton;
@@ -15,6 +17,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+
+import com.apps4you.shared.Warrior;
 
 
 
@@ -32,6 +36,8 @@ public class ClientUI extends JFrame implements ActionListener
    private JTextArea moderatorCommentsArea = new JTextArea();
    
    private Client client;
+   private File file;
+   private Warrior w;
    public static final String  DEFAULT_HOST_LOCATION = "localhost";
 
    
@@ -97,14 +103,17 @@ public class ClientUI extends JFrame implements ActionListener
 	 //Handle Select button action.
 	    if (e.getSource() == selectDataFileButton) 
 	    {	    	
-	        final JFileChooser fc = new JFileChooser();	    	
+	        final JFileChooser fc = new JFileChooser();	
+	        final FileNameExtensionFilter fileFilter= new FileNameExtensionFilter("Warrior data file", "wdat");
+	        fc.setFileFilter(fileFilter);
 	        int returnVal = fc.showOpenDialog(this);
 
 	        if (returnVal == JFileChooser.APPROVE_OPTION) 
 	        {
-	        	File file = fc.getSelectedFile();
+	        	file = fc.getSelectedFile();
 	            System.out.println("File " + file.getName() + " was selected.");
-	            this.client.readFileToCreateCombatant(file);
+	            w = Utils.readFileToCreateCombatant(file);
+	            
 	            this.selectDataFileButton.setEnabled(false);
 	        } else
 	        {
@@ -160,6 +169,8 @@ public class ClientUI extends JFrame implements ActionListener
 	    }
 	    else if (e.getSource() == closeButton)
 	    {
+	    	w.setHealth(w.getHealth()-10);
+	    	Utils.saveWarriorToFile(w, file);
 	    	dispose();
 	    	System.exit(0);
 	    }

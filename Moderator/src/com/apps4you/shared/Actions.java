@@ -20,6 +20,7 @@ public enum Actions {
 	{
 		this.chosenAction = actionChoice;
 	}
+
 	public String getAction(){
 		return this.chosenAction;
 	}

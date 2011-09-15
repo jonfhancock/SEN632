@@ -19,6 +19,9 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+
 
 import com.apps4you.shared.*;
 
@@ -201,16 +204,7 @@ public class Client extends JFrame
    } // end method setTextFieldEditable
 
   
-   protected void readFileToCreateCombatant(File file)
-   {
-	   //Setup reading of the serialized wdat file here
-	   
-	   
-	   //For now just going to construct a warrior as if it had been read in from the file
-	   Warrior w = new Warrior(new UUID(4242L, 4240L), "Brainy Viking", 100, Origins.KRIKKIT, "Silly Viking you are supposed to be tough.");
-	   this.combatant = w;
-	   
-   }
+   
 
       
 } // end class Client
