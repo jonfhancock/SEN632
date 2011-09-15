@@ -77,7 +77,7 @@ public class Warrior{
 	public Warrior(String name, Origins origin, String description){
 		
 		// Need to create a new warriorID
-		//this.warriorId = warriorId;
+		this.warriorId = UUID.randomUUID();
 		this.name = name;
 		//assuming that we are creating a new warrior for the first time
 		this.health = 100;

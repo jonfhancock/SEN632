@@ -5,6 +5,7 @@ import com.apps4you.shared.*;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
+import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -13,6 +14,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.util.ArrayList;
+import java.util.Vector;
+
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
@@ -54,6 +58,11 @@ public class CreateWarrior extends JDialog {
 		JLabel originLabel = new JLabel("Origin:");
 		originLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
 		originLabel.setBounds(21, 47, 46, 14);
+//		Vector<String> valuesList = new Vector<String>();
+//		for(Origins origin: Origins.values()){
+//			valuesList.add(origin.getOrigin());
+//		}
+		
 		contentPanel.add(originLabel);
 		originComboBox.setModel(new DefaultComboBoxModel(Origins.values()));
 		

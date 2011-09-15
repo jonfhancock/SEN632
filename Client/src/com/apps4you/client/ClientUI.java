@@ -184,10 +184,12 @@ public class ClientUI extends JFrame implements ActionListener
 			Warrior nw = new Warrior(dialog.getNewName(), 
 										dialog.getOrigin(), 
 										dialog.getDescription());
-			/*
+			
+			
 			File file = new File(dialog.getNewName()+".wdat");
+			System.out.println("Wrote warrior to " + file.getAbsolutePath());
 			Utils.saveWarriorToFile(nw, file);
-			*/
+			
 	    }
 	    else if (e.getSource() == closeButton)
 	    {
