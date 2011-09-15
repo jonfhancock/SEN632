@@ -25,7 +25,7 @@ import com.apps4you.shared.Warrior;
 
 
 
-public class ClientUI extends JFrame implements ActionListener
+public class ClientUI extends JFrame 
 {
 
    private static final long serialVersionUID = -8606655646939582216L;
@@ -63,12 +63,11 @@ public class ClientUI extends JFrame implements ActionListener
 		   this.moderatorCommentsArea.setText("There was an error connecting to the Moderator server.  Are you sure it is running?");
 	   }
    }
-   
-  
-   
+
    private void setupFrame()
    {
-	   this.
+	   EventHandler handler = new EventHandler();
+	   
        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	   setBounds(100, 100, 450, 300);
 	   contentPane = new JPanel();
@@ -92,11 +91,11 @@ public class ClientUI extends JFrame implements ActionListener
 	   this.closeButton.setSize(100, 40);
 	   this.opponentButton.setSize(100, 40);
 	   this.newCombatantButton.setSize(100, 40);
-	   this.selectDataFileButton.addActionListener(this);
-	   this.closeButton.addActionListener(this);
-	   this.opponentButton.addActionListener(this);
-	   this.connectButton.addActionListener(this);	
-	   this.newCombatantButton.addActionListener(this);
+	   this.selectDataFileButton.addActionListener(handler);
+	   this.closeButton.addActionListener(handler);
+	   this.opponentButton.addActionListener(handler);
+	   this.connectButton.addActionListener(handler);	
+	   this.newCombatantButton.addActionListener(handler);
 	   this.connectButton.setBounds(80,40,100,30);	
 	   this.selectDataFileButton.setBounds(80, 100, 100, 30);
 	   this.opponentButton.setBounds(80, 160, 100, 30);
@@ -114,7 +113,10 @@ public class ClientUI extends JFrame implements ActionListener
 	   
    }
    
+ private class EventHandler implements ActionListener
+ {
 
+	@Override
    public void actionPerformed (ActionEvent e)
    {
 	 //Handle Select button action.
@@ -132,7 +134,7 @@ public class ClientUI extends JFrame implements ActionListener
 				e1.printStackTrace();
 			}
 	        
-	        int returnVal = fc.showOpenDialog(this);
+	        int returnVal = fc.showOpenDialog(ClientUI.this);
 
 	        if (returnVal == JFileChooser.APPROVE_OPTION) 
 	        {
@@ -140,8 +142,8 @@ public class ClientUI extends JFrame implements ActionListener
 	            System.out.println("File " + file.getName() + " was selected.");
 	            w = Utils.readFileToCreateCombatant(file);
 	            connectToServer();
-	            this.selectDataFileButton.setEnabled(false);
-	            this.opponentButton.setEnabled(true);
+	            ClientUI.this.selectDataFileButton.setEnabled(false);
+	            ClientUI.this.opponentButton.setEnabled(true);
 	        } else
 	        {
 	        	System.out.println("Open command cancelled by user./n");
@@ -152,7 +154,7 @@ public class ClientUI extends JFrame implements ActionListener
 	    	//Get a list of the possible opponents from the server and then 
 	    	Object[] possibilities = {"Zerg", "Woody", "Ham", "Buzz"};
 	    	String s = (String)JOptionPane.showInputDialog(
-	    	                    this,
+	    			            ClientUI.this,
 	    	                    "Please select your opponent:",
 	    	                    "Opponent Selection Dialog",
 	    	                    JOptionPane.QUESTION_MESSAGE,
@@ -161,7 +163,7 @@ public class ClientUI extends JFrame implements ActionListener
 	    	                    null);	    	
 	    	System.out.println("\n Opponent Selection was chosen - with an opponent of: " + s ); 
 
-	    	JOptionPane.showMessageDialog(this,
+	    	JOptionPane.showMessageDialog(ClientUI.this,
 	    		    "The Opponent button is not implemented, yet.",
 	    		    "Warning",
 	    		    JOptionPane.WARNING_MESSAGE);
@@ -173,7 +175,7 @@ public class ClientUI extends JFrame implements ActionListener
 	    {
 
 	    	String s = (String)JOptionPane.showInputDialog(
-	    	                    this,
+	    			            ClientUI.this,
 	    	                    "Please enter the prefered server that you would like to connect to:",
 	    	                    "Prefered Server Dialog",
 	    	                    JOptionPane.QUESTION_MESSAGE,
@@ -185,7 +187,7 @@ public class ClientUI extends JFrame implements ActionListener
 	    	if ((s != null) && (s.length() > 0)&& (s.length()<=15)) 
 	    	{
 	    		System.out.println("\n Prefered Server location was chosen - with a host of: " + s ); 
-		    	this.hostLocation = s;	    	
+	    		ClientUI.this.hostLocation = s;	    	
 		     	 
 	    	}
 	    	else
@@ -212,5 +214,6 @@ public class ClientUI extends JFrame implements ActionListener
 	    	dispose();
 	    	System.exit(0);
 	    }
-   }   
+     } 
+   }
 }
