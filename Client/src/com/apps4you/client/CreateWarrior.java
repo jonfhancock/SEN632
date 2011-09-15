@@ -112,7 +112,7 @@ public class CreateWarrior extends JDialog {
 	}
 	public Origins getOrigin()
 	{
-		return Origins.valueOf(this.originComboBox.getSelectedItem().toString());
+		return (Origins) this.originComboBox.getSelectedItem();
 
 	}
 	public String getDescription()
