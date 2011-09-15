@@ -14,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -32,6 +33,7 @@ public class CreateWarrior extends JDialog {
 	private JButton okButton = new JButton("OK");
 	private JButton cancelButton = new JButton("Cancel");
 	private JComboBox originComboBox = new JComboBox();
+	
 	
 	/**
 	 * Create the dialog.
@@ -105,7 +107,7 @@ public class CreateWarrior extends JDialog {
 	
 	public String getNewName()
 	{
-		return this.nameTextField.getText().toString();
+		return this.nameTextField.getText();
 		
 	}
 	public Origins getOrigin()
@@ -115,7 +117,7 @@ public class CreateWarrior extends JDialog {
 	}
 	public String getDescription()
 	{
-		return this.descTextField.toString();
+		return this.descTextField.getText();
 	}
 	
     private class ButtonHandler implements ActionListener
@@ -126,6 +128,14 @@ public class CreateWarrior extends JDialog {
 		{
 			if (e.getSource() == okButton) 
 		    {
+				Warrior nw = new Warrior(getNewName(), 
+						getOrigin(), 
+						getDescription());
+
+
+						File file = new File(getNewName()+".wdat");
+						System.out.println("Wrote warrior to " + file.getAbsolutePath());
+						Utils.saveWarriorToFile(nw, file);
 				CreateWarrior.this.setVisible(false);
 		    }
 			else if (e.getSource() == cancelButton)

@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
+import java.net.ConnectException;
 
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileFilter;
@@ -55,12 +57,18 @@ public class ClientUI extends JFrame implements ActionListener
    protected void connectToServer()
    {
 	   this.client = new Client(this.hostLocation);
+	   try{
 	   this.client.runClient();   
+	   } catch(Exception e){
+		   this.moderatorCommentsArea.setText("There was an error connecting to the Moderator server.  Are you sure it is running?");
+	   }
    }
    
+  
    
    private void setupFrame()
    {
+	   this.
        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	   setBounds(100, 100, 450, 300);
 	   contentPane = new JPanel();
@@ -95,7 +103,8 @@ public class ClientUI extends JFrame implements ActionListener
 	   this.newCombatantButton.setBounds(80, 220, 100, 30);
 	   this.closeButton.setBounds(80, 280, 100, 30);		   
 	   this.moderatorCommentsArea.setBounds(0, 200, 200, 30);	      
-       	   
+	   this.moderatorCommentsArea.setColumns(20);
+	   this.moderatorCommentsArea.setLineWrap(true);
 	   this.opponentButton.setEnabled(false);
 	   
 	   this.setSize( 500, 400 ); // set size of window
@@ -114,6 +123,15 @@ public class ClientUI extends JFrame implements ActionListener
 	        final JFileChooser fc = new JFileChooser();	
 	        final FileNameExtensionFilter fileFilter= new FileNameExtensionFilter("Warrior data file", "wdat");
 	        fc.setFileFilter(fileFilter);
+	        File f;
+			try {
+				f = new File(new File(".").getCanonicalPath());
+				fc.setCurrentDirectory(f);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+	        
 	        int returnVal = fc.showOpenDialog(this);
 
 	        if (returnVal == JFileChooser.APPROVE_OPTION) 
@@ -181,14 +199,7 @@ public class ClientUI extends JFrame implements ActionListener
 	    	CreateWarrior dialog = new CreateWarrior();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
-			Warrior nw = new Warrior(dialog.getNewName(), 
-										dialog.getOrigin(), 
-										dialog.getDescription());
 			
-			
-			File file = new File(dialog.getNewName()+".wdat");
-			System.out.println("Wrote warrior to " + file.getAbsolutePath());
-			Utils.saveWarriorToFile(nw, file);
 			
 	    }
 	    else if (e.getSource() == closeButton)
