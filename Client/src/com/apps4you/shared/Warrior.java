@@ -73,6 +73,17 @@ public class Warrior{
 		this.description = description;
 	}
 
+
+	public Warrior(String name, Origins origin, String description){
+		
+		// Need to create a new warriorID
+		//this.warriorId = warriorId;
+		this.name = name;
+		//assuming that we are creating a new warrior for the first time
+		this.health = 100;
+		this.origin = origin;
+		this.description = description;
+	}
 	
 @Override
 	public String toString() {
