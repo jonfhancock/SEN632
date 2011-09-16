@@ -161,7 +161,7 @@ public class Client extends JFrame
    } // end method closeConnection
 
    // send message to server
-   private void sendData( String message )
+   public void sendData( String message )
    {
       try // send object to server
       {
@@ -171,6 +171,7 @@ public class Client extends JFrame
       } // end try
       catch ( IOException ioException )
       {
+    	  ioException.printStackTrace();
          displayArea.append( "\nError writing object" );
       } // end catch
    } // end method sendData
