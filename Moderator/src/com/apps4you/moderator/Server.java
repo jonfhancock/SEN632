@@ -20,6 +20,9 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import com.apps4you.shared.Warrior;
+import com.apps4you.shared.WarriorFactory;
+
 public class Server extends JFrame implements ActionListener
 {
 
@@ -145,6 +148,8 @@ public class Server extends JFrame implements ActionListener
          try // read message and display it
          {
             message = ( String ) input.readObject(); // read new message
+//            Warrior w = WarriorFactory.fromJSON(message);
+//            sendData("Welcome, " + w.getName()+ "!");
             displayMessage( "\n" + message ); // display message
          } // end try
          catch ( ClassNotFoundException classNotFoundException ) 

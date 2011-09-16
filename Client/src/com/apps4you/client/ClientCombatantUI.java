@@ -44,37 +44,35 @@ public class ClientCombatantUI extends JFrame {
    private static Client client;
    private static File file;
    private static Warrior mWarrior;
+   private static Warrior mOpponent;
    private static String hostLocation = "localhost";
    private final JPanel battlePanel = new JPanel();
    private Actions battleAction;
 
    
-   protected static void connectToServer()
+   protected void connectToServer()
    {
 	   
 	   try{
-		   SwingUtilities.invokeLater(
-		   new Runnable()
-	         {
-	            public void run() // updates displayArea
-	            {
-	            	client = new Client(hostLocation);
-	            	client.runClient(); 
-	            	try {
-						client.sendData(WarriorFactory.toJSON(mWarrior));
-					} catch (JsonGenerationException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (JsonMappingException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-	            } // end method run
-	         }
-		   );
+	        new Thread(
+	                new Runnable() {
+	                    public void run() {
+	                    	client = new Client(hostLocation);
+	    	            	try {
+								client.runClient(WarriorFactory.toJSON(mWarrior));
+							} catch (JsonGenerationException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (JsonMappingException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} 
+	                    }
+	                }).start();
+        	
 	     
 	   } catch(Exception e){
 		   displayText("There was an error connecting to the Moderator server.  Are you sure it is running?");
@@ -165,7 +163,7 @@ public class ClientCombatantUI extends JFrame {
 		
 	}
 	
-	public static void setWarrior(Warrior warrior){
+	public void setWarrior(Warrior warrior){
 		mWarrior = warrior;
         connectToServer();
         selectDataFileButton.setEnabled(false);
@@ -213,7 +211,7 @@ public class ClientCombatantUI extends JFrame {
 		    							   new Warrior("Woody",Origins.BREQUINDA,"He's a cowboy"),
 		    							   new Warrior("Ham",Origins.VOGSPHERE,"AKA Evil Dr. Porkchop"),
 		    							   new Warrior("Buzz",Origins.KAKRAFOON,"To infinity and beyond!")};
-		    	Warrior s = (Warrior)JOptionPane.showInputDialog(
+		    	mOpponent= (Warrior)JOptionPane.showInputDialog(
 		    			ClientCombatantUI.this,
 		    	                    "Please select your opponent:",
 		    	                    "Opponent Selection Dialog",
@@ -221,7 +219,7 @@ public class ClientCombatantUI extends JFrame {
 		    	                    null,
 		    	                    possibilities,
 		    	                    null);	    	
-		    	System.out.println("\n Opponent Selection was chosen - with an opponent of: " + s ); 
+		    	System.out.println("\n Opponent Selection was chosen - with an opponent of: " + mOpponent ); 
 
 		    	JOptionPane.showMessageDialog(ClientCombatantUI.this,
 		    		    "The Opponent button is not implemented, yet.",
@@ -234,7 +232,7 @@ public class ClientCombatantUI extends JFrame {
 		    {
 		    	
 		    	Object[] possibilities = Actions.values();
-		    	ClientCombatantUI.this.battleAction = (Actions)JOptionPane.showInputDialog(
+		    	battleAction = (Actions)JOptionPane.showInputDialog(
 		    			ClientCombatantUI.this,
 		    	                    "Please select your battle action:",
 		    	                    "Battle Selection Dialog",
@@ -242,7 +240,8 @@ public class ClientCombatantUI extends JFrame {
 		    	                    null,
 		    	                    possibilities,
 		    	                    null);	   
-		    	System.out.println("\n The selected action was: " + ClientCombatantUI.this.battleAction.toString() ); 
+		    	System.out.println("\n The selected action was: " + battleAction.toString() ); 
+		    	client.sendData(mWarrior.getName()+" used " + battleAction.toString() + " on " + mOpponent.getName() );
 		    }
 		    else if (e.getSource() == connectButton)
 		    {

@@ -133,7 +133,8 @@ public class CreateWarrior extends JDialog {
 						File file = new File(getNewName()+".wdat");
 						System.out.println("Wrote warrior to " + file.getAbsolutePath());
 						Utils.saveWarriorToFile(nw, file);
-						ClientCombatantUI.setWarrior(nw);
+						
+						ClientCombatantUI.getInstance().setWarrior(nw);
 				CreateWarrior.this.setVisible(false);
 		    }
 			else if (e.getSource() == cancelButton)
