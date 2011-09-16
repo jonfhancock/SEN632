@@ -20,8 +20,11 @@ public enum Actions {
 	{
 		this.chosenAction = actionChoice;
 	}
-
 	public String getAction(){
+		return this.chosenAction;
+	}
+	@Override
+	public String toString(){
 		return this.chosenAction;
 	}
 }	

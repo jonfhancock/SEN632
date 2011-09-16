@@ -18,4 +18,8 @@ public enum Origins{
 	public String getOrigin(){
 		return origin;
 	}
+	@Override
+	public String toString(){
+		return origin;
+	}
 }
