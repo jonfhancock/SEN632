@@ -16,12 +16,17 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
 
 import com.apps4you.shared.Actions;
 import com.apps4you.shared.Origins;
 import com.apps4you.shared.Warrior;
+import com.apps4you.shared.WarriorFactory;
 
 public class ClientCombatantUI extends JFrame {
 
@@ -39,26 +44,60 @@ public class ClientCombatantUI extends JFrame {
    private static Client client;
    private static File file;
    private static Warrior mWarrior;
-   private static String hostLocation;
+   private static String hostLocation = "localhost";
    private final JPanel battlePanel = new JPanel();
    private Actions battleAction;
 
    
    protected static void connectToServer()
    {
-	   client = new Client(hostLocation);
+	   
 	   try{
-	   client.runClient();   
+		   SwingUtilities.invokeLater(
+		   new Runnable()
+	         {
+	            public void run() // updates displayArea
+	            {
+	            	client = new Client(hostLocation);
+	            	client.runClient(); 
+	            	try {
+						client.sendData(WarriorFactory.toJSON(mWarrior));
+					} catch (JsonGenerationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (JsonMappingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	            } // end method run
+	         }
+		   );
+	     
 	   } catch(Exception e){
-		   moderatorCommentsArea.setText("There was an error connecting to the Moderator server.  Are you sure it is running?");
+		   displayText("There was an error connecting to the Moderator server.  Are you sure it is running?");
 	   }
    }
 
+   public static void displayText(String text){
+	   moderatorCommentsArea.append(text);
+   }
 
+   private static ClientCombatantUI instance = null;
+   
+   public static ClientCombatantUI getInstance(){
+	   if(instance == null){
+		   instance = new ClientCombatantUI();
+	   }
+	   return instance;
+   }
+   
 	/**
 	 * Create the frame.
 	 */
-	public ClientCombatantUI() {
+	private ClientCombatantUI() {
 		setResizable(false);
 		   EventHandler handler = new EventHandler();
 		   
@@ -120,6 +159,10 @@ public class ClientCombatantUI extends JFrame {
 		   setVisible( true ); // show window
 		   setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			   
+	}
+	
+	private void setUpUI(){
+		
 	}
 	
 	public static void setWarrior(Warrior warrior){
