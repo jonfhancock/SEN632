@@ -1,26 +1,23 @@
 package com.apps4you.client;
 
-import com.apps4you.shared.*;
-
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-
-import javax.swing.ComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Vector;
 
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+
+import com.apps4you.shared.Origins;
+import com.apps4you.shared.Warrior;
 
 public class CreateWarrior extends JDialog {
 
@@ -136,6 +133,7 @@ public class CreateWarrior extends JDialog {
 						File file = new File(getNewName()+".wdat");
 						System.out.println("Wrote warrior to " + file.getAbsolutePath());
 						Utils.saveWarriorToFile(nw, file);
+						ClientCombatantUI.setWarrior(nw);
 				CreateWarrior.this.setVisible(false);
 		    }
 			else if (e.getSource() == cancelButton)

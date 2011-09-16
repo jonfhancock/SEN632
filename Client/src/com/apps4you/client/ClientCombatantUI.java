@@ -1,6 +1,5 @@
 package com.apps4you.client;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,39 +20,37 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.apps4you.shared.Actions;
+import com.apps4you.shared.Origins;
 import com.apps4you.shared.Warrior;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class ClientCombatantUI extends JFrame {
 
    private static final long serialVersionUID = -8606655646939582216L;
    private JPanel contentPane;
    private final JButton connectButton = new JButton("Server");
-   private final JButton selectDataFileButton = new JButton("Select File");
-   private final JButton opponentButton = new JButton("Opponent");
+   private final static JButton selectDataFileButton = new JButton("Select File");
+   private final static JButton opponentButton = new JButton("Opponent");
    private final JButton newCombatantButton = new JButton("New");
    private final JButton closeButton = new JButton("Close");
    private final JButton actionButton = new JButton("Action");
    private JLabel welcomeLabel = new JLabel("Welcome to the Apps4You Client.");
-   private JTextArea moderatorCommentsArea = new JTextArea();
+   private static JTextArea moderatorCommentsArea = new JTextArea();
    
-   private Client client;
-   private File file;
-   private Warrior w;
-   private String hostLocation;
+   private static Client client;
+   private static File file;
+   private static Warrior mWarrior;
+   private static String hostLocation;
    private final JPanel battlePanel = new JPanel();
    private Actions battleAction;
 
    
-   protected void connectToServer()
+   protected static void connectToServer()
    {
-	   this.client = new Client(this.hostLocation);
+	   client = new Client(hostLocation);
 	   try{
-	   this.client.runClient();   
+	   client.runClient();   
 	   } catch(Exception e){
-		   this.moderatorCommentsArea.setText("There was an error connecting to the Moderator server.  Are you sure it is running?");
+		   moderatorCommentsArea.setText("There was an error connecting to the Moderator server.  Are you sure it is running?");
 	   }
    }
 
@@ -124,6 +121,14 @@ public class ClientCombatantUI extends JFrame {
 		   setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			   
 	}
+	
+	public static void setWarrior(Warrior warrior){
+		mWarrior = warrior;
+        connectToServer();
+        selectDataFileButton.setEnabled(false);
+        opponentButton.setEnabled(true);		
+	}
+	
 	 private class EventHandler implements ActionListener
 	 {
 
@@ -151,10 +156,8 @@ public class ClientCombatantUI extends JFrame {
 		        {
 		        	file = fc.getSelectedFile();
 		            System.out.println("File " + file.getName() + " was selected.");
-		            w = Utils.readFileToCreateCombatant(file);
-		            connectToServer();
-		            ClientCombatantUI.this.selectDataFileButton.setEnabled(false);
-		            ClientCombatantUI.this.opponentButton.setEnabled(true);		            
+		            setWarrior(Utils.readFileToCreateCombatant(file));
+            
 		        } else
 		        {
 		        	System.out.println("Open command cancelled by user./n");
@@ -163,8 +166,11 @@ public class ClientCombatantUI extends JFrame {
 		    else if (e.getSource() == opponentButton)
 		    {	    	
 		    	//Get a list of the possible opponents from the server and then 
-		    	Object[] possibilities = {"Zerg", "Woody", "Ham", "Buzz"};
-		    	String s = (String)JOptionPane.showInputDialog(
+		    	Warrior[] possibilities = {new Warrior("Zerg",Origins.JAGLANBETA,"Come to the dark side"),
+		    							   new Warrior("Woody",Origins.BREQUINDA,"He's a cowboy"),
+		    							   new Warrior("Ham",Origins.VOGSPHERE,"AKA Evil Dr. Porkchop"),
+		    							   new Warrior("Buzz",Origins.KAKRAFOON,"To infinity and beyond!")};
+		    	Warrior s = (Warrior)JOptionPane.showInputDialog(
 		    			ClientCombatantUI.this,
 		    	                    "Please select your opponent:",
 		    	                    "Opponent Selection Dialog",
@@ -230,10 +236,12 @@ public class ClientCombatantUI extends JFrame {
 		    }
 		    else if (e.getSource() == closeButton)
 		    {
-		    	if ((client != null)&&(w !=null))
+		    	if ((client != null)&&(mWarrior !=null))
 		    	{
-		    	  w.setHealth(w.getHealth()-10);
-		    	  Utils.saveWarriorToFile(w, file);
+		    	  if(file == null){
+		    		  file = new File(mWarrior.getName()+".wdat");
+		    	  }
+		    	  Utils.saveWarriorToFile(mWarrior, file);
 		    	}
 		    	dispose();
 		    	System.exit(0);
