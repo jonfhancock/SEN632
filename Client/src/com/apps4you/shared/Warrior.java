@@ -87,9 +87,7 @@ public class Warrior{
 	
 @Override
 	public String toString() {
-		return "Warrior [warriorId=" + warriorId + ", name=" + name
-				+ ", health=" + health + ", origin=" + origin
-				+ ", description=" + description + "]";
+		return this.name;
 	}
 
 
