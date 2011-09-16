@@ -20,6 +20,7 @@ import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import com.apps4you.shared.Actions;
 import com.apps4you.shared.Warrior;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -34,8 +35,8 @@ public class ClientCombatantUI extends JFrame {
    private final JButton opponentButton = new JButton("Opponent");
    private final JButton newCombatantButton = new JButton("New");
    private final JButton closeButton = new JButton("Close");
+   private final JButton actionButton = new JButton("Action");
    private JLabel welcomeLabel = new JLabel("Welcome to the Apps4You Client.");
-   private JLabel moderatorCommentsLabel = new JLabel("Moderator Comments:");
    private JTextArea moderatorCommentsArea = new JTextArea();
    
    private Client client;
@@ -43,6 +44,7 @@ public class ClientCombatantUI extends JFrame {
    private Warrior w;
    private String hostLocation;
    private final JPanel battlePanel = new JPanel();
+   private Actions battleAction;
 
    
    protected void connectToServer()
@@ -73,9 +75,9 @@ public class ClientCombatantUI extends JFrame {
 		   JLabel modCommentsLabel = new JLabel("Moderator Comments:");
 		   modCommentsLabel.setBounds(272, 30, 162, 20);
 		   
-		   this.setTitle("Apps4You - Client");
+		   setTitle("Apps4You - Client");
 		   closeButton.setBounds(64, 289, 100, 30);
-		   this.closeButton.addActionListener(handler);
+		   closeButton.addActionListener(handler);
 		   
 		   JPanel setupPanel = new JPanel();
 		   setupPanel.setBounds(5, 30, 234, 108);
@@ -88,7 +90,7 @@ public class ClientCombatantUI extends JFrame {
 		   contentPane.add(scrollPane);
 		   scrollPane.setViewportView(moderatorCommentsArea);
 		   moderatorCommentsArea.setMinimumSize(new Dimension(200, 300));
-		   this.moderatorCommentsArea.setLineWrap(true);
+		   moderatorCommentsArea.setLineWrap(true);
 		   contentPane.add(modCommentsLabel);
 		   contentPane.add(setupPanel);
 		   connectButton.setBounds(10, 26, 100, 30);
@@ -105,20 +107,21 @@ public class ClientCombatantUI extends JFrame {
 
 		   opponentButton.setBounds(22, 30, 81, 23);
 		   battlePanel.add(opponentButton);
-		   this.opponentButton.addActionListener(handler);
-		   this.opponentButton.setEnabled(false);
+		   opponentButton.addActionListener(handler);
+		   opponentButton.setEnabled(false);
 		   
-		   JButton actionButton = new JButton("Action");
+
 		   actionButton.setEnabled(false);
 		   actionButton.setBounds(113, 30, 89, 23);
 		   battlePanel.add(actionButton);
-		   this.newCombatantButton.addActionListener(handler);
-		   this.selectDataFileButton.addActionListener(handler);
-		   this.connectButton.addActionListener(handler);	
+		   newCombatantButton.addActionListener(handler);
+		   selectDataFileButton.addActionListener(handler);
+		   connectButton.addActionListener(handler);	
+		   actionButton.addActionListener(handler);	
 		   
-		   this.setSize( 516, 400 ); // set size of window
-		   this.setVisible( true ); // show window
-		   this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		   setSize( 516, 400 ); // set size of window
+		   setVisible( true ); // show window
+		   setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			   
 	}
 	 private class EventHandler implements ActionListener
@@ -151,7 +154,7 @@ public class ClientCombatantUI extends JFrame {
 		            w = Utils.readFileToCreateCombatant(file);
 		            connectToServer();
 		            ClientCombatantUI.this.selectDataFileButton.setEnabled(false);
-		            ClientCombatantUI.this.opponentButton.setEnabled(true);
+		            ClientCombatantUI.this.opponentButton.setEnabled(true);		            
 		        } else
 		        {
 		        	System.out.println("Open command cancelled by user./n");
@@ -175,10 +178,23 @@ public class ClientCombatantUI extends JFrame {
 		    		    "The Opponent button is not implemented, yet.",
 		    		    "Warning",
 		    		    JOptionPane.WARNING_MESSAGE);
-		    	
+		    	ClientCombatantUI.this.actionButton.setEnabled(true);		
 		    	//TODO Update who was selected
 		    }
-
+		    else if (e.getSource() == actionButton)
+		    {
+		    	
+		    	Object[] possibilities = Actions.values();
+		    	ClientCombatantUI.this.battleAction = (Actions)JOptionPane.showInputDialog(
+		    			ClientCombatantUI.this,
+		    	                    "Please select your battle action:",
+		    	                    "Battle Selection Dialog",
+		    	                    JOptionPane.QUESTION_MESSAGE,
+		    	                    null,
+		    	                    possibilities,
+		    	                    null);	   
+		    	System.out.println("\n The selected action was: " + ClientCombatantUI.this.battleAction.toString() ); 
+		    }
 		    else if (e.getSource() == connectButton)
 		    {
 
