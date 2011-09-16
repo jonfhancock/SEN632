@@ -105,17 +105,17 @@ public class CreateWarrior extends JDialog {
 		} 
 	}
 	
-	public String getNewName()
+	private String getNewName()
 	{
 		return this.nameTextField.getText();
 		
 	}
-	public Origins getOrigin()
+	private Origins getOrigin()
 	{
 		return (Origins) this.originComboBox.getSelectedItem();
 
 	}
-	public String getDescription()
+	private String getDescription()
 	{
 		return this.descTextField.getText();
 	}
