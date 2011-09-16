@@ -3,6 +3,7 @@ package com.apps4you.moderator;
 
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.Random;
 
 import com.apps4you.shared.Warrior;
 
@@ -18,10 +19,12 @@ private static final long serialVersionUID = 1712048162291486001L;
 		// TODO Auto-generated constructor stub
 	}
 	
-	private void moderateAttacks()
+	private void moderateAttacks(Warrior w1, Warrior w2)
 	{
 		//determine the changes to the health of the warriors
-				
+		int w1PointsToReduce = determineHealthPointsToDeduct();		
+	    int w2PointsToReduce = determineHealthPointsToDeduct();
+	    
 	}
 	
 	private void sendAttackResults()
@@ -46,5 +49,12 @@ private static final long serialVersionUID = 1712048162291486001L;
 	public void receiveAttackRequest(UUID warriorId)
 	{
 		//Use the warriorId to look up the
+	}
+	
+	
+	private int determineHealthPointsToDeduct()
+	{
+		 Random rand = new Random(); 
+		 return rand.nextInt(101);
 	}
 }
