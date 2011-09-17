@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.StringWriter;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -24,6 +25,8 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 
 import com.apps4you.shared.Actions;
+import com.apps4you.shared.Message;
+import com.apps4you.shared.MessageFactory;
 import com.apps4you.shared.Origins;
 import com.apps4you.shared.Warrior;
 import com.apps4you.shared.WarriorFactory;
@@ -58,18 +61,9 @@ public class ClientCombatantUI extends JFrame {
 	                new Runnable() {
 	                    public void run() {
 	                    	client = new Client(hostLocation);
-	    	            	try {
-								client.runClient(WarriorFactory.toJSON(mWarrior));
-							} catch (JsonGenerationException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (JsonMappingException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} 
+	    	            		Message message = new Message(mWarrior,Message.MessageCommand.NEWWARRIOR);
+								client.runClient(MessageFactory.toJSON(message));
+
 	                    }
 	                }).start();
         	

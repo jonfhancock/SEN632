@@ -20,6 +20,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import com.apps4you.shared.Message;
+import com.apps4you.shared.MessageFactory;
 import com.apps4you.shared.Warrior;
 import com.apps4you.shared.WarriorFactory;
 
@@ -148,9 +150,14 @@ public class Server extends JFrame implements ActionListener
          try // read message and display it
          {
             message = ( String ) input.readObject(); // read new message
-//            Warrior w = WarriorFactory.fromJSON(message);
-//            sendData("Welcome, " + w.getName()+ "!");
-            displayMessage( "\n" + message ); // display message
+            Message inMessage = MessageFactory.fromJSON(message);
+            switch(inMessage.getCommand()){
+            case NEWWARRIOR :
+            	displayMessage( "\nNew warrior added: "+ inMessage.getWarrior().getName() ); // display message
+            	sendData("Welcome, " + inMessage.getWarrior().getName() + "!");
+            	break;
+            }
+            
          } // end try
          catch ( ClassNotFoundException classNotFoundException ) 
          {
@@ -183,9 +190,9 @@ public class Server extends JFrame implements ActionListener
    {
       try // send object to client
       {
-         output.writeObject( "SERVER>>> " + message );
+         output.writeObject(message );
          output.flush(); // flush output to client
-         displayMessage( "\nSERVER>>> " + message );
+         displayMessage(message );
       } // end try
       catch ( IOException ioException ) 
       {
