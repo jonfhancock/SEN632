@@ -215,10 +215,6 @@ public class ClientCombatantUI extends JFrame {
 		    	                    null);	    	
 		    	System.out.println("\n Opponent Selection was chosen - with an opponent of: " + mOpponent ); 
 
-		    	JOptionPane.showMessageDialog(ClientCombatantUI.this,
-		    		    "The Opponent button is not implemented, yet.",
-		    		    "Warning",
-		    		    JOptionPane.WARNING_MESSAGE);
 		    	ClientCombatantUI.this.actionButton.setEnabled(true);		
 		    	//TODO Update who was selected
 		    }
@@ -236,6 +232,7 @@ public class ClientCombatantUI extends JFrame {
 		    	                    null);	   
 		    	System.out.println("\n The selected action was: " + battleAction.toString() ); 
 		    	client.sendData(mWarrior.getName()+" used " + battleAction.toString() + " on " + mOpponent.getName() );
+		    	ClientCombatantUI.this.selectDataFileButton.setEnabled(true);
 		    }
 		    else if (e.getSource() == connectButton)
 		    {

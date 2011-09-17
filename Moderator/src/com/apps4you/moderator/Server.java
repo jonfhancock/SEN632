@@ -7,78 +7,30 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
+import com.apps4you.moderator.ModeratorUI;
 import com.apps4you.shared.Message;
 import com.apps4you.shared.MessageFactory;
-import com.apps4you.shared.Warrior;
-import com.apps4you.shared.WarriorFactory;
 
-public class Server extends JFrame implements ActionListener
+public class Server  
 {
-
    private static final long serialVersionUID = -5693161904305556535L;
 	
-   private JTextField enterField; // inputs message from user
-   private JTextArea displayArea; // display information to user
    private ObjectOutputStream output; // output stream to client
    private ObjectInputStream input; // input stream from client
    private ServerSocket server; // server socket
    private Socket connection; // connection to client
    private int counter = 1; // counter of number of connections
    
-   
-   //New UI Pieces
-   private JFrame mainFrame = new JFrame("Apps4You - Server");
-   private JButton closeButton = new JButton("Close");
-   private JLabel welcomeLabel = new JLabel("Welcome to the Apps4You Server.");
-   private JTextArea combatantsConnectedArea = new JTextArea();
-   
-   
+   private ModeratorUI uiInstance;
 
    // set up GUI
    public Server()
-   {
-      super( "Server" );
-
-      enterField = new JTextField(); // create enterField
-      enterField.setEditable( false );
-      enterField.addActionListener(
-         new ActionListener() 
-         {
-            // send message to client
-            public void actionPerformed( ActionEvent event )
-            {
-               sendData( event.getActionCommand() );
-               enterField.setText( "" );
-            } // end method actionPerformed
-         } // end anonymous inner class
-      ); // end call to addActionListener
-
-      add( enterField, BorderLayout.NORTH );
-
-      displayArea = new JTextArea(); // create displayArea
-      add( new JScrollPane( displayArea ), BorderLayout.CENTER );
-
-      setSize( 300, 150 ); // set size of window
-      setVisible( true ); // show window
-      
-
-      setupMainFrame(); //Setup the Window and start gathering info form the user
-          
-      combatantsConnectedArea.append("Combatants Connected:\n");            
-      
+   {     
+      ModeratorUI mUI = new ModeratorUI();
+      this.uiInstance = mUI;
+      mUI.setVisible(true);
       
    } // end Server constructor
 
@@ -142,9 +94,6 @@ public class Server extends JFrame implements ActionListener
       String message = "Connection successful";
       sendData( message ); // send connection successful message
 
-      // enable enterField so server user can send messages
-      setTextFieldEditable( true );
-
       do // process messages sent from client
       { 
          try // read message and display it
@@ -171,7 +120,7 @@ public class Server extends JFrame implements ActionListener
    private void closeConnection() 
    {
       displayMessage( "\nTerminating connection\n" );
-      setTextFieldEditable( false ); // disable enterField
+      //setTextFieldEditable( false ); // disable enterField
 
       try 
       {
@@ -196,71 +145,14 @@ public class Server extends JFrame implements ActionListener
       } // end try
       catch ( IOException ioException ) 
       {
-         displayArea.append( "\nError writing object" );
+    	  displayMessage("\nError writing object" );
       } // end catch
    } // end method sendData
 
    // manipulates displayArea in the event-dispatch thread
    private void displayMessage( final String messageToDisplay )
    {
-      SwingUtilities.invokeLater(
-         new Runnable() 
-         {
-            public void run() // updates displayArea
-            {
-               displayArea.append( messageToDisplay ); // append message
-            } // end method run
-         } // end anonymous inner class
-      ); // end call to SwingUtilities.invokeLater
-   } // end method displayMessage
-
-   // manipulates enterField in the event-dispatch thread
-   private void setTextFieldEditable( final boolean editable )
-   {
-      SwingUtilities.invokeLater(
-         new Runnable()
-         {
-            public void run() // sets enterField's editability
-            {
-               enterField.setEditable( editable );
-            } // end method run
-         }  // end inner class
-      ); // end call to SwingUtilities.invokeLater
-   } // end method setTextFieldEditable
-   
-   
-   
-   
-
-   private void setupMainFrame()
-   {
-	   this.mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-	   this.mainFrame.getContentPane().add(closeButton, BorderLayout.SOUTH);
-       this.mainFrame.getContentPane().add(welcomeLabel,BorderLayout.PAGE_START);
-       this.mainFrame.getContentPane().add(new JScrollPane(combatantsConnectedArea), BorderLayout.CENTER);
-
-	   this.closeButton.setSize(100, 40);
-
-	   this.closeButton.addActionListener(this);
-       	   
-	   this.mainFrame.setSize( 500, 300 ); // set size of window
-	   this.mainFrame.setVisible( true ); // show window
-	   
-   }
-   
-
-   public void actionPerformed (ActionEvent e)
-   {
-	 //Handle Select button action.
-	    if (e.getSource() == closeButton)
-	    {
-	    	dispose();
-	    	System.exit(0);
-	    }
-   }
-   
-   
-   
+	   uiInstance.displayText( messageToDisplay ); // append message
+   } // end method displayMessage    
    
 } // end class Server
