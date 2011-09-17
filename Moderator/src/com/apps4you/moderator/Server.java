@@ -44,14 +44,14 @@ public class Server extends JFrame implements ActionListener
    private JButton closeButton = new JButton("Close");
    private JLabel welcomeLabel = new JLabel("Welcome to the Apps4You Server.");
    private JTextArea combatantsConnectedArea = new JTextArea();
-   
+   Moderator moderator;
    
 
    // set up GUI
    public Server()
    {
       super( "Server" );
-
+      moderator = new Moderator();
       enterField = new JTextField(); // create enterField
       enterField.setEditable( false );
       enterField.addActionListener(
@@ -74,7 +74,7 @@ public class Server extends JFrame implements ActionListener
       setSize( 300, 150 ); // set size of window
       setVisible( true ); // show window
       
-
+      
       setupMainFrame(); //Setup the Window and start gathering info form the user
           
       combatantsConnectedArea.append("Combatants Connected:\n");            
@@ -155,6 +155,15 @@ public class Server extends JFrame implements ActionListener
             case NEWWARRIOR :
             	displayMessage( "\nNew warrior added: "+ inMessage.getWarrior().getName() ); // display message
             	sendData("Welcome, " + inMessage.getWarrior().getName() + "!");
+            	if(moderator.getOpponentCount() == 0){
+            		sendData(MessageFactory.toJSON(new Message(Message.MessageCommand.NOOPPONENTS)));
+                	moderator.addOpponent(inMessage.getWarrior());
+            	} else {
+            		sendData(MessageFactory.toJSON(new Message(
+            					moderator.getOpponents(),
+            					Message.MessageCommand.SENDOPPONENTS)));
+            	}
+            	
             	break;
             }
             

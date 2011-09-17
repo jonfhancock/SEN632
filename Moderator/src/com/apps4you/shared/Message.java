@@ -1,6 +1,7 @@
 package com.apps4you.shared;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
@@ -9,6 +10,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 public class Message {
 	private Warrior mWarrior = null;
+	private ArrayList<Warrior> mOpponents = null;
 	private Actions mAction = null;
 	private MessageCommand mCommand = null;
 	
@@ -21,6 +23,19 @@ public class Message {
 	public Message(Warrior warrior, MessageCommand command,Actions action){
 		mWarrior = warrior;
 		mAction = action;
+		mCommand = command;
+	}
+	public Message(Warrior warrior, ArrayList<Warrior> opponents, MessageCommand command,Actions action){
+		mWarrior = warrior;
+		mAction = action;
+		mCommand = command;
+		mOpponents = opponents;
+	}
+	public Message(ArrayList<Warrior> opponents, MessageCommand command){
+		mCommand = command;
+		mOpponents = opponents;
+	}
+	public Message(MessageCommand command){
 		mCommand = command;
 	}
 	
@@ -42,12 +57,21 @@ public class Message {
 	public void setCommand(MessageCommand mCommand) {
 		this.mCommand = mCommand;
 	}
+	public ArrayList<Warrior> getOpponents(){
+		return mOpponents;
+	}
+	public void setOpponents(ArrayList<Warrior> opponents){
+		this.mOpponents = opponents;
+	}
 	
 	
 	
 	public static enum MessageCommand{
 		NEWWARRIOR,
-		BATTLEWARRIOR
+		BATTLEWARRIOR,
+		GREETWARRIOR,
+		NOOPPONENTS,
+		SENDOPPONENTS
 	}
 	
 	

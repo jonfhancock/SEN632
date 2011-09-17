@@ -11,9 +11,9 @@ import com.apps4you.shared.Warrior;
 
 public class Moderator{
 
-private ArrayList<Warrior> warriorsList;
-
-private static final long serialVersionUID = 1712048162291486001L;
+	private ArrayList<Warrior> warriorsList;
+	
+	private static final long serialVersionUID = 1712048162291486001L;
 
 	public Moderator() {
 		// TODO Auto-generated constructor stub
@@ -40,7 +40,10 @@ private static final long serialVersionUID = 1712048162291486001L;
 	{
 		this.warriorsList.remove(removeWarrior);
 	}	
-	public ArrayList<Warrior> sendWarriorList()
+	public int getOpponentCount(){
+		return warriorsList.size();
+	}
+	public ArrayList<Warrior> getOpponents()
 	{
 		return this.warriorsList;		
 	}
