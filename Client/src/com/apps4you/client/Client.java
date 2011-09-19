@@ -1,9 +1,7 @@
 package com.apps4you.client;
 
 //Client portion of a stream-socket connection between client and server.
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -11,59 +9,22 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-
-import com.apps4you.shared.Warrior;
-import com.apps4you.shared.WarriorFactory;
-
 public class Client  
 {
-
    private static final long serialVersionUID = 7189340988809001708L;
-//   private JTextField enterField; // enters information from user
-//   private JTextArea displayArea; // display information to user
    private ObjectOutputStream output; // output stream to server
    private ObjectInputStream input; // input stream from server
    private String message = ""; // message from server
    private String chatServer; // host server for this application
    private Socket client; // socket to communicate with server
    private ClientCombatantUI uiInstance;
-   private Warrior combatant;
    
    // initialize chatServer and set up GUI
    public Client( String host )
    {
-//      super( "Client" );
       uiInstance = ClientCombatantUI.getInstance();
       chatServer = host; // set server to which this client connects
-      
-//      enterField = new JTextField(); // create enterField
-//      enterField.setEditable( false );
-//      enterField.addActionListener(
-//         new ActionListener() 
-//         {
-//            // send message to server
-//            public void actionPerformed( ActionEvent event )
-//            {
-//               sendData( event.getActionCommand() );
-//               enterField.setText( "" );
-//            } // end method actionPerformed
-//         } // end anonymous inner class
-//      ); // end call to addActionListener
-//
-//      add( enterField, BorderLayout.NORTH );
-//
-//      displayArea = new JTextArea(); // create displayArea
-//      add( new JScrollPane( displayArea ), BorderLayout.CENTER );
-//
-//      setSize( 300, 150 ); // set size of window
-//      setVisible( true ); // show window
-          
-   } // end Client constructor
+  } // end Client constructor
    
    // connect to server and process messages from server
    public void runClient(String initialMessage) 
@@ -122,9 +83,6 @@ public class Client
    // process connection with server
    private void processConnection() throws IOException
    {
-      // enable enterField so client user can send messages
-//      setTextFieldEditable( true );
-
       do // process messages sent from server
       { 
          try // read message and display it
@@ -144,8 +102,6 @@ public class Client
    private void closeConnection() 
    {
       displayMessage( "\nClosing connection" );
-//      setTextFieldEditable( false ); // disable enterField
-
       try 
       {
          output.close(); // close output stream
@@ -177,33 +133,7 @@ public class Client
    // manipulates displayArea in the event-dispatch thread
    protected void displayMessage( final String messageToDisplay )
    {
-//      SwingUtilities.invokeLater(
-//         new Runnable()
-//         {
-//            public void run() // updates displayArea
-//            {
-            	uiInstance.displayText( messageToDisplay );
-//            } // end method run
-//         }  // end anonymous inner class
-//      ); // end call to SwingUtilities.invokeLater
-   } // end method displayMessage
+      uiInstance.displayText( messageToDisplay );
 
-   // manipulates enterField in the event-dispatch thread
-//   private void setTextFieldEditable( final boolean editable )
-//   {
-//      SwingUtilities.invokeLater(
-//         new Runnable() 
-//         {
-//            public void run() // sets enterField's editability
-//            {
-//               enterField.setEditable( editable );
-//            } // end method run
-//         } // end anonymous inner class
-//      ); // end call to SwingUtilities.invokeLater
-//   } // end method setTextFieldEditable
-
-  
-   
-
-      
+   } // end method displayMessage      
 } // end class Client
