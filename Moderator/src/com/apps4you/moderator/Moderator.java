@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.UUID;
 import java.util.Random;
 
+import com.apps4you.shared.Message;
+import com.apps4you.shared.MessageFactory;
 import com.apps4you.shared.Warrior;
 
 
@@ -17,6 +19,7 @@ public class Moderator{
 
 	public Moderator() {
 		// TODO Auto-generated constructor stub
+		warriorsList = new ArrayList<Warrior>();
 	}
 	
 	private void moderateAttacks(Warrior w1, Warrior w2)
@@ -59,5 +62,16 @@ public class Moderator{
 	{
 		 Random rand = new Random(); 
 		 return rand.nextInt(101);
+	}
+	
+	public Message processNewWarrior(Message message){
+		if(warriorsList.size() == 0){
+			warriorsList.add(message.getWarrior());
+    		return new Message(Message.MessageCommand.NOOPPONENTS);        	
+    	} else {
+    		return new Message(
+    					warriorsList,
+    					Message.MessageCommand.SENDOPPONENTS);
+    	}
 	}
 }

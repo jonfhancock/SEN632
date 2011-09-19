@@ -55,7 +55,7 @@ public class ModeratorUI extends JFrame {
 		setVisible( true ); // show window		
 	}
 	
-    public static void displayText(String text){
+    public void displayText(String text){
     	combatantsConnectedArea.append(text);
     }
 
