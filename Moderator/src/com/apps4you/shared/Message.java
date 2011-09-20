@@ -13,6 +13,7 @@ public class Message {
 	private ArrayList<Warrior> mOpponents = null;
 	private Actions mAction = null;
 	private MessageCommand mCommand = null;
+	private Warrior mOpponent = null;
 	
 	public Message(){};
 	
@@ -25,6 +26,13 @@ public class Message {
 		mAction = action;
 		mCommand = command;
 	}
+	public Message(Warrior warrior, MessageCommand command,Actions action, Warrior opponent){
+		mWarrior = warrior;
+		mAction = action;
+		mCommand = command;
+		mOpponent = opponent;
+	}
+	
 	public Message(Warrior warrior, ArrayList<Warrior> opponents, MessageCommand command,Actions action){
 		mWarrior = warrior;
 		mAction = action;
@@ -56,6 +64,9 @@ public class Message {
 	}
 	public void setCommand(MessageCommand mCommand) {
 		this.mCommand = mCommand;
+	}
+    public Warrior getOpponent() {
+		return mOpponent;
 	}
 	public ArrayList<Warrior> getOpponents(){
 		return mOpponents;

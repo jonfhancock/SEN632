@@ -79,4 +79,17 @@ public class Moderator{
     					Message.MessageCommand.SENDOPPONENTS);
     	}
 	}
+	
+	public Message processBattleRequet(Message message){
+		//Need to notify the Opponent of a Battle Request and allow them to pick an Action
+		if(warriorsList.size() != 0)
+		{
+			warriorsList.get(message.getOpponent());
+			return new Message(message.getOpponent(),Message.MessageCommand.SELECTACTION);        	
+    	} else {
+    		return new Message(
+    					warriorsList,
+    					Message.MessageCommand.NOOPPONENTS);
+    	}
+	}
 }

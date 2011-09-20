@@ -118,6 +118,15 @@ public class Server {
 							.processNewWarrior(inMessage)));
 
 					break;
+					
+				case BATTLEWARRIOR:
+					System.out.println("Debugging ProcessConnection - In BATTLEWARRIOR case");
+					displayMessage("\nBattle commencing between: "
+							+ inMessage.getWarrior().getName() + " and " inMessage.getOpponent().getName() + " with " + inMessage.getAction()); // display
+
+					sendData(MessageFactory.toJSON(new Message(inMessage.getWarrior(),Message.MessageCommand.GREETWARRIOR)));
+					sendData(MessageFactory.toJSON(moderator
+							.processNewWarrior(inMessage)));					
 				default:  //Added for debugging to verify that the message was not falling out via not being handled.
 					System.out.println("Debugging ProcessConnection -Default portion of Switch which does nothing");
 				}

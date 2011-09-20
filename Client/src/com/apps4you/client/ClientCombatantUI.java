@@ -235,10 +235,10 @@ public class ClientCombatantUI extends JFrame {
 		    	System.out.println("\n The selected action was: " + battleAction.toString() ); 
 		    	
 		    	//I believe it should look more like this then the current sendData that is below
-//		    	Message message = new Message(mWarrior,Message.MessageCommand.BATTLEWARRIOR,battleAction, mOpponent);
-//				client.sendData(MessageFactory.toJSON(message));
+		    	Message message = new Message(mWarrior,Message.MessageCommand.BATTLEWARRIOR,battleAction, mOpponent);
+				client.sendData(MessageFactory.toJSON(message));
 						    	
-		    	client.sendData(mWarrior.getName()+" used " + battleAction.toString() + " on " + mOpponent.getName() );
+		    	//client.sendData(mWarrior.getName()+" used " + battleAction.toString() + " on " + mOpponent.getName() );
 		    	
 		    	ClientCombatantUI.this.selectDataFileButton.setEnabled(true);
 		    }
