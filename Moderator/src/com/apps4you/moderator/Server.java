@@ -90,16 +90,18 @@ public class Server {
 	// process connection with client
 	private void processConnection() throws IOException {
 		String message = "Connection successful";
-//		sendData(message); // send connection successful message
 
 		do // process messages sent from client
 		{
 			try // read message and display it
 			{
 				message = (String) input.readObject(); // read new message
+				System.out.println("Debugging ProcessConnection - Message was: ***"+ message + "***End Message***");
 				Message inMessage = MessageFactory.fromJSON(message);
+				System.out.println("Debugging ProcessConnection - Retrieved Message from MessageFactory");
 				switch (inMessage.getCommand()) {
 				case NEWWARRIOR:
+					System.out.println("Debugging ProcessConnection - In NEWWARRIOR case");
 					displayMessage("\nNew warrior added: "
 							+ inMessage.getWarrior().getName()); // display
 
@@ -108,8 +110,19 @@ public class Server {
 							.processNewWarrior(inMessage)));
 
 					break;
-				}
+					
+				case BATTLEWARRIOR:
+					System.out.println("Debugging ProcessConnection - In BATTLEWARRIOR case");
+					displayMessage("\nBattle commencing between: "
+							+ inMessage.getWarrior().getName() + " and " inMessage.getOpponent().getName() + " with " + inMessage.getAction()); // display
 
+					sendData(MessageFactory.toJSON(new Message(inMessage.getWarrior(),Message.MessageCommand.GREETWARRIOR)));
+					sendData(MessageFactory.toJSON(moderator
+							.processNewWarrior(inMessage)));					
+				default:  //Added for debugging to verify that the message was not falling out via not being handled.
+					System.out.println("Debugging ProcessConnection -Default portion of Switch which does nothing");
+				}
+				System.out.println("Debugging ProcessConnection - Out of the switch statment");
 			} // end try
 			catch (ClassNotFoundException classNotFoundException) {
 				displayMessage("\nUnknown object type received");

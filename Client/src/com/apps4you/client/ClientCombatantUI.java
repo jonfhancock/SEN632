@@ -206,12 +206,7 @@ public class ClientCombatantUI extends JFrame {
 		   }
 		    else if (e.getSource() == opponentButton)
 		    {	    	
-		    	//Get a list of the possible opponents from the server and then 
-//		    	opponents.add(new Warrior("Zerg",Origins.JAGLANBETA,"Come to the dark side"));
-//		    	opponents.add(new Warrior("Woody",Origins.BREQUINDA,"He's a cowboy"));
-//		    	opponents.add(new Warrior("Ham",Origins.VOGSPHERE,"AKA Evil Dr. Porkchop"));
-//		    	opponents.add(new Warrior("Buzz",Origins.KAKRAFOON,"To infinity and beyond!"));
-		    	
+	    	
 		    	mOpponent= (Warrior)JOptionPane.showInputDialog(
 		    			ClientCombatantUI.this,
 		    	                    "Please select your opponent:",
@@ -238,7 +233,13 @@ public class ClientCombatantUI extends JFrame {
 		    	                    possibilities,
 		    	                    null);	   
 		    	System.out.println("\n The selected action was: " + battleAction.toString() ); 
-		    	client.sendData(mWarrior.getName()+" used " + battleAction.toString() + " on " + mOpponent.getName() );
+		    	
+		    	//I believe it should look more like this then the current sendData that is below
+		    	Message message = new Message(mWarrior,Message.MessageCommand.BATTLEWARRIOR,battleAction, mOpponent);
+				client.sendData(MessageFactory.toJSON(message));
+						    	
+		    	//client.sendData(mWarrior.getName()+" used " + battleAction.toString() + " on " + mOpponent.getName() );
+		    	
 		    	ClientCombatantUI.this.selectDataFileButton.setEnabled(true);
 		    }
 		    else if (e.getSource() == connectButton)
