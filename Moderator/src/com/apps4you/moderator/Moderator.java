@@ -14,17 +14,17 @@ import com.apps4you.shared.Warrior;
 
 public class Moderator{
 
-	private ArrayList<Warrior> warriorsList;
+	private ArrayList<ConnectedWarrior> warriorsList;
 	
 	private static final long serialVersionUID = 1712048162291486001L;
 
 	public Moderator() {
 		// TODO Auto-generated constructor stub
-		warriorsList = new ArrayList<Warrior>();
-		warriorsList.add(new Warrior("Zerg",Origins.JAGLANBETA,"Come to the dark side"));
-		warriorsList.add(new Warrior("Woody",Origins.BREQUINDA,"He's a cowboy"));
-		warriorsList.add(new Warrior("Ham",Origins.VOGSPHERE,"AKA Evil Dr. Porkchop"));
-		warriorsList.add(new Warrior("Buzz",Origins.KAKRAFOON,"To infinity and beyond!"));
+		warriorsList = new ArrayList<ConnectedWarrior>();
+//		warriorsList.add(new Warrior("Zerg",Origins.JAGLANBETA,"Come to the dark side"));
+//		warriorsList.add(new Warrior("Woody",Origins.BREQUINDA,"He's a cowboy"));
+//		warriorsList.add(new Warrior("Ham",Origins.VOGSPHERE,"AKA Evil Dr. Porkchop"));
+//		warriorsList.add(new Warrior("Buzz",Origins.KAKRAFOON,"To infinity and beyond!"));
 	}
 	
 	private void moderateAttacks(Warrior w1, Warrior w2)
@@ -40,18 +40,18 @@ public class Moderator{
 		//TODO report back to the warriors the result of the attack		
 	}
 	
-	public void addOpponent(Warrior newWarrior)
+	public void addOpponent(ConnectedWarrior newWarrior)
 	{
 		this.warriorsList.add(newWarrior);
 	}
-	public void deleteOpponent(Warrior removeWarrior)
+	public void deleteOpponent(ConnectedWarrior removeWarrior)
 	{
 		this.warriorsList.remove(removeWarrior);
 	}	
 	public int getOpponentCount(){
 		return warriorsList.size();
 	}
-	public ArrayList<Warrior> getOpponents()
+	public ArrayList<ConnectedWarrior> getOpponents()
 	{
 		return this.warriorsList;		
 	}

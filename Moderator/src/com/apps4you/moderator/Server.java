@@ -18,11 +18,13 @@ public class Server {
 	private ObjectOutputStream output; // output stream to client
 	private ObjectInputStream input; // input stream from client
 	private ServerSocket server; // server socket
-	private Socket connection; // connection to client
+//	private Socket connection; // connection to client
 	private int counter = 1; // counter of number of connections
 
 	private Moderator moderator;
 	private ModeratorUI uiInstance;
+	
+	
 
 	// set up GUI
 	public Server() {
@@ -43,24 +45,12 @@ public class Server {
 				
 				try {
 					
-					waitForConnection(); // wait for a connection
-			        new Thread(
-			                new Runnable() {
-			                    public void run() {
-			                    	try {
-										getStreams();
-										processConnection(); // process connection
-									}catch (EOFException eofException) {
-										displayMessage("\nServer terminated connection");
-									} // end catch
-			                    	catch (IOException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
-									} // get input & output streams
-			    					
+					ConnectedWarrior cw = waitForConnection(); // wait for a connection
 
-			                    }
-			                }).start();
+					getStreams(cw);
+					processConnection(); // process connection
+
+									
 					
 				} // end try
 				
@@ -76,21 +66,23 @@ public class Server {
 	} // end method runServer
 
 	// wait for connection to arrive, then display connection info
-	private void waitForConnection() throws IOException {
+	private ConnectedWarrior waitForConnection() throws IOException {
 		displayMessage("Waiting for connection\n");
-		connection = server.accept(); // allow server to accept connection
+		ConnectedWarrior cw = new ConnectedWarrior(server.accept());
+//		Socket connection = server.accept(); // allow server to accept connection
 		displayMessage("Connection " + counter + " received from: "
-				+ connection.getInetAddress().getHostName());
+				+ cw.getSocket().getInetAddress().getHostName());
+		return cw;
 	} // end method waitForConnection
 
 	// get streams to send and receive data
-	private void getStreams() throws IOException {
+	private void getStreams(ConnectedWarrior cw) throws IOException {
 		// set up output stream for objects
-		output = new ObjectOutputStream(connection.getOutputStream());
+		output = new ObjectOutputStream(cw.getSocket().getOutputStream());
 		output.flush(); // flush output buffer to send header information
 
 		// set up input stream for objects
-		input = new ObjectInputStream(connection.getInputStream());
+		input = new ObjectInputStream(cw.getSocket().getInputStream());
 
 		displayMessage("\nGot I/O streams\n");
 	} // end method getStreams
@@ -129,7 +121,6 @@ public class Server {
 	// close streams and socket
 	private void closeConnection() {
 		displayMessage("\nTerminating connection\n");
-		// setTextFieldEditable( false ); // disable enterField
 
 		try {
 			output.close(); // close output stream
