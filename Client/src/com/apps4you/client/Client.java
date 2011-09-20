@@ -9,6 +9,10 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 
+import com.apps4you.shared.Message;
+import com.apps4you.shared.MessageFactory;
+import com.apps4you.shared.Warrior;
+
 public class Client  
 {
    private static final long serialVersionUID = 7189340988809001708L;
@@ -88,7 +92,19 @@ public class Client
          try // read message and display it
          {
             message = ( String ) input.readObject(); // read new message
-            displayMessage( "\n" + message ); // display message
+//            displayMessage( "\n" + message ); // display message
+            Message inMessage = MessageFactory.fromJSON(message);
+            switch(inMessage.getCommand()){
+            case GREETWARRIOR:
+            	displayMessage("Welcome, " + inMessage.getWarrior().toString() + "!");
+            	break;
+            case SENDOPPONENTS:
+            	ClientCombatantUI.getInstance().setOpponents(inMessage.getOpponents());
+            	displayOpponents(inMessage);
+            	break;
+            default:
+            	break;
+            }
          } // end try
          catch ( ClassNotFoundException classNotFoundException ) 
          {
@@ -121,7 +137,7 @@ public class Client
       {
          output.writeObject(message );
          output.flush(); // flush data to output
-         displayMessage( message );
+//         displayMessage( message );
       } // end try
       catch ( IOException ioException )
       {
@@ -135,5 +151,12 @@ public class Client
    {
       uiInstance.displayText( messageToDisplay );
 
-   } // end method displayMessage      
+   } // end method displayMessage    
+   
+   private void displayOpponents(Message message){
+	   	 displayMessage("\nWarriors on the battlefield:\n");
+	     for(Warrior w:message.getOpponents()){
+	    	 displayMessage(w.toFormattedString());
+	     }
+   }
 } // end class Client

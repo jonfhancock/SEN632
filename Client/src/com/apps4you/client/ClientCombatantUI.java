@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -50,6 +52,7 @@ public class ClientCombatantUI extends JFrame {
    private static Warrior mWarrior;
    private static Warrior mOpponent;
    private static String hostLocation = "localhost";
+   private ArrayList<Warrior> opponents;
    private final JPanel battlePanel = new JPanel();
    private Actions battleAction;
 
@@ -92,6 +95,8 @@ public class ClientCombatantUI extends JFrame {
 	 */
 	private ClientCombatantUI() {
 		setResizable(false);
+    	opponents = new ArrayList<Warrior>();
+
 		   EventHandler handler = new EventHandler();
 		   
 	       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -151,12 +156,11 @@ public class ClientCombatantUI extends JFrame {
 		   setSize( 516, 400 ); // set size of window
 		   setVisible( true ); // show window
 		   setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		   
 			   
 	}
 	
-	private void setUpUI(){
-		
-	}
+
 	
 	public void setWarrior(Warrior warrior){
 		mWarrior = warrior;
@@ -164,6 +168,7 @@ public class ClientCombatantUI extends JFrame {
         selectDataFileButton.setEnabled(false);
         opponentButton.setEnabled(true);		
 	}
+	
 	
 	 private class EventHandler implements ActionListener
 	 {
@@ -202,19 +207,20 @@ public class ClientCombatantUI extends JFrame {
 		    else if (e.getSource() == opponentButton)
 		    {	    	
 		    	//Get a list of the possible opponents from the server and then 
-		    	Warrior[] possibilities = {new Warrior("Zerg",Origins.JAGLANBETA,"Come to the dark side"),
-		    							   new Warrior("Woody",Origins.BREQUINDA,"He's a cowboy"),
-		    							   new Warrior("Ham",Origins.VOGSPHERE,"AKA Evil Dr. Porkchop"),
-		    							   new Warrior("Buzz",Origins.KAKRAFOON,"To infinity and beyond!")};
+//		    	opponents.add(new Warrior("Zerg",Origins.JAGLANBETA,"Come to the dark side"));
+//		    	opponents.add(new Warrior("Woody",Origins.BREQUINDA,"He's a cowboy"));
+//		    	opponents.add(new Warrior("Ham",Origins.VOGSPHERE,"AKA Evil Dr. Porkchop"));
+//		    	opponents.add(new Warrior("Buzz",Origins.KAKRAFOON,"To infinity and beyond!"));
+		    	
 		    	mOpponent= (Warrior)JOptionPane.showInputDialog(
 		    			ClientCombatantUI.this,
 		    	                    "Please select your opponent:",
 		    	                    "Opponent Selection Dialog",
 		    	                    JOptionPane.QUESTION_MESSAGE,
 		    	                    null,
-		    	                    possibilities,
+		    	                    opponents.toArray(),
 		    	                    null);	    	
-		    	System.out.println("\n Opponent Selection was chosen - with an opponent of: " + mOpponent ); 
+		    	System.out.println("\n"+mWarrior.getName()+" is prepared to engage " + mOpponent + " in battle!" ); 
 
 		    	ClientCombatantUI.this.actionButton.setEnabled(true);		
 		    	//TODO Update who was selected
@@ -282,4 +288,15 @@ public class ClientCombatantUI extends JFrame {
 		    }
 	     } 
 	 }
+	 
+	 public void addOpponent(Warrior opponent){
+		 opponents.add(opponent);
+	 }
+	 public void removeOpponent(Warrior opponent){
+		 opponents.remove(opponent);
+	 }
+	 public void setOpponents(ArrayList<Warrior> opponentsList){
+		 opponents = opponentsList;
+	 }
+	 
   }

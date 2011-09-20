@@ -7,6 +7,7 @@ import java.util.Random;
 
 import com.apps4you.shared.Message;
 import com.apps4you.shared.MessageFactory;
+import com.apps4you.shared.Origins;
 import com.apps4you.shared.Warrior;
 
 
@@ -20,6 +21,10 @@ public class Moderator{
 	public Moderator() {
 		// TODO Auto-generated constructor stub
 		warriorsList = new ArrayList<Warrior>();
+		warriorsList.add(new Warrior("Zerg",Origins.JAGLANBETA,"Come to the dark side"));
+		warriorsList.add(new Warrior("Woody",Origins.BREQUINDA,"He's a cowboy"));
+		warriorsList.add(new Warrior("Ham",Origins.VOGSPHERE,"AKA Evil Dr. Porkchop"));
+		warriorsList.add(new Warrior("Buzz",Origins.KAKRAFOON,"To infinity and beyond!"));
 	}
 	
 	private void moderateAttacks(Warrior w1, Warrior w2)

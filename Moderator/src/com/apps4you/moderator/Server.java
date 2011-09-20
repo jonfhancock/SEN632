@@ -38,16 +38,32 @@ public class Server {
 		try // set up server to receive connections; process connections
 		{
 			server = new ServerSocket(12345, 100); // create ServerSocket
-
+	        
 			while (true) {
+				
 				try {
+					
 					waitForConnection(); // wait for a connection
-					getStreams(); // get input & output streams
-					processConnection(); // process connection
+			        new Thread(
+			                new Runnable() {
+			                    public void run() {
+			                    	try {
+										getStreams();
+										processConnection(); // process connection
+									}catch (EOFException eofException) {
+										displayMessage("\nServer terminated connection");
+									} // end catch
+			                    	catch (IOException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									} // get input & output streams
+			    					
+
+			                    }
+			                }).start();
+					
 				} // end try
-				catch (EOFException eofException) {
-					displayMessage("\nServer terminated connection");
-				} // end catch
+				
 				finally {
 					closeConnection(); // close connection
 					++counter;
@@ -82,7 +98,7 @@ public class Server {
 	// process connection with client
 	private void processConnection() throws IOException {
 		String message = "Connection successful";
-		sendData(message); // send connection successful message
+//		sendData(message); // send connection successful message
 
 		do // process messages sent from client
 		{
@@ -95,6 +111,7 @@ public class Server {
 					displayMessage("\nNew warrior added: "
 							+ inMessage.getWarrior().getName()); // display
 
+					sendData(MessageFactory.toJSON(new Message(inMessage.getWarrior(),Message.MessageCommand.GREETWARRIOR)));
 					sendData(MessageFactory.toJSON(moderator
 							.processNewWarrior(inMessage)));
 

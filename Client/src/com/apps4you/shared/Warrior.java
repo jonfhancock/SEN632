@@ -73,6 +73,14 @@ public class Warrior{
 		return this.name;
 	}
 
+	public String toFormattedString(){
+		StringBuilder builder = new StringBuilder();
+		builder.append(name).append(" (").append(health).append(")\n")
+		.append("From: ").append(origin.toString()).append("\n")
+		.append(description).append("\n\n");
+		return builder.toString();
+	}
+
 
 
 
