@@ -3,16 +3,13 @@ package com.apps4you.shared;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 
 public class Message {
 	private Warrior mWarrior = null;
 	private ArrayList<Warrior> mOpponents = null;
 	private Actions mAction = null;
 	private MessageCommand mCommand = null;
+	
 	private Warrior mOpponent = null;
 	
 	public Message(){};

@@ -15,8 +15,8 @@ import com.apps4you.shared.MessageFactory;
 public class Server {
 	private static final long serialVersionUID = -5693161904305556535L;
 
-	private ObjectOutputStream output; // output stream to client
-	private ObjectInputStream input; // input stream from client
+//	private ObjectOutputStream output; // output stream to client
+//	private ObjectInputStream input; // input stream from client
 	private ServerSocket server; // server socket
 //	private Socket connection; // connection to client
 	private int counter = 1; // counter of number of connections
@@ -46,8 +46,8 @@ public class Server {
 				try {
 					
 					ConnectedWarrior cw = waitForConnection(); // wait for a connection
-
-					getStreams(cw);
+					moderator.addOpponent(cw);
+//					getStreams(cw);
 					processConnection(); // process connection
 
 									
@@ -69,6 +69,7 @@ public class Server {
 	private ConnectedWarrior waitForConnection() throws IOException {
 		displayMessage("Waiting for connection\n");
 		ConnectedWarrior cw = new ConnectedWarrior(server.accept());
+		
 //		Socket connection = server.accept(); // allow server to accept connection
 		displayMessage("Connection " + counter + " received from: "
 				+ cw.getSocket().getInetAddress().getHostName());
@@ -76,16 +77,16 @@ public class Server {
 	} // end method waitForConnection
 
 	// get streams to send and receive data
-	private void getStreams(ConnectedWarrior cw) throws IOException {
-		// set up output stream for objects
-		output = new ObjectOutputStream(cw.getSocket().getOutputStream());
-		output.flush(); // flush output buffer to send header information
-
-		// set up input stream for objects
-		input = new ObjectInputStream(cw.getSocket().getInputStream());
-
-		displayMessage("\nGot I/O streams\n");
-	} // end method getStreams
+//	private void getStreams(ConnectedWarrior cw) throws IOException {
+//		// set up output stream for objects
+//		output = new ObjectOutputStream(cw.getSocket().getOutputStream());
+//		output.flush(); // flush output buffer to send header information
+//
+//		// set up input stream for objects
+//		input = new ObjectInputStream(cw.getSocket().getInputStream());
+//
+//		displayMessage("\nGot I/O streams\n");
+//	} // end method getStreams
 
 	// process connection with client
 	private void processConnection() throws IOException {
@@ -95,34 +96,17 @@ public class Server {
 		{
 			try // read message and display it
 			{
-				message = (String) input.readObject(); // read new message
-				System.out.println("Debugging ProcessConnection - Message was: ***"+ message + "***End Message***");
-				Message inMessage = MessageFactory.fromJSON(message);
-				System.out.println("Debugging ProcessConnection - Retrieved Message from MessageFactory");
-				switch (inMessage.getCommand()) {
-				case NEWWARRIOR:
-					System.out.println("Debugging ProcessConnection - In NEWWARRIOR case");
-					displayMessage("\nNew warrior added: "
-							+ inMessage.getWarrior().getName()); // display
-
-					sendData(MessageFactory.toJSON(new Message(inMessage.getWarrior(),Message.MessageCommand.GREETWARRIOR)));
-					sendData(MessageFactory.toJSON(moderator
-							.processNewWarrior(inMessage)));
-
-					break;
+				
+				for(ConnectedWarrior cw: moderator.getOpponents()){
+					message = (String) cw.getInputStream().readObject(); // read new message
+					Message inMessage = MessageFactory.fromJSON(message);
+					processMessage(inMessage, cw);
+					System.out.println("Debugging ProcessConnection - Message was: ***"+ message + "***End Message***");
 					
-				case BATTLEWARRIOR:
-					System.out.println("Debugging ProcessConnection - In BATTLEWARRIOR case");
-					displayMessage("\nBattle commencing between: "
-							+ inMessage.getWarrior().getName() + " and " inMessage.getOpponent().getName() + " with " + inMessage.getAction()); // display
-
-					sendData(MessageFactory.toJSON(new Message(inMessage.getWarrior(),Message.MessageCommand.GREETWARRIOR)));
-					sendData(MessageFactory.toJSON(moderator
-							.processNewWarrior(inMessage)));					
-				default:  //Added for debugging to verify that the message was not falling out via not being handled.
-					System.out.println("Debugging ProcessConnection -Default portion of Switch which does nothing");
+					System.out.println("Debugging ProcessConnection - Retrieved Message from MessageFactory");
 				}
-				System.out.println("Debugging ProcessConnection - Out of the switch statment");
+				
+
 			} // end try
 			catch (ClassNotFoundException classNotFoundException) {
 				displayMessage("\nUnknown object type received");
@@ -136,9 +120,11 @@ public class Server {
 		displayMessage("\nTerminating connection\n");
 
 		try {
-			output.close(); // close output stream
-			input.close(); // close input stream
-			connection.close(); // close socket
+			for(ConnectedWarrior cw:moderator.getOpponents()){
+			cw.getOutputStream().close(); // close output stream
+			cw.getInputStream().close(); // close input stream
+			cw.getSocket().close(); // close socket
+			}
 		} // end try
 		catch (IOException ioException) {
 			ioException.printStackTrace();
@@ -146,11 +132,11 @@ public class Server {
 	} // end method closeConnection
 
 	// send message to client
-	private void sendData(String message) {
+	private void sendData(String message, ConnectedWarrior cw) {
 		try // send object to client
 		{
-			output.writeObject(message);
-			output.flush(); // flush output to client
+			cw.getOutputStream().writeObject(message);
+			cw.getOutputStream().flush(); // flush output to client
 			displayMessage(message);
 		} // end try
 		catch (IOException ioException) {
@@ -163,4 +149,31 @@ public class Server {
 		uiInstance.displayText(messageToDisplay); // append message
 	} // end method displayMessage
 
+	private void processMessage(Message inMessage, ConnectedWarrior cw){
+		switch (inMessage.getCommand()) {
+		case NEWWARRIOR:
+			System.out.println("Debugging ProcessConnection - In NEWWARRIOR case");
+			displayMessage("\nNew warrior added: "
+					+ inMessage.getWarrior().getName()); // display
+			cw.upgradeWarrior(inMessage.getWarrior());
+			sendData(MessageFactory.toJSON(new Message(inMessage.getWarrior(),Message.MessageCommand.GREETWARRIOR)),cw);
+			sendData(MessageFactory.toJSON(moderator
+					.processNewWarrior(inMessage,cw)),cw);
+
+			break;
+			
+		case BATTLEWARRIOR:
+			System.out.println("Debugging ProcessConnection - In BATTLEWARRIOR case");
+			displayMessage("\nBattle commencing between: "
+					+ inMessage.getWarrior().getName() + " and " + inMessage.getOpponent().getName() + " with " + inMessage.getAction()); // display
+
+			sendData(MessageFactory.toJSON(new Message(inMessage.getWarrior(),Message.MessageCommand.GREETWARRIOR)),cw);
+//			sendData(MessageFactory.toJSON(moderator
+//					.processNewWarrior(inMessage)));					
+		default:  //Added for debugging to verify that the message was not falling out via not being handled.
+			System.out.println("Debugging ProcessConnection -Default portion of Switch which does nothing");
+		}
+		System.out.println("Debugging ProcessConnection - Out of the switch statment");
+	}
+	
 } // end class Server

@@ -8,6 +8,8 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import com.apps4you.moderator.ConnectedWarrior;
+
 public class Message {
 	private Warrior mWarrior = null;
 	private ArrayList<Warrior> mOpponents = null;
@@ -32,7 +34,6 @@ public class Message {
 		mCommand = command;
 		mOpponent = opponent;
 	}
-	
 	public Message(Warrior warrior, ArrayList<Warrior> opponents, MessageCommand command,Actions action){
 		mWarrior = warrior;
 		mAction = action;
@@ -43,6 +44,16 @@ public class Message {
 		mCommand = command;
 		mOpponents = opponents;
 	}
+	
+	public Message(ArrayList<ConnectedWarrior> opponents, MessageCommand command, int flag){
+		mCommand = command;
+		mOpponents = new ArrayList<Warrior>();
+		for(ConnectedWarrior cw:opponents){
+			mOpponents.add(cw);
+		}
+//		mOpponents = opponents;
+	}
+	
 	public Message(MessageCommand command){
 		mCommand = command;
 	}
@@ -65,7 +76,7 @@ public class Message {
 	public void setCommand(MessageCommand mCommand) {
 		this.mCommand = mCommand;
 	}
-    public Warrior getOpponent() {
+	public Warrior getOpponent() {
 		return mOpponent;
 	}
 	public ArrayList<Warrior> getOpponents(){
@@ -75,6 +86,7 @@ public class Message {
 		this.mOpponents = opponents;
 	}
 	
+	 
 	
 	
 	public static enum MessageCommand{
@@ -82,7 +94,8 @@ public class Message {
 		BATTLEWARRIOR,
 		GREETWARRIOR,
 		NOOPPONENTS,
-		SENDOPPONENTS
+		SENDOPPONENTS,
+		SELECTACTION
 	}
 	
 	

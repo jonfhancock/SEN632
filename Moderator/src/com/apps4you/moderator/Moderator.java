@@ -42,7 +42,7 @@ public class Moderator{
 	
 	public void addOpponent(ConnectedWarrior newWarrior)
 	{
-		this.warriorsList.add(newWarrior);
+		warriorsList.add(newWarrior);
 	}
 	public void deleteOpponent(ConnectedWarrior removeWarrior)
 	{
@@ -69,14 +69,15 @@ public class Moderator{
 		 return rand.nextInt(101);
 	}
 	
-	public Message processNewWarrior(Message message){
+	public Message processNewWarrior(Message message,ConnectedWarrior cw){
+		cw.upgradeWarrior(message.getWarrior());
 		if(warriorsList.size() == 0){
-			warriorsList.add(message.getWarrior());
+			warriorsList.add(cw);
     		return new Message(Message.MessageCommand.NOOPPONENTS);        	
     	} else {
     		return new Message(
     					warriorsList,
-    					Message.MessageCommand.SENDOPPONENTS);
+    					Message.MessageCommand.SENDOPPONENTS,0);
     	}
 	}
 	
@@ -84,12 +85,22 @@ public class Moderator{
 		//Need to notify the Opponent of a Battle Request and allow them to pick an Action
 		if(warriorsList.size() != 0)
 		{
-			warriorsList.get(message.getOpponent());
+			
+			ConnectedWarrior opponent = findById(message.getOpponent().getWarriorId());
+
 			return new Message(message.getOpponent(),Message.MessageCommand.SELECTACTION);        	
     	} else {
-    		return new Message(
-    					warriorsList,
-    					Message.MessageCommand.NOOPPONENTS);
+    		return new Message(Message.MessageCommand.NOOPPONENTS);
     	}
+	}
+	
+	public ConnectedWarrior findById(UUID uuid){
+		ConnectedWarrior r = null;
+		for(ConnectedWarrior w:warriorsList){
+			if(uuid.equals(w.getWarriorId())){
+				r = w;
+			}
+		}
+		return r;
 	}
 }
