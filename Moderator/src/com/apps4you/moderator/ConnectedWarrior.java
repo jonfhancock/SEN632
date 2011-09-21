@@ -30,7 +30,7 @@ public class ConnectedWarrior extends Warrior {
 			e.printStackTrace();
 		}
 	}
-	
+	@JsonIgnore 
 	public Socket getSocket(){
 		return mConnection;
 	}
@@ -46,9 +46,11 @@ public class ConnectedWarrior extends Warrior {
 			e.printStackTrace();
 		}
 	}
+	@JsonIgnore 
 	public ObjectOutputStream getOutputStream(){
 		return outStream;
 	}
+	@JsonIgnore 
 	public ObjectInputStream getInputStream(){
 		return inStream;
 	}
