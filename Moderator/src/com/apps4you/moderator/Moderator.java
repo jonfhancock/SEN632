@@ -76,9 +76,9 @@ public class Moderator{
 			warriorsList.add(cw);
     		return new Message(Message.MessageCommand.NOOPPONENTS);        	
     	} else {
-    		return new Message(
+    		return new ModeratorMessage(
     					warriorsList,
-    					Message.MessageCommand.SENDOPPONENTS,0);
+    					Message.MessageCommand.SENDOPPONENTS);
     	}
 	}
 	

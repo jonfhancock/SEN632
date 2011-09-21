@@ -8,5 +8,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/Client/src/com/apps4you/shared"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Client"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

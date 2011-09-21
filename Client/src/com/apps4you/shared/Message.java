@@ -79,7 +79,9 @@ public class Message {
 	public void setOpponents(ArrayList<Warrior> opponents){
 		this.mOpponents = opponents;
 	}
-	
+	public void addOpponent(Warrior w){
+		mOpponents.add(w);
+	}
 	
 	
 	public static enum MessageCommand{
