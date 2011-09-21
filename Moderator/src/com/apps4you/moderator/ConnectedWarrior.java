@@ -5,11 +5,16 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import com.apps4you.shared.Warrior;
 
 public class ConnectedWarrior extends Warrior {
+	@JsonIgnore 
 	private Socket mConnection;
+	@JsonIgnore 
 	private ObjectOutputStream outStream;
+	@JsonIgnore 
 	private ObjectInputStream inStream;
 	
 	public ConnectedWarrior(Socket socket){

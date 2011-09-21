@@ -3,13 +3,11 @@ package com.apps4you.shared;
 import java.io.IOException;
 import java.util.ArrayList;
 
-
 public class Message {
 	private Warrior mWarrior = null;
 	private ArrayList<Warrior> mOpponents = null;
 	private Actions mAction = null;
-	private MessageCommand mCommand = null;
-	
+	private MessageCommand mCommand = null;	
 	private Warrior mOpponent = null;
 	
 	public Message(){};
@@ -60,6 +58,9 @@ public class Message {
 	}
 	public void setCommand(MessageCommand mCommand) {
 		this.mCommand = mCommand;
+	}
+	public void setOpponent(Warrior opponent){
+		mOpponent = opponent;
 	}
 	public Warrior getOpponent() {
 		return mOpponent;

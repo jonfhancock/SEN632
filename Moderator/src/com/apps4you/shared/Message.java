@@ -76,6 +76,9 @@ public class Message {
 	public void setCommand(MessageCommand mCommand) {
 		this.mCommand = mCommand;
 	}
+	public void setOpponent(Warrior opponent){
+		mOpponent = opponent;
+	}
 	public Warrior getOpponent() {
 		return mOpponent;
 	}
