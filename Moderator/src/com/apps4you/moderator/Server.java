@@ -24,7 +24,7 @@ public class Server {
 	private Moderator moderator;
 	private ModeratorUI uiInstance;
 	
-	
+	private boolean processing = false;
 
 	// set up GUI
 	public Server() {
@@ -48,6 +48,7 @@ public class Server {
 					ConnectedWarrior cw = waitForConnection(); // wait for a connection
 					moderator.addOpponent(cw);
 //					getStreams(cw);
+					if(!processing){
 			        new Thread(
 			                new Runnable() {
 			                    public void run() {
@@ -60,13 +61,15 @@ public class Server {
 
 			                    }
 			                }).start();
+			        processing = true;
+					}
 					
 									
 					
 				} // end try
 				
 				finally {
-					closeConnection(); // close connection
+//					closeConnection(); // close connection
 					++counter;
 				} // end finally
 			} // end while

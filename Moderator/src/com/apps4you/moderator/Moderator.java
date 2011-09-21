@@ -72,14 +72,16 @@ public class Moderator{
 	
 	public Message processNewWarrior(Message message,ConnectedWarrior cw){
 		cw.upgradeWarrior(message.getWarrior());
+		Message returnMessage = null;
 		if(warriorsList.size() == 0){
-			warriorsList.add(cw);
-    		return new Message(Message.MessageCommand.NOOPPONENTS);        	
+    		returnMessage = new Message(Message.MessageCommand.NOOPPONENTS);        	
     	} else {
-    		return new ModeratorMessage(
+    		returnMessage = new ModeratorMessage(
     					warriorsList,
     					Message.MessageCommand.SENDOPPONENTS);
     	}
+		warriorsList.add(cw);
+		return returnMessage;
 	}
 	
 	public Message processBattleRequet(Message message){
