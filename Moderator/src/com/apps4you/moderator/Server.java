@@ -48,8 +48,19 @@ public class Server {
 					ConnectedWarrior cw = waitForConnection(); // wait for a connection
 					moderator.addOpponent(cw);
 //					getStreams(cw);
-					processConnection(); // process connection
+			        new Thread(
+			                new Runnable() {
+			                    public void run() {
+			                    	try {
+										processConnections();
+									} catch (IOException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									} // process connection
 
+			                    }
+			                }).start();
+					
 									
 					
 				} // end try
@@ -89,7 +100,7 @@ public class Server {
 //	} // end method getStreams
 
 	// process connection with client
-	private void processConnection() throws IOException {
+	private void processConnections() throws IOException {
 		String message = "Connection successful";
 
 		do // process messages sent from client
