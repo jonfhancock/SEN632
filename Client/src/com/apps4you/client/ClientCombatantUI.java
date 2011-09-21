@@ -169,6 +169,25 @@ public class ClientCombatantUI extends JFrame {
         opponentButton.setEnabled(true);		
 	}
 	
+	public void haveBeenChosenForBattleSelectAction(Warrior whoSelectedMe)
+	{
+		System.out.println("Been Selected for Battle now choose Action");
+		Object[] possibilities = Actions.values();
+    	battleAction = (Actions)JOptionPane.showInputDialog(
+    			ClientCombatantUI.this,
+    	                    "You have been selected for battle.  Please select your battle action:",
+    	                    "Battle Selection Dialog",
+    	                    JOptionPane.QUESTION_MESSAGE,
+    	                    null,
+    	                    possibilities,
+    	                    null);	   
+    	System.out.println("\n The selected action as a defense was: " + battleAction.toString() ); 
+    	
+    	//I believe it should look more like this then the current sendData that is below
+    	Message message = new Message(mWarrior,Message.MessageCommand.DEFENSESELECTED,battleAction);
+		client.sendData(MessageFactory.toJSON(message));
+		
+	}
 	
 	 private class EventHandler implements ActionListener
 	 {
@@ -237,9 +256,7 @@ public class ClientCombatantUI extends JFrame {
 		    	//I believe it should look more like this then the current sendData that is below
 		    	Message message = new Message(mWarrior,Message.MessageCommand.BATTLEWARRIOR,battleAction, mOpponent);
 				client.sendData(MessageFactory.toJSON(message));
-						    	
-		    	//client.sendData(mWarrior.getName()+" used " + battleAction.toString() + " on " + mOpponent.getName() );
-		    	
+					
 		    	ClientCombatantUI.this.selectDataFileButton.setEnabled(true);
 		    }
 		    else if (e.getSource() == connectButton)

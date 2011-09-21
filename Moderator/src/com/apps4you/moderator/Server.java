@@ -99,9 +99,11 @@ public class Server {
 				
 				for(ConnectedWarrior cw: moderator.getOpponents()){
 					message = (String) cw.getInputStream().readObject(); // read new message
+					System.out.println("Debugging ProcessConnection - Message was: ***"+ message + "***End Message***");
+					
 					Message inMessage = MessageFactory.fromJSON(message);
 					processMessage(inMessage, cw);
-					System.out.println("Debugging ProcessConnection - Message was: ***"+ message + "***End Message***");
+					System.out.println("Debugging ProcessConnection - Message was: ***"+ inMessage + "***End Message***");
 					
 					System.out.println("Debugging ProcessConnection - Retrieved Message from MessageFactory");
 				}
@@ -150,6 +152,7 @@ public class Server {
 	} // end method displayMessage
 
 	private void processMessage(Message inMessage, ConnectedWarrior cw){
+		System.out.println("Debugging ProcessConnection - Message is ***"+inMessage+"***");
 		switch (inMessage.getCommand()) {
 		case NEWWARRIOR:
 			System.out.println("Debugging ProcessConnection - In NEWWARRIOR case");
@@ -168,8 +171,9 @@ public class Server {
 					+ inMessage.getWarrior().getName() + " and " + inMessage.getOpponent().getName() + " with " + inMessage.getAction()); // display
 
 			sendData(MessageFactory.toJSON(new Message(inMessage.getWarrior(),Message.MessageCommand.GREETWARRIOR)),cw);
-//			sendData(MessageFactory.toJSON(moderator
-//					.processNewWarrior(inMessage)));					
+//		case SELECTACTION:
+//			System.out.println("Debugging ProcessConnection - In SELECTACTION case");
+//			sendData(MessageFactory.toJSON(new Message()));
 		default:  //Added for debugging to verify that the message was not falling out via not being handled.
 			System.out.println("Debugging ProcessConnection -Default portion of Switch which does nothing");
 		}

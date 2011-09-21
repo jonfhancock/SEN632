@@ -32,7 +32,8 @@ public class Moderator{
 		//determine the changes to the health of the warriors
 		int w1PointsToReduce = determineHealthPointsToDeduct();		
 	    int w2PointsToReduce = determineHealthPointsToDeduct();
-	    
+	    w1.setHealth(w1.getHealth()-w1PointsToReduce);
+	    w2.setHealth(w2.getHealth()-w2PointsToReduce);	        
 	}
 	
 	private void sendAttackResults()
@@ -85,14 +86,29 @@ public class Moderator{
 		//Need to notify the Opponent of a Battle Request and allow them to pick an Action
 		if(warriorsList.size() != 0)
 		{
-			
+			System.out.println("Process Battle - Debugging " + message);
 			ConnectedWarrior opponent = findById(message.getOpponent().getWarriorId());
+			ConnectedWarrior original = findById(message.getWarrior().getWarriorId());
 
-			return new Message(message.getOpponent(),Message.MessageCommand.SELECTACTION);        	
+			return new Message((Warrior)opponent,Message.MessageCommand.SELECTACTION,(Warrior)original);        	
     	} else {
     		return new Message(Message.MessageCommand.NOOPPONENTS);
     	}
 	}
+	
+	public Message processDefenseWasSelected(Message message)
+	{
+		System.out.println("Process Defense - Debugging " + message);
+		ConnectedWarrior opponent = findById(message.getOpponent().getWarriorId());
+		ConnectedWarrior originalWarrior = findById(message.getWarrior().getWarriorId());
+		//Action defense = message.getAction();
+		
+		//Need to call moderateAttacks(w1,w2)
+		moderateAttacks(originalWarrior,opponent);
+		
+		//sendupdate to the warriors about their new health
+		return new Message((Warrior)originalWarrior,Message.MessageCommand.HEALTHUPDATE,(Warrior)opponent);
+    }
 	
 	public ConnectedWarrior findById(UUID uuid){
 		ConnectedWarrior r = null;

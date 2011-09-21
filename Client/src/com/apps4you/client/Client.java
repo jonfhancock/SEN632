@@ -63,6 +63,8 @@ public class Client
    {      
       displayMessage( "Attempting connection\n" );
 
+      System.out.println("Debugging - connectToServer - ChatServer is :***"+ chatServer +"***");
+      
       // create Socket to make connection to server
       client = new Socket( InetAddress.getByName( chatServer ), 12345 );
 
@@ -102,6 +104,8 @@ public class Client
             	ClientCombatantUI.getInstance().setOpponents(inMessage.getOpponents());
             	displayOpponents(inMessage);
             	break;
+            case SELECTACTION:            	
+            	ClientCombatantUI.getInstance().haveBeenChosenForBattleSelectAction(inMessage.getWarrior());
             default:
             	break;
             }
