@@ -21,12 +21,20 @@ public class Message {
 		mAction = action;
 		mCommand = command;
 	}
+
 	public Message(Warrior warrior, MessageCommand command,Actions action, Warrior opponent){
 		mWarrior = warrior;
 		mAction = action;
 		mCommand = command;
 		mOpponent = opponent;
 	}
+	
+	public Message(Warrior warrior, MessageCommand command,Warrior opponent){
+		mWarrior = warrior;
+		mCommand = command;
+		mOpponent = opponent;
+	}
+	
 	public Message(Warrior warrior, ArrayList<Warrior> opponents, MessageCommand command,Actions action){
 		mWarrior = warrior;
 		mAction = action;
@@ -80,7 +88,9 @@ public class Message {
 		GREETWARRIOR,
 		NOOPPONENTS,
 		SENDOPPONENTS,
-		SELECTACTION
+		SELECTACTION,
+		DEFENSESELECTED,
+		HEALTHUPDATE
 	}
 	
 	
