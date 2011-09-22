@@ -33,7 +33,7 @@ public class ThreadedServer {
 	
 	   public void execute()
 	   {
-	     while(moderator.getOpponentCount() < 2){
+	     while(true){
 	    	 try {
 				WarriorConnection wc = new WarriorConnection(server.accept(),moderator,uiInstance);
 				moderator.addOpponent(wc);
