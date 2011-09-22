@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>fig27_13_16</name>
+			<type>2</type>
+			<location>/home/jonfhancock/Dropbox/SEN 632/fig27_13_16</location>
+		</link>
+	</linkedResources>
 </projectDescription>

@@ -73,14 +73,14 @@ public class Moderator{
 	public Message processNewWarrior(Message message,ConnectedWarrior cw){
 		cw.upgradeWarrior(message.getWarrior());
 		Message returnMessage = null;
-		if(warriorsList.size() == 0){
+		if(warriorsList.size() == 1){
     		returnMessage = new Message(Message.MessageCommand.NOOPPONENTS);        	
     	} else {
     		returnMessage = new ModeratorMessage(
     					warriorsList,
     					Message.MessageCommand.SENDOPPONENTS);
     	}
-		warriorsList.add(cw);
+//		warriorsList.add(cw);
 		return returnMessage;
 	}
 	
