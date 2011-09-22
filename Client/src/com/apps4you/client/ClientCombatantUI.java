@@ -165,6 +165,7 @@ public class ClientCombatantUI extends JFrame {
 	public void setWarrior(Warrior warrior){
 		mWarrior = warrior;
         connectToServer();
+        welcomeLabel.setText("Connected as: "+ mWarrior.getName());
         selectDataFileButton.setEnabled(false);
         opponentButton.setEnabled(true);		
 	}
@@ -225,14 +226,19 @@ public class ClientCombatantUI extends JFrame {
 		   }
 		    else if (e.getSource() == opponentButton)
 		    {	    	
-	    	
+		    	ArrayList<Warrior> opponentsList = new ArrayList<Warrior>();
+		    	for(Warrior w: opponents){
+		    		if(!w.getWarriorId().equals(mWarrior.getWarriorId())){
+		    			opponentsList.add(w);
+		    		}
+		    	}
 		    	mOpponent= (Warrior)JOptionPane.showInputDialog(
 		    			ClientCombatantUI.this,
 		    	                    "Please select your opponent:",
 		    	                    "Opponent Selection Dialog",
 		    	                    JOptionPane.QUESTION_MESSAGE,
 		    	                    null,
-		    	                    opponents.toArray(),
+		    	                    opponentsList.toArray(),
 		    	                    null);	    	
 		    	System.out.println("\n"+mWarrior.getName()+" is prepared to engage " + mOpponent + " in battle!" ); 
 
@@ -314,7 +320,13 @@ public class ClientCombatantUI extends JFrame {
 		 opponents.remove(opponent);
 	 }
 	 public void setOpponents(ArrayList<Warrior> opponentsList){
+//		 for(Warrior w: opponentsList){
+//			 if(w.getWarriorId().equals(mWarrior.getWarriorId())){
+//				 opponentsList.remove(w);
+//			 }
+//		 }
 		 opponents = opponentsList;
+		
 	 }
 	 
   }

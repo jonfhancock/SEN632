@@ -63,7 +63,7 @@ public class WarriorConnection implements Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
 		String jsonString = null;
-		while(true){
+		while(mConnection.isConnected()){
 			try {
 				jsonString = (String) inStream.readObject();
 				System.out.println("Debugging ProcessConnection - Message was: ***"+ jsonString + "***End Message***");
@@ -73,6 +73,7 @@ public class WarriorConnection implements Runnable {
 				e.printStackTrace();
 				try {
 					mConnection.close();
+				
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

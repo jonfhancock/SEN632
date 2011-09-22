@@ -38,6 +38,7 @@ public class ThreadedServer {
 				WarriorConnection wc = new WarriorConnection(server.accept(),moderator,uiInstance);
 				moderator.addOpponent(wc);
 				runGame.execute(wc);
+				
 	    	 } catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
