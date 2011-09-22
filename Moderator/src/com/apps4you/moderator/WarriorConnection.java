@@ -8,6 +8,8 @@ import java.net.Socket;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 
+import com.apps4you.shared.Message;
+import com.apps4you.shared.MessageFactory;
 import com.apps4you.shared.Warrior;
 
 public class WarriorConnection implements Runnable {
@@ -15,9 +17,13 @@ public class WarriorConnection implements Runnable {
 	private Socket mConnection;
 	private ObjectOutputStream outStream;
 	private ObjectInputStream inStream;
+	private Moderator mModerator;
+	private ModeratorUI mUiInstance;
 	
-	public WarriorConnection(Socket socket){
+	public WarriorConnection(Socket socket,Moderator moderator,ModeratorUI uiInstance){
 		mConnection = socket;
+		mModerator = moderator;
+		mUiInstance = uiInstance;
 		try {
 			inStream = new ObjectInputStream(socket.getInputStream());
 			outStream = new ObjectOutputStream(socket.getOutputStream());
@@ -47,9 +53,73 @@ public class WarriorConnection implements Runnable {
 	public ObjectInputStream getInputStream(){
 		return inStream;
 	}
+	public Warrior getWarrior(){
+		return mWarrior;
+	}
+	public void setWarrior(Warrior warrior){
+		mWarrior = warrior;
+	}
 	public void run() {
 		// TODO Auto-generated method stub
-		
-	}
+		String jsonString = null;
+		while(true){
+			try {
+				jsonString = (String) inStream.readObject();
+				System.out.println("Debugging ProcessConnection - Message was: ***"+ jsonString + "***End Message***");
+				Message message = MessageFactory.fromJSON(jsonString);
+				processMessage(message);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
+		}
+	}
+	private void processMessage(Message inMessage){
+		System.out.println("Debugging ProcessConnection - Message is ***"+inMessage+"***");
+		switch (inMessage.getCommand()) {
+		case NEWWARRIOR:
+			System.out.println("Debugging ProcessConnection - In NEWWARRIOR case");
+			displayMessage("\nNew warrior added: "
+					+ inMessage.getWarrior().getName()); // display
+			mWarrior = inMessage.getWarrior();
+//			this.upgradeWarrior(inMessage.getWarrior());
+			sendData(MessageFactory.toJSON(new Message(mWarrior,Message.MessageCommand.GREETWARRIOR)));
+			sendData(MessageFactory.toJSON(mModerator
+					.processNewWarrior(inMessage,mWarrior)));
+
+			break;
+			
+		case BATTLEWARRIOR:
+			System.out.println("Debugging ProcessConnection - In BATTLEWARRIOR case");
+			displayMessage("\nBattle commencing between: "
+					+ inMessage.getWarrior().getName() + " and " + inMessage.getOpponent().getName() + " with " + inMessage.getAction()); // display
+
+			sendData(MessageFactory.toJSON(new Message(mWarrior,Message.MessageCommand.GREETWARRIOR)));
+//		case SELECTACTION:
+//			System.out.println("Debugging ProcessConnection - In SELECTACTION case");
+//			sendData(MessageFactory.toJSON(new Message()));
+		default:  //Added for debugging to verify that the message was not falling out via not being handled.
+			System.out.println("Debugging ProcessConnection -Default portion of Switch which does nothing");
+		}
+		System.out.println("Debugging ProcessConnection - Out of the switch statment");
+	}
+	private void displayMessage(final String messageToDisplay) {
+		mUiInstance.displayText(messageToDisplay); // append message
+	} // end method displayMessage
+	
+	private void sendData(String message) {
+		try // send object to client
+		{
+			outStream.writeObject(message);
+			outStream.flush(); // flush output to client
+			displayMessage(message);
+		} // end try
+		catch (IOException ioException) {
+			displayMessage("\nError writing object");
+		} // end catch
+	} // end method sendData
 }

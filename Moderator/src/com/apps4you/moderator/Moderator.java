@@ -14,13 +14,13 @@ import com.apps4you.shared.Warrior;
 
 public class Moderator{
 
-	private ArrayList<ConnectedWarrior> warriorsList;
+	private ArrayList<WarriorConnection> warriorsList;
 	
 	private static final long serialVersionUID = 1712048162291486001L;
 
 	public Moderator() {
 		// TODO Auto-generated constructor stub
-		warriorsList = new ArrayList<ConnectedWarrior>();
+		warriorsList = new ArrayList<WarriorConnection>();
 //		warriorsList.add(new Warrior("Zerg",Origins.JAGLANBETA,"Come to the dark side"));
 //		warriorsList.add(new Warrior("Woody",Origins.BREQUINDA,"He's a cowboy"));
 //		warriorsList.add(new Warrior("Ham",Origins.VOGSPHERE,"AKA Evil Dr. Porkchop"));
@@ -41,18 +41,18 @@ public class Moderator{
 		//TODO report back to the warriors the result of the attack		
 	}
 	
-	public void addOpponent(ConnectedWarrior newWarrior)
+	public void addOpponent(WarriorConnection newWarrior)
 	{
 		warriorsList.add(newWarrior);
 	}
-	public void deleteOpponent(ConnectedWarrior removeWarrior)
+	public void deleteOpponent(WarriorConnection removeWarrior)
 	{
 		this.warriorsList.remove(removeWarrior);
 	}	
 	public int getOpponentCount(){
 		return warriorsList.size();
 	}
-	public ArrayList<ConnectedWarrior> getOpponents()
+	public ArrayList<WarriorConnection> getOpponents()
 	{
 		return this.warriorsList;		
 	}
@@ -70,14 +70,18 @@ public class Moderator{
 		 return rand.nextInt(101);
 	}
 	
-	public Message processNewWarrior(Message message,ConnectedWarrior cw){
-		cw.upgradeWarrior(message.getWarrior());
+	public Message processNewWarrior(Message message,Warrior cw){
+//		cw.upgradeWarrior(message.getWarrior());
 		Message returnMessage = null;
 		if(warriorsList.size() == 1){
     		returnMessage = new Message(Message.MessageCommand.NOOPPONENTS);        	
     	} else {
-    		returnMessage = new ModeratorMessage(
-    					warriorsList,
+    		ArrayList<Warrior> warriors = new ArrayList<Warrior>();
+    		for(WarriorConnection w:warriorsList){
+    			warriors.add(w.getWarrior());
+    		}
+    		returnMessage = new Message(
+    					warriors,
     					Message.MessageCommand.SENDOPPONENTS);
     	}
 //		warriorsList.add(cw);
@@ -89,10 +93,10 @@ public class Moderator{
 		if(warriorsList.size() != 0)
 		{
 			System.out.println("Process Battle - Debugging " + message);
-			ConnectedWarrior opponent = findById(message.getOpponent().getWarriorId());
-			ConnectedWarrior original = findById(message.getWarrior().getWarriorId());
+			Warrior opponent = findById(message.getOpponent().getWarriorId()).getWarrior();
+			Warrior original = findById(message.getWarrior().getWarriorId()).getWarrior();
 
-			return new Message((Warrior)opponent,Message.MessageCommand.SELECTACTION,(Warrior)original);        	
+			return new Message(opponent,Message.MessageCommand.SELECTACTION,original);        	
     	} else {
     		return new Message(Message.MessageCommand.NOOPPONENTS);
     	}
@@ -101,8 +105,8 @@ public class Moderator{
 	public Message processDefenseWasSelected(Message message)
 	{
 		System.out.println("Process Defense - Debugging " + message);
-		ConnectedWarrior opponent = findById(message.getOpponent().getWarriorId());
-		ConnectedWarrior originalWarrior = findById(message.getWarrior().getWarriorId());
+		Warrior opponent = findById(message.getOpponent().getWarriorId()).getWarrior();
+		Warrior originalWarrior = findById(message.getWarrior().getWarriorId()).getWarrior();
 		//Action defense = message.getAction();
 		
 		//Need to call moderateAttacks(w1,w2)
@@ -112,10 +116,10 @@ public class Moderator{
 		return new Message((Warrior)originalWarrior,Message.MessageCommand.HEALTHUPDATE,(Warrior)opponent);
     }
 	
-	public ConnectedWarrior findById(UUID uuid){
-		ConnectedWarrior r = null;
-		for(ConnectedWarrior w:warriorsList){
-			if(uuid.equals(w.getWarriorId())){
+	public WarriorConnection findById(UUID uuid){
+		WarriorConnection r = null;
+		for(WarriorConnection w:warriorsList){
+			if(uuid.equals(w.getWarrior().getWarriorId())){
 				r = w;
 			}
 		}
