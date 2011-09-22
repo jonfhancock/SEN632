@@ -17,9 +17,9 @@ public class Moderator{
 	private ArrayList<WarriorConnection> warriorsList;
 	
 	private static final long serialVersionUID = 1712048162291486001L;
-
-	public Moderator() {
-		// TODO Auto-generated constructor stub
+	private ModeratorUI mUiInstance;
+	public Moderator(ModeratorUI uiInstance) {
+		mUiInstance = uiInstance;
 		warriorsList = new ArrayList<WarriorConnection>();
 //		warriorsList.add(new Warrior("Zerg",Origins.JAGLANBETA,"Come to the dark side"));
 //		warriorsList.add(new Warrior("Woody",Origins.BREQUINDA,"He's a cowboy"));
@@ -70,22 +70,11 @@ public class Moderator{
 		 return rand.nextInt(101);
 	}
 	
-	public Message processNewWarrior(Message message,Warrior cw){
+	public void processNewWarrior(Message message,Warrior cw){
 //		cw.upgradeWarrior(message.getWarrior());
 		Message returnMessage = null;
-		if(warriorsList.size() == 1){
-    		returnMessage = new Message(Message.MessageCommand.NOOPPONENTS);        	
-    	} else {
-    		ArrayList<Warrior> warriors = new ArrayList<Warrior>();
-    		for(WarriorConnection w:warriorsList){
-    			warriors.add(w.getWarrior());
-    		}
-    		returnMessage = new Message(
-    					warriors,
-    					Message.MessageCommand.SENDOPPONENTS);
-    	}
-//		warriorsList.add(cw);
-		return returnMessage;
+	    		broadCastWarriorList();
+//		return returnMessage;
 	}
 	
 	public Message processBattleRequet(Message message){
@@ -124,5 +113,26 @@ public class Moderator{
 			}
 		}
 		return r;
+	}
+	public ArrayList<Warrior> getWarriorList(){
+		ArrayList<Warrior> warriors = new ArrayList<Warrior>();
+		for(WarriorConnection w:warriorsList){
+			warriors.add(w.getWarrior());
+		}
+		return warriors;
+	}
+	
+	private void broadCastWarriorList(){
+		for(WarriorConnection w:warriorsList){
+			Message message =  null;
+			if(warriorsList.size() == 1){
+				new Message(Message.MessageCommand.NOOPPONENTS);  
+			} else {
+				message = new Message(
+						getWarriorList(),
+	    					Message.MessageCommand.SENDOPPONENTS);
+			}
+			w.sendData(MessageFactory.toJSON(message));
+		}
 	}
 }

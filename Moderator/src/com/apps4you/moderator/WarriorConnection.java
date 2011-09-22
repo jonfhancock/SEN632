@@ -1,5 +1,6 @@
 package com.apps4you.moderator;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -68,6 +69,14 @@ public class WarriorConnection implements Runnable {
 				System.out.println("Debugging ProcessConnection - Message was: ***"+ jsonString + "***End Message***");
 				Message message = MessageFactory.fromJSON(jsonString);
 				processMessage(message);
+			}catch (EOFException e){
+				e.printStackTrace();
+				try {
+					mConnection.close();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -77,6 +86,7 @@ public class WarriorConnection implements Runnable {
 			}
 
 		}
+		
 	}
 	private void processMessage(Message inMessage){
 		System.out.println("Debugging ProcessConnection - Message is ***"+inMessage+"***");
@@ -88,8 +98,9 @@ public class WarriorConnection implements Runnable {
 			mWarrior = inMessage.getWarrior();
 //			this.upgradeWarrior(inMessage.getWarrior());
 			sendData(MessageFactory.toJSON(new Message(mWarrior,Message.MessageCommand.GREETWARRIOR)));
-			sendData(MessageFactory.toJSON(mModerator
-					.processNewWarrior(inMessage,mWarrior)));
+			mModerator.processNewWarrior(inMessage,mWarrior);
+//			sendData(MessageFactory.toJSON(mModerator
+//					.processNewWarrior(inMessage,mWarrior)));
 
 			break;
 			
@@ -111,7 +122,7 @@ public class WarriorConnection implements Runnable {
 		mUiInstance.displayText(messageToDisplay); // append message
 	} // end method displayMessage
 	
-	private void sendData(String message) {
+	public void sendData(String message) {
 		try // send object to client
 		{
 			outStream.writeObject(message);

@@ -106,6 +106,8 @@ public class Client
             	break;
             case SELECTACTION:            	
             	ClientCombatantUI.getInstance().haveBeenChosenForBattleSelectAction(inMessage.getWarrior());
+            case NOOPPONENTS:
+            	break;
             default:
             	break;
             }

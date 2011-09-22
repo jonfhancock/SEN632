@@ -77,7 +77,7 @@ public class ClientCombatantUI extends JFrame {
 	   }
    }
 
-   public static void displayText(String text){
+   public void displayText(String text){
 	   moderatorCommentsArea.append(text);
    }
 
