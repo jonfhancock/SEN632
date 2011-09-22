@@ -1,6 +1,5 @@
 package com.apps4you.shared;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class Message {

@@ -45,7 +45,6 @@ public class Warrior{
 	
 	public Warrior() {
 	
-		// TODO Auto-generated constructor stub
 	}
 	public Warrior(UUID warriorId, String name, int health, Origins origin, String description){
 		

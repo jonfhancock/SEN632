@@ -10,15 +10,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-
 import com.apps4you.shared.Warrior;
 import com.apps4you.shared.WarriorFactory;
 
 public class Utils {
 
-	public static Warrior readFileToCreateCombatant(File file) {
+	public static Warrior readFileToCreateWarrior(File file) {
 		Warrior combatant = null;
 		try {
 			FileInputStream fStream = new FileInputStream(file);
@@ -57,12 +54,6 @@ public class Utils {
 			
 			
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonGenerationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {

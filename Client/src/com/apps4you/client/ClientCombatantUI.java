@@ -5,13 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Vector;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -19,19 +15,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 
 import com.apps4you.shared.Actions;
 import com.apps4you.shared.Message;
 import com.apps4you.shared.MessageFactory;
-import com.apps4you.shared.Origins;
 import com.apps4you.shared.Warrior;
-import com.apps4you.shared.WarriorFactory;
 
 public class ClientCombatantUI extends JFrame {
 
@@ -60,6 +51,7 @@ public class ClientCombatantUI extends JFrame {
 
 		try {
 			new Thread(new Runnable() {
+				@Override
 				public void run() {
 					client = new Client(hostLocation);
 					Message message = new Message(mWarrior,
@@ -211,7 +203,7 @@ public class ClientCombatantUI extends JFrame {
 					file = fc.getSelectedFile();
 					System.out.println("File " + file.getName()
 							+ " was selected.");
-					setWarrior(Utils.readFileToCreateCombatant(file));
+					setWarrior(Utils.readFileToCreateWarrior(file));
 
 				} else {
 					if(Consts.LOGGING){
@@ -288,7 +280,7 @@ public class ClientCombatantUI extends JFrame {
 
 			} else if (e.getSource() == newCombatantButton) {
 				CreateWarrior dialog = new CreateWarrior();
-				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 				dialog.setVisible(true);
 
 			} else if (e.getSource() == closeButton) {

@@ -57,10 +57,7 @@ public class CreateWarrior extends JDialog {
 		JLabel originLabel = new JLabel("Origin:");
 		originLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
 		originLabel.setBounds(21, 47, 46, 14);
-//		Vector<String> valuesList = new Vector<String>();
-//		for(Origins origin: Origins.values()){
-//			valuesList.add(origin.getOrigin());
-//		}
+
 		
 		contentPanel.add(originLabel);
 		originComboBox.setModel(new DefaultComboBoxModel(Origins.values()));
@@ -131,7 +128,9 @@ public class CreateWarrior extends JDialog {
 
 
 						File file = new File(getNewName()+".wdat");
-						System.out.println("Wrote warrior to " + file.getAbsolutePath());
+						if(Consts.LOGGING){
+							System.out.println("Wrote warrior to " + file.getAbsolutePath());
+						}
 						Utils.saveWarriorToFile(nw, file);
 						
 						ClientCombatantUI.getInstance().setWarrior(nw);
