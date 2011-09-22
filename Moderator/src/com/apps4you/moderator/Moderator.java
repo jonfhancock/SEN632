@@ -126,7 +126,7 @@ public class Moderator{
 		for(WarriorConnection w:warriorsList){
 			Message message =  null;
 			if(warriorsList.size() == 1){
-				new Message(Message.MessageCommand.NOOPPONENTS);  
+				message = new Message(Message.MessageCommand.NOOPPONENTS);  
 			} else {
 				message = new Message(
 						getWarriorList(),
