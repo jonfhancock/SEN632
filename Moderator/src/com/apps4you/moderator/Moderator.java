@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.UUID;
 import java.util.Random;
 
+import com.apps4you.client.Consts;
 import com.apps4you.shared.Message;
 import com.apps4you.shared.MessageFactory;
-import com.apps4you.shared.Origins;
 import com.apps4you.shared.Warrior;
 
 
@@ -17,10 +17,10 @@ public class Moderator{
 	private ArrayList<WarriorConnection> warriorsList;
 	
 	private static final long serialVersionUID = 1712048162291486001L;
-	private ModeratorUI mUiInstance;
-	public Moderator(ModeratorUI uiInstance) {
-		mUiInstance = uiInstance;
+	public Moderator() {
 		warriorsList = new ArrayList<WarriorConnection>();
+		
+		// some sample warriors you can uncomment to stub warriors if needed.
 //		warriorsList.add(new Warrior("Zerg",Origins.JAGLANBETA,"Come to the dark side"));
 //		warriorsList.add(new Warrior("Woody",Origins.BREQUINDA,"He's a cowboy"));
 //		warriorsList.add(new Warrior("Ham",Origins.VOGSPHERE,"AKA Evil Dr. Porkchop"));
@@ -71,17 +71,16 @@ public class Moderator{
 	}
 	
 	public void processNewWarrior(Message message,Warrior cw){
-//		cw.upgradeWarrior(message.getWarrior());
-		Message returnMessage = null;
 	    		broadCastWarriorList();
-//		return returnMessage;
 	}
 	
 	public Message processBattleRequet(Message message){
 		//Need to notify the Opponent of a Battle Request and allow them to pick an Action
 		if(warriorsList.size() != 0)
 		{
-			System.out.println("Process Battle - Debugging " + message);
+			if(Consts.LOGGING){
+				System.out.println("Process Battle - Debugging " + message);
+			}
 			Warrior opponent = findById(message.getOpponent().getWarriorId()).getWarrior();
 			Warrior original = findById(message.getWarrior().getWarriorId()).getWarrior();
 
@@ -93,7 +92,9 @@ public class Moderator{
 	
 	public Message processDefenseWasSelected(Message message)
 	{
-		System.out.println("Process Defense - Debugging " + message);
+		if(Consts.LOGGING){
+			System.out.println("Process Defense - Debugging " + message);
+		}
 		Warrior opponent = findById(message.getOpponent().getWarriorId()).getWarrior();
 		Warrior originalWarrior = findById(message.getWarrior().getWarriorId()).getWarrior();
 		//Action defense = message.getAction();
