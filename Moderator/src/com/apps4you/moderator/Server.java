@@ -85,7 +85,7 @@ public class Server {
 		ConnectedWarrior cw = new ConnectedWarrior(server.accept());
 		
 //		Socket connection = server.accept(); // allow server to accept connection
-		displayMessage("Connection " + counter + " received from: "
+		displayMessage("\nConnection " + counter + " received from: "
 				+ cw.getSocket().getInetAddress().getHostName());
 		return cw;
 	} // end method waitForConnection
@@ -104,7 +104,7 @@ public class Server {
 
 	// process connection with client
 	private void processConnections() throws IOException {
-		String message = "Connection successful";
+		String message = "\nConnection successful";
 
 		do // process messages sent from client
 		{
