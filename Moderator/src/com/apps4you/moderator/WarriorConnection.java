@@ -63,14 +63,15 @@ public class WarriorConnection implements Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
 		String jsonString = null;
-		while(mConnection.isConnected()){
+		while(!mConnection.isClosed()){
 			try {
 				jsonString = (String) inStream.readObject();
 				System.out.println("Debugging ProcessConnection - Message was: ***"+ jsonString + "***End Message***");
 				Message message = MessageFactory.fromJSON(jsonString);
 				processMessage(message);
 			}catch (EOFException e){
-				e.printStackTrace();
+//				e.printStackTrace();
+				// The client disconnected, so we will just close the connection from our end.
 				try {
 					mConnection.close();
 				
