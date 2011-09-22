@@ -13,156 +13,247 @@ import com.apps4you.shared.Message;
 import com.apps4you.shared.MessageFactory;
 import com.apps4you.shared.Warrior;
 
-public class Client  
-{
-   private static final long serialVersionUID = 7189340988809001708L;
-   private ObjectOutputStream output; // output stream to server
-   private ObjectInputStream input; // input stream from server
-   private String message = ""; // message from server
-   private String chatServer; // host server for this application
-   private Socket client; // socket to communicate with server
-   private ClientCombatantUI uiInstance;
-   
-   // initialize chatServer and set up GUI
-   public Client( String host )
-   {
-      uiInstance = ClientCombatantUI.getInstance();
-      chatServer = host; // set server to which this client connects
-  } // end Client constructor
-   
-   // connect to server and process messages from server
-   public void runClient(String initialMessage) 
-   {
-      try // connect to server, get streams, process connection
-      {
-         connectToServer(); // create a Socket to make connection
-         getStreams(); // get the input and output streams
-         sendData(initialMessage);
-         System.out.println("Sending initial message: " + initialMessage);
-         processConnection(); // process connection
+/**
+ * The Client class handles connecting to the server and passing messages back
+ * and forth. It will also launch the GUI that the user will see.
+ * 
+ * @author Craig Mersereau
+ */
+public class Client {
 
-         
-      } // end try
-      catch ( EOFException eofException ) 
-      {
-         displayMessage( "\nClient terminated connection" );
-         
-      } // end catch
-      catch ( IOException ioException ) 
-      {
-         ioException.printStackTrace();
-      } // end catch
-      finally 
-      {
-         closeConnection(); // close connection
-      } // end finally
-   } // end method runClient
+	private static final long serialVersionUID = 7189340988809001708L;
+	private ObjectOutputStream output; // output stream to server
+	private ObjectInputStream input; // input stream from server
+	private String chatServer; // host server for this application
+	private Socket client; // socket to communicate with server
+	private ClientCombatantUI uiInstance; // The UI instance we'll be working
+											// with
 
-   // connect to server
-   private void connectToServer() throws IOException
-   {      
-      displayMessage( "Attempting connection\n" );
+	/**
+	 * Instantiate the GUI that the user will interact with, and set the
+	 * server's hostname.
+	 * 
+	 * @param host
+	 *            This should be a hostname or IP address of the server you want
+	 *            to connect to.
+	 */
+	public Client(String host) {
+		uiInstance = ClientCombatantUI.getInstance();
+		chatServer = host; // set server to which this client connects
+	} // end Client constructor
 
-      System.out.println("Debugging - connectToServer - ChatServer is :***"+ chatServer +"***");
-      
-      // create Socket to make connection to server
-      client = new Socket( InetAddress.getByName( chatServer ), 12345 );
+	/**
+	 * Launches the client connection
+	 * 
+	 * @param initialMessage
+	 *            An initial message to be sent to the server. This should be a
+	 *            JSON string constructed with MessageFactory. Use
+	 *            MessageFactory.toJSON(new Message()) to get a suitable string.
+	 */
+	public void runClient(String initialMessage) {
+		try // connect to server, get streams, process connection
+		{
+			// create a Socket to make connection
+			connectToServer();
+			// get the input and output streams
+			getStreams();
+			// send the initial message to the server. This should be a
+			// NEWWARRIOR message, which will add the warrior to the opponents
+			// list.
+			sendData(initialMessage);
 
-      // display connection information
-      displayMessage( "Connected to: " + 
-         client.getInetAddress().getHostName() );
-   } // end method connectToServer
+			if (Consts.LOGGING) {
+				System.out
+						.println("Sending initial message: " + initialMessage);
+			}
 
-   // get streams to send and receive data
-   private void getStreams() throws IOException
-   {
-      // set up output stream for objects
-      output = new ObjectOutputStream( client.getOutputStream() );      
-      output.flush(); // flush output buffer to send header information
+			// process connection
+			processConnection();
 
-      // set up input stream for objects
-      input = new ObjectInputStream( client.getInputStream() );
+		} // end try
+		catch (EOFException eofException) {
+			displayMessage("\nClient terminated connection");
 
-      displayMessage( "\nGot I/O streams\n" );
-   } // end method getStreams
+		} // end catch
+		catch (IOException ioException) {
+			ioException.printStackTrace();
+		} // end catch
+		finally {
+			closeConnection(); // close connection
+		} // end finally
+	} // end method runClient
 
-   // process connection with server
-   private void processConnection() throws IOException
-   {
-      do // process messages sent from server
-      { 
-         try // read message and display it
-         {
-            message = ( String ) input.readObject(); // read new message
-//            displayMessage( "\n" + message ); // display message
-            Message inMessage = MessageFactory.fromJSON(message);
-            switch(inMessage.getCommand()){
-            case GREETWARRIOR:
-            	displayMessage("Welcome, " + inMessage.getWarrior().toString() + "!");
-            	break;
-            case SENDOPPONENTS:
-            	ClientCombatantUI.getInstance().setOpponents(inMessage.getOpponents());
-            	displayOpponents(inMessage);
-            	break;
-            case SELECTACTION:            	
-            	ClientCombatantUI.getInstance().haveBeenChosenForBattleSelectAction(inMessage.getWarrior());
-            case NOOPPONENTS:
-            	break;
-            default:
-            	break;
-            }
-         } // end try
-         catch ( ClassNotFoundException classNotFoundException ) 
-         {
-            displayMessage( "\nUnknown object type received" );
-         } // end catch
+	/**
+	 * Actually perform the task of connecting to the server via the socket.
+	 * 
+	 * @throws IOException
+	 */
+	private void connectToServer() throws IOException {
+		displayMessage("Attempting connection\n");
 
-      } while ( !message.equals( "SERVER>>> TERMINATE" ) );
-   } // end method processConnection
+		if (Consts.LOGGING) {
+			System.out
+					.println("Debugging - connectToServer - ChatServer is :***"
+							+ chatServer + "***");
+		}
 
-   // close streams and socket
-   private void closeConnection() 
-   {
-      displayMessage( "\nClosing connection" );
-      try 
-      {
-         output.close(); // close output stream
-         input.close(); // close input stream
-         client.close(); // close socket
-      } // end try
-      catch ( IOException ioException ) 
-      {
-         ioException.printStackTrace();
-      } // end catch
-   } // end method closeConnection
+		// create Socket to make connection to server
+		client = new Socket(InetAddress.getByName(chatServer), 12345);
 
-   // send message to server
-   public void sendData( String message )
-   {
-      try // send object to server
-      {
-         output.writeObject(message );
-         output.flush(); // flush data to output
-//         displayMessage( message );
-      } // end try
-      catch ( IOException ioException )
-      {
-    	  ioException.printStackTrace();
-//         displayArea.append( "\nError writing object" );
-      } // end catch
-   } // end method sendData
+		// display connection information
+		displayMessage("Connected to: " + client.getInetAddress().getHostName());
+	} // end method connectToServer
 
-   // manipulates displayArea in the event-dispatch thread
-   protected void displayMessage( final String messageToDisplay )
-   {
-      uiInstance.displayText( messageToDisplay );
+	/**
+	 * Get the ObjectOutputStream and ObjectInputStream we will use to send and
+	 * receive messages to and from the server.
+	 * 
+	 * @throws IOException
+	 */
+	private void getStreams() throws IOException {
 
-   } // end method displayMessage    
-   
-   private void displayOpponents(Message message){
-	   	 displayMessage("\nWarriors on the battlefield:\n");
-	     for(Warrior w:message.getOpponents()){
-	    	 displayMessage(w.toFormattedString());
-	     }
-   }
+		// set up output stream for objects
+		output = new ObjectOutputStream(client.getOutputStream());
+		// flush output buffer to send header information
+		output.flush();
+
+		// set up input stream for objects
+		input = new ObjectInputStream(client.getInputStream());
+
+	} // end method getStreams
+
+	// process connection with server
+
+	/**
+	 * Loop continuously and read messages from the server Naturally, if a
+	 * message is received, act upon it.
+	 * 
+	 * @throws IOException
+	 */
+	private void processConnection() throws IOException {
+		String jsonString = ""; // message from server
+
+		do // process messages sent from server
+		{
+			try // read message and display it
+			{
+				// read the json string sent from the server.
+				jsonString = (String) input.readObject();
+
+				// Instantiate a new Message object from the json string.
+				Message message = MessageFactory.fromJSON(jsonString);
+
+				// Process the message appropriately depending on the value of
+				// message's command.
+				switch (message.getCommand()) {
+
+				// This message is the first thing sent back when a new warrior
+				// is added to the server
+				// We will simply post a welcome message back to the user
+				// indicating that they are connected.
+				case GREETWARRIOR:
+					displayMessage("Welcome, "
+							+ message.getWarrior().toString() + "!");
+					break;
+
+				// This type of message contains an ArrayList of Warriors that
+				// we use to show the player who is on the battle field.
+				// We will also use this list to build the drop down where the
+				// user chooses who to attack.
+				case SENDOPPONENTS:
+
+					// Pass the list of opponents to the GUI instance.
+					ClientCombatantUI.getInstance().setOpponents(
+							message.getOpponents());
+
+					// Show the user who is on the battle field.
+					displayOpponents(message);
+					break;
+
+				// This notifies this warrior that another warrior has engaged
+				// it in battle
+				// From here we will notify the player, and allow him or her to
+				// decide what to do next.
+				case SELECTACTION:
+					ClientCombatantUI.getInstance()
+							.haveBeenChosenForBattleSelectAction(
+									message.getWarrior());
+					break;
+
+				// There were no opponents already connected to the server. The
+				// player must wait for somebody else to join before they can do
+				// anything.
+				case NOOPPONENTS:
+					break;
+				default:
+					break;
+				}
+			} // end try
+			catch (ClassNotFoundException classNotFoundException) {
+				displayMessage("\nUnknown object type received");
+			} // end catch
+
+		} while (!jsonString.equals("SERVER>>> TERMINATE"));
+	} // end method processConnection
+
+	/**
+	 * To be called when the player is done with the connection. This will close
+	 * the streams and socket connection.
+	 */
+	private void closeConnection() {
+		displayMessage("\nClosing connection");
+		try {
+			output.close(); // close output stream
+			input.close(); // close input stream
+			client.close(); // close socket
+		} // end try
+		catch (IOException ioException) {
+			ioException.printStackTrace();
+		} // end catch
+	} // end method closeConnection
+
+	/**
+	 * Pass a json string to the server. The json string should be created using
+	 * MessageFactory. Use MessageFactory.toJson(new Message()) to get a
+	 * suitable string.
+	 * 
+	 * @param message
+	 *            A properly formatted JSON string generated by MessageFactory
+	 */
+	public void sendData(String message) {
+		try // send object to server
+		{
+			output.writeObject(message);
+			output.flush(); // flush data to output
+		} // end try
+		catch (IOException ioException) {
+			ioException.printStackTrace();
+		} // end catch
+	} // end method sendData
+
+	/**
+	 * Send a message to the GUI to be displayed to the user
+	 * 
+	 * @param messageToDisplay
+	 *            The string you wish to display
+	 */
+	protected void displayMessage(final String messageToDisplay) {
+		uiInstance.displayText(messageToDisplay);
+
+	} // end method displayMessage
+
+	/**
+	 * Show the user the list of warriors (including themselves) on the
+	 * battlefield.
+	 * 
+	 * @param message
+	 *            A Message object which contains an opponents ArrayList of
+	 *            Warriors. This should come from a SENDOPPONENTS message.
+	 */
+	private void displayOpponents(Message message) {
+		displayMessage("\nWarriors on the battlefield:\n");
+		for (Warrior w : message.getOpponents()) {
+			displayMessage(w.toFormattedString());
+		}
+	}
 } // end class Client
