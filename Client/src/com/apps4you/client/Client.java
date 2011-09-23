@@ -184,6 +184,21 @@ public class Client {
 				// anything.
 				case NOOPPONENTS:
 					break;
+				
+				// This notifies the warrior of the results of the their engagement battle.
+				//   From here the warriors will have their health updated
+				case HEALTHUPDATE:
+					if(Consts.LOGGING){
+						System.out.println("Debugging ProcessConnection - Client - In HEALTHUPDATE case");}
+								
+					displayMessage("\nBattle Outcome Between: "
+							+ message.getWarrior().getName() + " Heath is: " + message.getWarrior().getHealth());
+					
+					//Update the health level of the warriors
+					ClientCombatantUI.getInstance().updateMyHealth(message.getWarrior());
+									
+					break;					
+					
 				default:
 					break;
 				}

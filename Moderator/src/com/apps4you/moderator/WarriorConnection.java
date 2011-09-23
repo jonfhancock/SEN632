@@ -89,10 +89,12 @@ public class WarriorConnection implements Runnable {
 		
 	}
 	private void processMessage(Message inMessage){
-		System.out.println("Debugging ProcessConnection - Message is ***"+inMessage+"***");
+		if(Consts.LOGGING){
+		System.out.println("Debugging ProcessConnection - Message is ***"+inMessage+"***");}
 		switch (inMessage.getCommand()) {
 		case NEWWARRIOR:
-			System.out.println("Debugging ProcessConnection - In NEWWARRIOR case");
+			if(Consts.LOGGING){
+			System.out.println("Debugging ProcessConnection - In NEWWARRIOR case");}
 			displayMessage("\nNew warrior added: "
 					+ inMessage.getWarrior().getName()); // display
 			mWarrior = inMessage.getWarrior();
@@ -112,7 +114,6 @@ public class WarriorConnection implements Runnable {
 
 			WarriorConnection newOpponent = Moderator.getInstance().findById(inMessage.getOpponent().getWarriorId());
 			newOpponent.sendData(new Message(Message.MessageCommand.SELECTACTION,mWarrior));
-//			sendData(MessageFactory.toJSON(new Message(Message.MessageCommand.SELECTACTION,mWarrior)));
 			break;
 		case SELECTACTION:
 			if(Consts.LOGGING){
@@ -123,16 +124,24 @@ public class WarriorConnection implements Runnable {
 			if(Consts.LOGGING){
 				System.out.println("Debugging ProcessConnection - In DEFENSESELECTED case");}
 			mModerator.processDefenseWasSelected(inMessage);
+
 			break;
-//		case HEALTHUPDATE:
-//			if(Consts.LOGGING){
-//				System.out.println("Debugging ProcessConnection - In HEALTHUPDATE case");}
-//			 sendData(MessageFactory.toJSON(new Message(Message.MessageCommand.HEALTHUPDATE)));
-//			break;
+		case HEALTHUPDATE:
+			if(Consts.LOGGING){
+				System.out.println("Debugging ProcessConnection - In HEALTHUPDATE case");}
+			displayMessage("\nBattle Outcome Between: "
+					+ inMessage.getWarrior().getName() + " and " + inMessage.getOpponent().getName()); // display
+			displayMessage("\n "
+					+ inMessage.getWarrior().getName() + " Heath is: " + inMessage.getWarrior().getHealth() + " & " + inMessage.getOpponent().getName()+ " Heath is: " + inMessage.getOpponent().getHealth() ); // display
+			//TODO Update the health level of the warriors
+			
+			break;
 		default:  //Added for debugging to verify that the message was not falling out via not being handled.
-			System.out.println("Debugging ProcessConnection -Default portion of Switch which does nothing");
+			if(Consts.LOGGING){
+			System.out.println("Debugging ProcessConnection -Default portion of Switch which does nothing");}
 		}
-		System.out.println("Debugging ProcessConnection - Out of the switch statment");
+		if(Consts.LOGGING){
+		System.out.println("Debugging ProcessConnection - Out of the switch statment");}
 	}
 	private void displayMessage(final String messageToDisplay) {
 		mUiInstance.displayText(messageToDisplay); // append message

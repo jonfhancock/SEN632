@@ -161,11 +161,6 @@ public class ClientCombatantUI extends JFrame {
 			System.out.println("Who selected me "+ whoSelectedMe.getName());
 		}
 		
-//		if(whoSelectedMe.getWarriorId().equals(mWarrior.getWarriorId())){
-//			//This is me so don't listen to this message
-//		}
-//		else
-//		{
 			Object[] possibilities = Actions.values();
 			battleAction = (Actions) JOptionPane
 					.showInputDialog(
@@ -178,8 +173,6 @@ public class ClientCombatantUI extends JFrame {
 				System.out.println("\n The selected action as a defense was: "
 						+ battleAction.toString());
 				System.out.println("Warrior is: " + mWarrior.getName());
-//			}
-		
 			
 			Message message = new Message(Message.MessageCommand.DEFENSESELECTED,
 					mWarrior, battleAction,whoSelectedMe);
@@ -187,6 +180,14 @@ public class ClientCombatantUI extends JFrame {
 		}
 	}
 
+	public void updateMyHealth(Warrior w)
+	{
+		if(Consts.LOGGING){
+			System.out.println("Update my health");
+			System.out.println("Warrior: "+ w.getName());}
+			
+	}
+	
 	private class EventHandler implements ActionListener {
 
 		@Override

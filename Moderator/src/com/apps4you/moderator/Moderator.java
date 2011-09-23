@@ -27,12 +27,6 @@ public class Moderator{
 	
 	private Moderator() {
 		warriorsList = new ArrayList<WarriorConnection>();
-		
-		// some sample warriors you can uncomment to stub warriors if needed.
-//		warriorsList.add(new Warrior("Zerg",Origins.JAGLANBETA,"Come to the dark side"));
-//		warriorsList.add(new Warrior("Woody",Origins.BREQUINDA,"He's a cowboy"));
-//		warriorsList.add(new Warrior("Ham",Origins.VOGSPHERE,"AKA Evil Dr. Porkchop"));
-//		warriorsList.add(new Warrior("Buzz",Origins.KAKRAFOON,"To infinity and beyond!"));
 	}
 	
 	private void moderateAttacks(Warrior w1, Warrior w2)
@@ -41,14 +35,10 @@ public class Moderator{
 		int w1PointsToReduce = determineHealthPointsToDeduct();		
 	    int w2PointsToReduce = determineHealthPointsToDeduct();
 	    w1.setHealth(w1.getHealth()-w1PointsToReduce);
-	    w2.setHealth(w2.getHealth()-w2PointsToReduce);	        
+	    w2.setHealth(w2.getHealth()-w2PointsToReduce);    
+	    
 	}
-	
-	private void sendAttackResults()
-	{
-		//TODO report back to the warriors the result of the attack		
-	}
-	
+
 	public void addOpponent(WarriorConnection newWarrior)
 	{
 		warriorsList.add(newWarrior);
@@ -98,7 +88,7 @@ public class Moderator{
     	}
 	}
 	
-	public Message processDefenseWasSelected(Message message)
+	public void processDefenseWasSelected(Message message)
 	{
 		if(Consts.LOGGING){
 			System.out.println("Process Defense - Debugging " + message);
@@ -106,21 +96,13 @@ public class Moderator{
 		Warrior opponent = findById(message.getOpponent().getWarriorId()).getWarrior();
 		Warrior originalWarrior = findById(message.getWarrior().getWarriorId()).getWarrior();
 
-		if(Consts.LOGGING){
-			System.out.println("Original Warrior Health was - "+ originalWarrior.getHealth());
-			System.out.println("Opponent Warrior Health was - "+ opponent.getHealth());
-			}
 		//Need to call moderateAttacks(w1,w2)
 		moderateAttacks(originalWarrior,opponent);
 		
-		if(Consts.LOGGING){
-			System.out.println("Original Warrior Health is - "+ originalWarrior.getHealth());
-			System.out.println("Opponent Warrior Health is - "+ opponent.getHealth());
-			}
-		
-		
-		//sendupdate to the warriors about their new health
-		return new Message(Message.MessageCommand.HEALTHUPDATE,originalWarrior,opponent);
+		//update the health of the original Warrior
+		broadCastWarriorHealth(originalWarrior);
+		//Update the health of the opponent
+		broadCastWarriorHealth(opponent);
 
     }
 	
@@ -154,4 +136,10 @@ public class Moderator{
 			w.sendData(message);
 		}
 	}
+	
+	private void broadCastWarriorHealth(Warrior wToUpdate){
+		WarriorConnection w = findById(wToUpdate.getWarriorId());
+		w.sendData(new Message(Message.MessageCommand.HEALTHUPDATE,
+		wToUpdate));
+	}		
 }
