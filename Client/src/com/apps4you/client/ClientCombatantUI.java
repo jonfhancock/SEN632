@@ -56,7 +56,7 @@ public class ClientCombatantUI extends JFrame {
 					client = new Client(hostLocation);
 					Message message = new Message(Message.MessageCommand.NEWWARRIOR,
 							mWarrior);
-					client.runClient(MessageFactory.toJSON(message));
+					client.runClient(message);
 
 				}
 			}).start();
@@ -183,7 +183,7 @@ public class ClientCombatantUI extends JFrame {
 			
 			Message message = new Message(Message.MessageCommand.DEFENSESELECTED,
 					mWarrior, battleAction,whoSelectedMe);
-			client.sendData(MessageFactory.toJSON(message));
+			client.sendData(message);
 		}
 	}
 
@@ -256,7 +256,7 @@ public class ClientCombatantUI extends JFrame {
 				Message message = new Message(Message.MessageCommand.BATTLEWARRIOR,
 						mWarrior, battleAction,
 						mOpponent);
-				client.sendData(MessageFactory.toJSON(message));
+				client.sendData(message);
 
 				selectDataFileButton.setEnabled(true);
 			} else if (e.getSource() == connectButton) {

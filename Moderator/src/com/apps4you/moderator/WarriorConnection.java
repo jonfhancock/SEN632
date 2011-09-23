@@ -97,7 +97,7 @@ public class WarriorConnection implements Runnable {
 					+ inMessage.getWarrior().getName()); // display
 			mWarrior = inMessage.getWarrior();
 //			this.upgradeWarrior(inMessage.getWarrior());
-			sendData(MessageFactory.toJSON(new Message(Message.MessageCommand.GREETWARRIOR,mWarrior)));
+			sendData(new Message(Message.MessageCommand.GREETWARRIOR,mWarrior));
 			mModerator.processNewWarrior(inMessage,mWarrior);
 //			sendData(MessageFactory.toJSON(mModerator
 //					.processNewWarrior(inMessage,mWarrior)));
@@ -111,13 +111,13 @@ public class WarriorConnection implements Runnable {
 					+ inMessage.getWarrior().getName() + " and " + inMessage.getOpponent().getName() + " with " + inMessage.getAction()); // display
 
 			WarriorConnection newOpponent = Moderator.getInstance().findById(inMessage.getOpponent().getWarriorId());
-			newOpponent.sendData(MessageFactory.toJSON(new Message(Message.MessageCommand.SELECTACTION,mWarrior)));
+			newOpponent.sendData(new Message(Message.MessageCommand.SELECTACTION,mWarrior));
 //			sendData(MessageFactory.toJSON(new Message(Message.MessageCommand.SELECTACTION,mWarrior)));
 			break;
 		case SELECTACTION:
 			if(Consts.LOGGING){
 				System.out.println("Debugging ProcessConnection - In SELECTACTION case");}
-			sendData(MessageFactory.toJSON(new Message(Message.MessageCommand.SELECTACTION,mWarrior)));
+			sendData(new Message(Message.MessageCommand.SELECTACTION,mWarrior));
 			break;
 		case DEFENSESELECTED:
 			if(Consts.LOGGING){
@@ -138,12 +138,13 @@ public class WarriorConnection implements Runnable {
 		mUiInstance.displayText(messageToDisplay); // append message
 	} // end method displayMessage
 	
-	public void sendData(String message) {
+	public void sendData(Message message) {
+		String jsonString = MessageFactory.toJSON(message);
 		try // send object to client
 		{
-			outStream.writeObject(message);
+			outStream.writeObject(jsonString);
 			outStream.flush(); // flush output to client
-			displayMessage(message);
+			displayMessage(jsonString);
 		} // end try
 		catch (IOException ioException) {
 			displayMessage("\nError writing object");

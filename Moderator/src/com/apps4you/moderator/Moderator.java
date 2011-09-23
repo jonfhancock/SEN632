@@ -151,7 +151,7 @@ public class Moderator{
 						Message.MessageCommand.SENDOPPONENTS,
 	    					getWarriorList());
 			}
-			w.sendData(MessageFactory.toJSON(message));
+			w.sendData(message);
 		}
 	}
 }
