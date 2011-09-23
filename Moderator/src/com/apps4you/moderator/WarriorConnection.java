@@ -71,7 +71,13 @@ public class WarriorConnection implements Runnable {
 //				e.printStackTrace();
 				// The client disconnected, so we will just close the connection from our end.
 				try {
+					inStream.close();
+					outStream.close();
 					mConnection.close();
+					Moderator.getInstance().deleteOpponent(this);
+					Moderator.getInstance().broadCastWarriorList();
+					
+				
 				
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block

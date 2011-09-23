@@ -123,7 +123,7 @@ public class Moderator{
 		return warriors;
 	}
 	
-	private void broadCastWarriorList(){
+	public void broadCastWarriorList(){
 		for(WarriorConnection w:warriorsList){
 			Message message =  null;
 			if(warriorsList.size() == 1){
