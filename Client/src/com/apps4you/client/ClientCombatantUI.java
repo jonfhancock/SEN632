@@ -182,7 +182,7 @@ public class ClientCombatantUI extends JFrame {
 		
 			
 			Message message = new Message(Message.MessageCommand.DEFENSESELECTED,
-					mWarrior, battleAction);
+					mWarrior, battleAction,whoSelectedMe);
 			client.sendData(MessageFactory.toJSON(message));
 		}
 	}

@@ -18,7 +18,7 @@ public class ThreadedServer {
 		   ModeratorUI mUI = new ModeratorUI();
 			this.uiInstance = mUI;
 			mUI.setVisible(true);
-			moderator = new Moderator();
+			moderator = Moderator.getInstance();
 			runGame = Executors.newCachedThreadPool();
 		      try
 		      {

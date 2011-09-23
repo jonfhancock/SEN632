@@ -17,7 +17,15 @@ public class Moderator{
 	private ArrayList<WarriorConnection> warriorsList;
 	
 	private static final long serialVersionUID = 1712048162291486001L;
-	public Moderator() {
+	private static Moderator instance;
+	public  static Moderator getInstance(){
+		if(instance == null){
+			instance = new Moderator();
+		}
+		return instance;
+	}
+	
+	private Moderator() {
 		warriorsList = new ArrayList<WarriorConnection>();
 		
 		// some sample warriors you can uncomment to stub warriors if needed.

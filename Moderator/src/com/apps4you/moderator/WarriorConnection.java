@@ -110,12 +110,15 @@ public class WarriorConnection implements Runnable {
 			displayMessage("\nBattle commencing between: "
 					+ inMessage.getWarrior().getName() + " and " + inMessage.getOpponent().getName() + " with " + inMessage.getAction()); // display
 
-			sendData(MessageFactory.toJSON(new Message(Message.MessageCommand.SELECTACTION,mWarrior)));
+			WarriorConnection newOpponent = Moderator.getInstance().findById(inMessage.getOpponent().getWarriorId());
+			newOpponent.sendData(MessageFactory.toJSON(new Message(Message.MessageCommand.SELECTACTION,mWarrior)));
+//			sendData(MessageFactory.toJSON(new Message(Message.MessageCommand.SELECTACTION,mWarrior)));
+			break;
 		case SELECTACTION:
 			if(Consts.LOGGING){
 				System.out.println("Debugging ProcessConnection - In SELECTACTION case");}
 			sendData(MessageFactory.toJSON(new Message(Message.MessageCommand.SELECTACTION,mWarrior)));
-			
+			break;
 		case DEFENSESELECTED:
 			if(Consts.LOGGING){
 				System.out.println("Debugging ProcessConnection - In DEFENSESELECTED case");}
