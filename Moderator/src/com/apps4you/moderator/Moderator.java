@@ -84,7 +84,7 @@ public class Moderator{
 			Warrior opponent = findById(message.getOpponent().getWarriorId()).getWarrior();
 			Warrior original = findById(message.getWarrior().getWarriorId()).getWarrior();
 
-			return new Message(opponent,Message.MessageCommand.SELECTACTION,original);        	
+			return new Message(Message.MessageCommand.SELECTACTION,opponent,original);        	
     	} else {
     		return new Message(Message.MessageCommand.NOOPPONENTS);
     	}
@@ -103,7 +103,7 @@ public class Moderator{
 		moderateAttacks(originalWarrior,opponent);
 		
 		//sendupdate to the warriors about their new health
-		return new Message((Warrior)originalWarrior,Message.MessageCommand.HEALTHUPDATE,(Warrior)opponent);
+		return new Message(Message.MessageCommand.HEALTHUPDATE,(Warrior)originalWarrior,(Warrior)opponent);
     }
 	
 	public WarriorConnection findById(UUID uuid){
@@ -130,8 +130,8 @@ public class Moderator{
 				message = new Message(Message.MessageCommand.NOOPPONENTS);  
 			} else {
 				message = new Message(
-						getWarriorList(),
-	    					Message.MessageCommand.SENDOPPONENTS);
+						Message.MessageCommand.SENDOPPONENTS,
+	    					getWarriorList());
 			}
 			w.sendData(MessageFactory.toJSON(message));
 		}

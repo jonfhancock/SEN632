@@ -54,8 +54,8 @@ public class ClientCombatantUI extends JFrame {
 				@Override
 				public void run() {
 					client = new Client(hostLocation);
-					Message message = new Message(mWarrior,
-							Message.MessageCommand.NEWWARRIOR);
+					Message message = new Message(Message.MessageCommand.NEWWARRIOR,
+							mWarrior);
 					client.runClient(MessageFactory.toJSON(message));
 
 				}
@@ -179,8 +179,8 @@ public class ClientCombatantUI extends JFrame {
 //			}
 		
 			
-			Message message = new Message(mWarrior,
-					Message.MessageCommand.DEFENSESELECTED, battleAction);
+			Message message = new Message(Message.MessageCommand.DEFENSESELECTED,
+					mWarrior, battleAction);
 			client.sendData(MessageFactory.toJSON(message));
 		}
 	}
@@ -251,8 +251,8 @@ public class ClientCombatantUI extends JFrame {
 				}
 				
 
-				Message message = new Message(mWarrior,
-						Message.MessageCommand.BATTLEWARRIOR, battleAction,
+				Message message = new Message(Message.MessageCommand.BATTLEWARRIOR,
+						mWarrior, battleAction,
 						mOpponent);
 				client.sendData(MessageFactory.toJSON(message));
 

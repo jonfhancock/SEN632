@@ -97,7 +97,7 @@ public class WarriorConnection implements Runnable {
 					+ inMessage.getWarrior().getName()); // display
 			mWarrior = inMessage.getWarrior();
 //			this.upgradeWarrior(inMessage.getWarrior());
-			sendData(MessageFactory.toJSON(new Message(mWarrior,Message.MessageCommand.GREETWARRIOR)));
+			sendData(MessageFactory.toJSON(new Message(Message.MessageCommand.GREETWARRIOR,mWarrior)));
 			mModerator.processNewWarrior(inMessage,mWarrior);
 //			sendData(MessageFactory.toJSON(mModerator
 //					.processNewWarrior(inMessage,mWarrior)));
@@ -110,11 +110,11 @@ public class WarriorConnection implements Runnable {
 			displayMessage("\nBattle commencing between: "
 					+ inMessage.getWarrior().getName() + " and " + inMessage.getOpponent().getName() + " with " + inMessage.getAction()); // display
 
-			sendData(MessageFactory.toJSON(new Message(mWarrior,Message.MessageCommand.SELECTACTION)));
+			sendData(MessageFactory.toJSON(new Message(Message.MessageCommand.SELECTACTION,mWarrior)));
 		case SELECTACTION:
 			if(Consts.LOGGING){
 				System.out.println("Debugging ProcessConnection - In SELECTACTION case");}
-			sendData(MessageFactory.toJSON(new Message(mWarrior,Message.MessageCommand.SELECTACTION)));
+			sendData(MessageFactory.toJSON(new Message(Message.MessageCommand.SELECTACTION,mWarrior)));
 			
 		case DEFENSESELECTED:
 			if(Consts.LOGGING){

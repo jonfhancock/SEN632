@@ -2,97 +2,119 @@ package com.apps4you.shared;
 
 import java.util.ArrayList;
 
+/**
+ * Used to store all the information that needs to be passed between the client
+ * and server. Since there are several kinds of messages, and several fields
+ * that can be added to a message, there are a lot of constructors. Use
+ * whichever provides you with the features you need at the time. There is no
+ * special constructor for any given message type. Each message must have at
+ * least a MessageCommand.
+ * 
+ * @author jonfhancock
+ * 
+ */
 public class Message {
-	private Warrior mWarrior = null;
-	private ArrayList<Warrior> mOpponents = null;
+
+	public static enum MessageCommand {
+		BATTLEWARRIOR, 
+		DEFENSESELECTED, 
+		GREETWARRIOR, 
+		HEALTHUPDATE, 
+		NEWWARRIOR, 
+		NOOP, 
+		NOOPPONENTS, 
+		SELECTACTION, 
+		SENDOPPONENTS
+	}
+
+	// This is the action that the warrior wishes to perform during an attack
 	private Actions mAction = null;
-	private MessageCommand mCommand = null;	
+	// This is the only truly required field. A message must have a command to
+	// be valid, and a message that contains only a command is valid.
+	private MessageCommand mCommand = null;
+	// This can be used to store another single warrior. Most likely an opponent
+	// in the current battle.
 	private Warrior mOpponent = null;
-	
-	public Message(){};
-	
-	public Message(Warrior warrior, MessageCommand command){
+	// This is a list of warriors, and is usually used to pass all the warriors
+	// on the battlefield to the client so the player knows who to attack
+	private ArrayList<Warrior> mOpponents = null;
+	// This is usually the warrior that is performing the action
+	private Warrior mWarrior = null;;
+
+	public Message() {
+		mCommand = MessageCommand.NOOP;
+	}
+
+	public Message(MessageCommand command) {
+		mCommand = command;
+	}
+
+	public Message(MessageCommand command, Warrior warrior) {
 		mWarrior = warrior;
 		mCommand = command;
 	}
-	public Message(Warrior warrior, MessageCommand command,Actions action){
+
+	public Message(MessageCommand command, ArrayList<Warrior> opponents) {
+		mCommand = command;
+		mOpponents = opponents;
+	}
+
+	public Message(MessageCommand command, Warrior warrior, Actions action) {
 		mWarrior = warrior;
 		mAction = action;
 		mCommand = command;
 	}
 
-	public Message(Warrior warrior, MessageCommand command,Actions action, Warrior opponent){
+	public Message(MessageCommand command, Warrior warrior, Actions action,
+			Warrior opponent) {
 		mWarrior = warrior;
 		mAction = action;
 		mCommand = command;
 		mOpponent = opponent;
 	}
-	
-	public Message(Warrior warrior, MessageCommand command,Warrior opponent){
-		mWarrior = warrior;
-		mCommand = command;
-		mOpponent = opponent;
+
+	public void addOpponent(Warrior w) {
+		mOpponents.add(w);
 	}
-	
-	public Message(Warrior warrior, ArrayList<Warrior> opponents, MessageCommand command,Actions action){
-		mWarrior = warrior;
-		mAction = action;
-		mCommand = command;
-		mOpponents = opponents;
-	}
-	public Message(ArrayList<Warrior> opponents, MessageCommand command){
-		mCommand = command;
-		mOpponents = opponents;
-	}
-	public Message(MessageCommand command){
-		mCommand = command;
-	}
-	
-	public Warrior getWarrior() {
-		return mWarrior;
-	}
-	public void setWarrior(Warrior mWarrior) {
-		this.mWarrior = mWarrior;
-	}
+
 	public Actions getAction() {
 		return mAction;
 	}
-	public void setAction(Actions mAction) {
-		this.mAction = mAction;
-	}
+
 	public MessageCommand getCommand() {
 		return mCommand;
 	}
-	public void setCommand(MessageCommand mCommand) {
-		this.mCommand = mCommand;
-	}
-	public void setOpponent(Warrior opponent){
-		mOpponent = opponent;
-	}
+
 	public Warrior getOpponent() {
 		return mOpponent;
 	}
-	public ArrayList<Warrior> getOpponents(){
+
+	public ArrayList<Warrior> getOpponents() {
 		return mOpponents;
 	}
-	public void setOpponents(ArrayList<Warrior> opponents){
+
+	public Warrior getWarrior() {
+		return mWarrior;
+	}
+
+	public void setAction(Actions mAction) {
+		this.mAction = mAction;
+	}
+
+	public void setCommand(MessageCommand mCommand) {
+		this.mCommand = mCommand;
+	}
+
+	public void setOpponent(Warrior opponent) {
+		mOpponent = opponent;
+	}
+
+	public void setOpponents(ArrayList<Warrior> opponents) {
 		this.mOpponents = opponents;
 	}
-	public void addOpponent(Warrior w){
-		mOpponents.add(w);
+
+	public void setWarrior(Warrior mWarrior) {
+		this.mWarrior = mWarrior;
 	}
-	
-	
-	public static enum MessageCommand{
-		NEWWARRIOR,
-		BATTLEWARRIOR,
-		GREETWARRIOR,
-		NOOPPONENTS,
-		SENDOPPONENTS,
-		SELECTACTION,
-		DEFENSESELECTED,
-		HEALTHUPDATE
-	}
-	
-	
+
 }

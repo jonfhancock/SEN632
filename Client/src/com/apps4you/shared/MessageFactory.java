@@ -7,6 +7,11 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
+/**
+ * 
+ * @author jonfhancock
+ *
+ */
 public class MessageFactory {
 	private static ObjectMapper mapper = new ObjectMapper(); 
 
