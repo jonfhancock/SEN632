@@ -97,13 +97,23 @@ public class Moderator{
 		}
 		Warrior opponent = findById(message.getOpponent().getWarriorId()).getWarrior();
 		Warrior originalWarrior = findById(message.getWarrior().getWarriorId()).getWarrior();
-		//Action defense = message.getAction();
-		
+
+		if(Consts.LOGGING){
+			System.out.println("Original Warrior Health was - "+ originalWarrior.getHealth());
+			System.out.println("Opponent Warrior Health was - "+ opponent.getHealth());
+			}
 		//Need to call moderateAttacks(w1,w2)
 		moderateAttacks(originalWarrior,opponent);
 		
+		if(Consts.LOGGING){
+			System.out.println("Original Warrior Health is - "+ originalWarrior.getHealth());
+			System.out.println("Opponent Warrior Health is - "+ opponent.getHealth());
+			}
+		
+		
 		//sendupdate to the warriors about their new health
-		return new Message(Message.MessageCommand.HEALTHUPDATE,(Warrior)originalWarrior,(Warrior)opponent);
+		return new Message(Message.MessageCommand.HEALTHUPDATE,originalWarrior,opponent);
+
     }
 	
 	public WarriorConnection findById(UUID uuid){

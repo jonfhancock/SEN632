@@ -158,6 +158,7 @@ public class ClientCombatantUI extends JFrame {
 	public void haveBeenChosenForBattleSelectAction(Warrior whoSelectedMe) {
 		if(Consts.LOGGING){
 			System.out.println("Been Selected for Battle now choose Action");
+			System.out.println("Who selected me "+ whoSelectedMe.getName());
 		}
 		
 //		if(whoSelectedMe.getWarriorId().equals(mWarrior.getWarriorId())){
@@ -176,6 +177,7 @@ public class ClientCombatantUI extends JFrame {
 			if(Consts.LOGGING){
 				System.out.println("\n The selected action as a defense was: "
 						+ battleAction.toString());
+				System.out.println("Warrior is: " + mWarrior.getName());
 //			}
 		
 			

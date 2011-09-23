@@ -72,7 +72,12 @@ public class Message {
 		mCommand = command;
 		mOpponent = opponent;
 	}
-
+	public Message(MessageCommand command, Warrior warrior, Warrior opponent) {
+		mWarrior = warrior;
+		mCommand = command;
+		mOpponent = opponent;
+	}
+	
 	public void addOpponent(Warrior w) {
 		mOpponents.add(w);
 	}
