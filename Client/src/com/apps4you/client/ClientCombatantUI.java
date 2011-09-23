@@ -42,11 +42,22 @@ public class ClientCombatantUI extends JFrame {
 	private static File file;
 	private static Warrior mWarrior;
 	private static Warrior mOpponent;
+	
 	private static String hostLocation = "localhost";
 	private ArrayList<Warrior> opponents;
 	private final JPanel battlePanel = new JPanel();
 	private Actions battleAction;
 
+	
+	public Warrior getWarrior(){
+		return mWarrior;
+	}
+	public File  getWarriorFile(){
+		if (file == null) {
+			file = new File(mWarrior.getName() + ".wdat");
+		}
+		return file;
+	}
 	protected void connectToServer() {
 
 		try {
@@ -67,7 +78,7 @@ public class ClientCombatantUI extends JFrame {
 	}
 
 	public void displayText(String text) {
-		moderatorCommentsArea.append(text);
+		moderatorCommentsArea.setText(text);
 	}
 
 	private static ClientCombatantUI instance = null;
@@ -150,22 +161,23 @@ public class ClientCombatantUI extends JFrame {
 	public void setWarrior(Warrior warrior) {
 		mWarrior = warrior;
 		connectToServer();
-		welcomeLabel.setText("Connected as: " + mWarrior.getName());
+		
 		selectDataFileButton.setEnabled(false);
 		opponentButton.setEnabled(true);
 	}
 
-	public void haveBeenChosenForBattleSelectAction(Warrior whoSelectedMe) {
+	public void haveBeenChosenForBattleSelectAction(Warrior whoSelectedMe,Actions action) {
 		if(Consts.LOGGING){
 			System.out.println("Been Selected for Battle now choose Action");
 			System.out.println("Who selected me "+ whoSelectedMe.getName());
+			System.out.println("They are using: " + action);
 		}
 		
 			Object[] possibilities = Actions.values();
 			battleAction = (Actions) JOptionPane
 					.showInputDialog(
 							ClientCombatantUI.this,
-							"You have been selected for battle.  Please select your battle action:",
+							whoSelectedMe.getName() + " wants to fight you using "+ action +".  Please select your battle action:",
 							"Battle Selection Dialog",
 							JOptionPane.QUESTION_MESSAGE, null, possibilities, null);
 			
@@ -175,16 +187,30 @@ public class ClientCombatantUI extends JFrame {
 				System.out.println("Warrior is: " + mWarrior.getName());
 			
 			Message message = new Message(Message.MessageCommand.DEFENSESELECTED,
-					mWarrior, battleAction,whoSelectedMe);
+					mWarrior, new Actions[]{battleAction,action},whoSelectedMe);
 			client.sendData(message);
 		}
 	}
 
-	public void updateMyHealth(Warrior w)
+	public void updateMyHealth(int health)
 	{
+		if(health > 0){
+			mWarrior.setHealth(health);
+			
+		} else {
+			mWarrior.setHealth(0);
+			Utils.saveWarriorToFile(mWarrior, getWarriorFile());
+			Message message = new Message(Message.MessageCommand.IAMDEAD);
+			displayText("Sadly, you didn't survive.");
+			setWarriorMessage(mWarrior.getName()+", You are dead.");
+			client.sendData(message);
+			client.closeConnection();
+			
+		}
+		mWarrior.setHealth(health);
 		if(Consts.LOGGING){
-			System.out.println("Update my health");
-			System.out.println("Warrior: "+ w.getName());}
+			System.out.println("Update my health to " + health);
+		}
 			
 	}
 	
@@ -210,8 +236,10 @@ public class ClientCombatantUI extends JFrame {
 
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					file = fc.getSelectedFile();
-					System.out.println("File " + file.getName()
-							+ " was selected.");
+					if(Consts.LOGGING){
+						System.out.println("File " + file.getName()
+								+ " was selected.");
+					}
 					setWarrior(Utils.readFileToCreateWarrior(file));
 
 				} else {
@@ -294,10 +322,8 @@ public class ClientCombatantUI extends JFrame {
 
 			} else if (e.getSource() == closeButton) {
 				if ((client != null) && (mWarrior != null)) {
-					if (file == null) {
-						file = new File(mWarrior.getName() + ".wdat");
-					}
-					Utils.saveWarriorToFile(mWarrior, file);
+					
+					Utils.saveWarriorToFile(mWarrior, getWarriorFile());
 				}
 				dispose();
 				System.exit(0);
@@ -317,4 +343,7 @@ public class ClientCombatantUI extends JFrame {
 		opponents = opponentsList;
 	}
 
+	public void setWarriorMessage(String s){
+		welcomeLabel.setText(s);
+	}
 }

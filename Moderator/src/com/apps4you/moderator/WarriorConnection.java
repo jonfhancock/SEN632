@@ -76,9 +76,7 @@ public class WarriorConnection implements Runnable {
 					mConnection.close();
 					Moderator.getInstance().deleteOpponent(this);
 					Moderator.getInstance().broadCastWarriorList();
-					
-				
-				
+					return;
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -92,6 +90,7 @@ public class WarriorConnection implements Runnable {
 			}
 
 		}
+		
 		
 	}
 	private void processMessage(Message inMessage){
@@ -119,29 +118,34 @@ public class WarriorConnection implements Runnable {
 					+ inMessage.getWarrior().getName() + " and " + inMessage.getOpponent().getName() + " with " + inMessage.getAction()); // display
 
 			WarriorConnection newOpponent = Moderator.getInstance().findById(inMessage.getOpponent().getWarriorId());
-			newOpponent.sendData(new Message(Message.MessageCommand.SELECTACTION,mWarrior));
+			newOpponent.sendData(new Message(Message.MessageCommand.SELECTACTION,mWarrior,inMessage.getAction()));
 			break;
-		case SELECTACTION:
-			if(Consts.LOGGING){
-				System.out.println("Debugging ProcessConnection - In SELECTACTION case");}
-			sendData(new Message(Message.MessageCommand.SELECTACTION,mWarrior));
-			break;
+//		case SELECTACTION:
+//			if(Consts.LOGGING){
+//				System.out.println("Debugging ProcessConnection - In SELECTACTION case");}
+//			sendData(new Message(Message.MessageCommand.SELECTACTION,mWarrior));
+//			break;
 		case DEFENSESELECTED:
 			if(Consts.LOGGING){
 				System.out.println("Debugging ProcessConnection - In DEFENSESELECTED case");}
 			mModerator.processDefenseWasSelected(inMessage);
 
 			break;
-		case HEALTHUPDATE:
-			if(Consts.LOGGING){
-				System.out.println("Debugging ProcessConnection - In HEALTHUPDATE case");}
-			displayMessage("\nBattle Outcome Between: "
-					+ inMessage.getWarrior().getName() + " and " + inMessage.getOpponent().getName()); // display
-			displayMessage("\n "
-					+ inMessage.getWarrior().getName() + " Heath is: " + inMessage.getWarrior().getHealth() + " & " + inMessage.getOpponent().getName()+ " Heath is: " + inMessage.getOpponent().getHealth() ); // display
-			//TODO Update the health level of the warriors
+		case IAMDEAD:
+			Moderator.getInstance().deleteOpponent(this);
+			Moderator.getInstance().broadCastWarriorList();
 			
 			break;
+//		case HEALTHUPDATE:
+//			if(Consts.LOGGING){
+//				System.out.println("Debugging ProcessConnection - In HEALTHUPDATE case");}
+//			displayMessage("\nBattle Outcome Between: "
+//					+ inMessage.getWarrior().getName() + " and " + inMessage.getOpponent().getName()); // display
+//			displayMessage("\n "
+//					+ inMessage.getWarrior().getName() + " Health is: " + inMessage.getWarrior().getHealth() + " & " + inMessage.getOpponent().getName()+ " Health is: " + inMessage.getOpponent().getHealth() ); // display
+//			//TODO Update the health level of the warriors
+//			
+//			break;
 		default:  //Added for debugging to verify that the message was not falling out via not being handled.
 			if(Consts.LOGGING){
 			System.out.println("Debugging ProcessConnection -Default portion of Switch which does nothing");}
@@ -152,6 +156,7 @@ public class WarriorConnection implements Runnable {
 	private void displayMessage(final String messageToDisplay) {
 		mUiInstance.displayText(messageToDisplay); // append message
 	} // end method displayMessage
+	
 	
 	public void sendData(Message message) {
 		String jsonString = MessageFactory.toJSON(message);

@@ -24,11 +24,15 @@ public class Message {
 		NOOP, 
 		NOOPPONENTS, 
 		SELECTACTION, 
-		SENDOPPONENTS
+		SENDOPPONENTS,
+		IAMDEAD
 	}
 
 	// This is the action that the warrior wishes to perform during an attack
 	private Actions mAction = null;
+	// This can be used to send multiple actions, and is most useful for sending
+	// back to the client the resutls of a battle
+	private Actions[] mActions = null;
 	// This is the only truly required field. A message must have a command to
 	// be valid, and a message that contains only a command is valid.
 	private MessageCommand mCommand = null;
@@ -39,7 +43,7 @@ public class Message {
 	// on the battlefield to the client so the player knows who to attack
 	private ArrayList<Warrior> mOpponents = null;
 	// This is usually the warrior that is performing the action
-	private Warrior mWarrior = null;;
+	private Warrior mWarrior = null;
 
 	public Message() {
 		mCommand = MessageCommand.NOOP;
@@ -72,12 +76,21 @@ public class Message {
 		mCommand = command;
 		mOpponent = opponent;
 	}
+
+	public Message(MessageCommand command, Warrior warrior,
+			Actions[] actions, Warrior opponent) {
+		mWarrior = warrior;
+		mActions = actions;
+		mCommand = command;
+		mOpponent = opponent;
+	}
+
 	public Message(MessageCommand command, Warrior warrior, Warrior opponent) {
 		mWarrior = warrior;
 		mCommand = command;
 		mOpponent = opponent;
 	}
-	
+
 	public void addOpponent(Warrior w) {
 		mOpponents.add(w);
 	}
@@ -86,6 +99,9 @@ public class Message {
 		return mAction;
 	}
 
+	public Actions[] getActions(){
+		return mActions;
+	}
 	public MessageCommand getCommand() {
 		return mCommand;
 	}
@@ -102,12 +118,15 @@ public class Message {
 		return mWarrior;
 	}
 
-	public void setAction(Actions mAction) {
-		this.mAction = mAction;
+	public void setAction(Actions action) {
+		this.mAction = action;
 	}
 
-	public void setCommand(MessageCommand mCommand) {
-		this.mCommand = mCommand;
+	public void setActions(Actions[] actions){
+		mActions = actions;
+	}
+	public void setCommand(MessageCommand command) {
+		this.mCommand = command;
 	}
 
 	public void setOpponent(Warrior opponent) {
@@ -118,8 +137,8 @@ public class Message {
 		this.mOpponents = opponents;
 	}
 
-	public void setWarrior(Warrior mWarrior) {
-		this.mWarrior = mWarrior;
+	public void setWarrior(Warrior warrior) {
+		this.mWarrior = warrior;
 	}
 
 }

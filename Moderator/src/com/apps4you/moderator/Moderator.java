@@ -6,6 +6,7 @@ import java.util.UUID;
 import java.util.Random;
 
 import com.apps4you.client.Consts;
+import com.apps4you.shared.Actions;
 import com.apps4you.shared.Message;
 import com.apps4you.shared.MessageFactory;
 import com.apps4you.shared.Warrior;
@@ -65,7 +66,7 @@ public class Moderator{
 	private int determineHealthPointsToDeduct()
 	{
 		 Random rand = new Random(); 
-		 return rand.nextInt(101);
+		 return rand.nextInt(20);
 	}
 	
 	public void processNewWarrior(Message message,Warrior cw){
@@ -100,9 +101,9 @@ public class Moderator{
 		moderateAttacks(originalWarrior,opponent);
 		
 		//update the health of the original Warrior
-		broadCastWarriorHealth(originalWarrior);
+		broadCastWarriorHealth(originalWarrior,opponent,message.getActions());
 		//Update the health of the opponent
-		broadCastWarriorHealth(opponent);
+//		broadCastWarriorHealth(opponent,originalWarrior,message.getActions());
 
     }
 	
@@ -137,9 +138,14 @@ public class Moderator{
 		}
 	}
 	
-	private void broadCastWarriorHealth(Warrior wToUpdate){
-		WarriorConnection w = findById(wToUpdate.getWarriorId());
+	private void broadCastWarriorHealth(Warrior warrior, Warrior opponent,Actions[] actions){
+		
+		WarriorConnection w = findById(warrior.getWarriorId());
 		w.sendData(new Message(Message.MessageCommand.HEALTHUPDATE,
-		wToUpdate));
+		warrior,actions,opponent));
+		
+		w = findById(opponent.getWarriorId());
+		w.sendData(new Message(Message.MessageCommand.HEALTHUPDATE,
+				warrior,actions,opponent));
 	}		
 }

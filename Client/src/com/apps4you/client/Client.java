@@ -3,6 +3,7 @@ package com.apps4you.client;
 //Client portion of a stream-socket connection between client and server.
 
 import java.io.EOFException;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -132,7 +133,7 @@ public class Client {
 	private void processConnection() throws IOException {
 		String jsonString = ""; // message from server
 
-		do // process messages sent from server
+		while(!client.isClosed()) // process messages sent from server
 		{
 			try // read message and display it
 			{
@@ -151,8 +152,9 @@ public class Client {
 				// We will simply post a welcome message back to the user
 				// indicating that they are connected.
 				case GREETWARRIOR:
-					displayMessage("Welcome, "
+					ClientCombatantUI.getInstance().setWarriorMessage("Welcome to the field of battle, "
 							+ message.getWarrior().toString() + "!");
+
 					break;
 
 				// This type of message contains an ArrayList of Warriors that
@@ -176,7 +178,7 @@ public class Client {
 				case SELECTACTION:
 					ClientCombatantUI.getInstance()
 							.haveBeenChosenForBattleSelectAction(
-									message.getWarrior());
+									message.getWarrior(),message.getAction());
 					break;
 
 				// There were no opponents already connected to the server. The
@@ -191,31 +193,55 @@ public class Client {
 					if(Consts.LOGGING){
 						System.out.println("Debugging ProcessConnection - Client - In HEALTHUPDATE case");}
 								
-					displayMessage("\nBattle Outcome Between: "
-							+ message.getWarrior().getName() + " Heath is: " + message.getWarrior().getHealth());
-					
-					//Update the health level of the warriors
-					ClientCombatantUI.getInstance().updateMyHealth(message.getWarrior());
+//					displayMessage("\nBattle Outcome Between: "
+//							+ message.getWarrior().getName() + " Health is: " + message.getWarrior().getHealth());
+					displayMessage("Battle Results:\n\n"
+							+ message.getOpponent().getName() + " used "+ message.getActions()[1]+".\nHealth: "+message.getOpponent().getHealth()+"\n\n"
+							+ message.getWarrior().getName() + " used "+ message.getActions()[0]+".\nHealth: "+message.getWarrior().getHealth()+"\n");
+							
+					//Determine if I am the originating warrior or the opponent, and call updateMyHealth accordingly.
+					if(message.getWarrior().getWarriorId().equals(ClientCombatantUI.getInstance().getWarrior().getWarriorId())){
+						ClientCombatantUI.getInstance().updateMyHealth(message.getWarrior().getHealth());
+					} else {
+						ClientCombatantUI.getInstance().updateMyHealth(message.getOpponent().getHealth());
+					}
+
 									
 					break;					
 					
 				default:
 					break;
 				}
-			} // end try
+			}
+			catch (EOFException e){
+				e.printStackTrace();
+				Utils.saveWarriorToFile(ClientCombatantUI.getInstance().getWarrior(), ClientCombatantUI.getInstance().getWarriorFile());
+				displayMessage("The server has disconnected.");
+				closeConnection();
+			}
 			catch (ClassNotFoundException classNotFoundException) {
 				displayMessage("\nUnknown object type received");
 			} // end catch
 
-		} while (!jsonString.equals("SERVER>>> TERMINATE"));
+		}
 	} // end method processConnection
 
+//	private void updateHealth(Warrior w){
+//		if(w.getHealth() <= 0){
+//			ClientCombatantUI.getInstance().updateMyHealth(0);
+//			
+//		} else {
+//			ClientCombatantUI.getInstance().updateMyHealth(w.getHealth());
+//			
+//		}
+//	}
+	
 	/**
 	 * To be called when the player is done with the connection. This will close
 	 * the streams and socket connection.
 	 */
-	private void closeConnection() {
-		displayMessage("\nClosing connection");
+	public void closeConnection() {
+//		displayMessage("\nClosing connection");
 		try {
 			output.close(); // close output stream
 			input.close(); // close input stream
@@ -266,8 +292,11 @@ public class Client {
 	 */
 	private void displayOpponents(Message message) {
 		displayMessage("\nWarriors on the battlefield:\n");
+		StringBuilder s = new StringBuilder();
 		for (Warrior w : message.getOpponents()) {
-			displayMessage(w.toFormattedString());
+			s.append(w.toFormattedString());
+			
 		}
+		displayMessage(s.toString());
 	}
 } // end class Client
