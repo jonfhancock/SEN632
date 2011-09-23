@@ -159,24 +159,30 @@ public class ClientCombatantUI extends JFrame {
 		if(Consts.LOGGING){
 			System.out.println("Been Selected for Battle now choose Action");
 		}
-		Object[] possibilities = Actions.values();
-		battleAction = (Actions) JOptionPane
-				.showInputDialog(
-						ClientCombatantUI.this,
-						"You have been selected for battle.  Please select your battle action:",
-						"Battle Selection Dialog",
-						JOptionPane.QUESTION_MESSAGE, null, possibilities, null);
 		
-		if(Consts.LOGGING){
-			System.out.println("\n The selected action as a defense was: "
-					+ battleAction.toString());
+//		if(whoSelectedMe.getWarriorId().equals(mWarrior.getWarriorId())){
+//			//This is me so don't listen to this message
+//		}
+//		else
+//		{
+			Object[] possibilities = Actions.values();
+			battleAction = (Actions) JOptionPane
+					.showInputDialog(
+							ClientCombatantUI.this,
+							"You have been selected for battle.  Please select your battle action:",
+							"Battle Selection Dialog",
+							JOptionPane.QUESTION_MESSAGE, null, possibilities, null);
+			
+			if(Consts.LOGGING){
+				System.out.println("\n The selected action as a defense was: "
+						+ battleAction.toString());
+//			}
+		
+			
+			Message message = new Message(mWarrior,
+					Message.MessageCommand.DEFENSESELECTED, battleAction);
+			client.sendData(MessageFactory.toJSON(message));
 		}
-	
-		
-		Message message = new Message(mWarrior,
-				Message.MessageCommand.DEFENSESELECTED, battleAction);
-		client.sendData(MessageFactory.toJSON(message));
-
 	}
 
 	private class EventHandler implements ActionListener {

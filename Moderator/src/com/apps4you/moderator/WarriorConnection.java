@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import com.apps4you.client.Consts;
 import com.apps4you.shared.Message;
 import com.apps4you.shared.MessageFactory;
 import com.apps4you.shared.Warrior;
@@ -104,14 +105,27 @@ public class WarriorConnection implements Runnable {
 			break;
 			
 		case BATTLEWARRIOR:
-			System.out.println("Debugging ProcessConnection - In BATTLEWARRIOR case");
+			if(Consts.LOGGING){
+			System.out.println("Debugging ProcessConnection - In BATTLEWARRIOR case");}
 			displayMessage("\nBattle commencing between: "
 					+ inMessage.getWarrior().getName() + " and " + inMessage.getOpponent().getName() + " with " + inMessage.getAction()); // display
 
-			sendData(MessageFactory.toJSON(new Message(mWarrior,Message.MessageCommand.GREETWARRIOR)));
-//		case SELECTACTION:
-//			System.out.println("Debugging ProcessConnection - In SELECTACTION case");
-//			sendData(MessageFactory.toJSON(new Message()));
+			sendData(MessageFactory.toJSON(new Message(mWarrior,Message.MessageCommand.SELECTACTION)));
+		case SELECTACTION:
+			if(Consts.LOGGING){
+				System.out.println("Debugging ProcessConnection - In SELECTACTION case");}
+			sendData(MessageFactory.toJSON(new Message(mWarrior,Message.MessageCommand.SELECTACTION)));
+			
+		case DEFENSESELECTED:
+			if(Consts.LOGGING){
+				System.out.println("Debugging ProcessConnection - In DEFENSESELECTED case");}
+			mModerator.processDefenseWasSelected(inMessage);
+			break;
+//		case HEALTHUPDATE:
+//			if(Consts.LOGGING){
+//				System.out.println("Debugging ProcessConnection - In HEALTHUPDATE case");}
+//			 sendData(MessageFactory.toJSON(new Message(Message.MessageCommand.HEALTHUPDATE)));
+//			break;
 		default:  //Added for debugging to verify that the message was not falling out via not being handled.
 			System.out.println("Debugging ProcessConnection -Default portion of Switch which does nothing");
 		}
