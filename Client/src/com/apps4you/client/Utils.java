@@ -37,7 +37,7 @@ public class Utils {
 			//Read File Line By Line
 			while ((strLine = br.readLine()) != null)
 			{
-			  //Actually write the file	
+			  //Assign the warrior by decoding the JSON string from the file.	
 			  combatant = WarriorFactory.fromJSON(strLine);
 			}
 		  //Close the input stream
@@ -46,7 +46,6 @@ public class Utils {
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 		}
-		// Setup reading of the serialized wdat file here
 		catch (IOException e) {
 			e.printStackTrace();
 		}

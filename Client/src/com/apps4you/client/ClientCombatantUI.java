@@ -112,7 +112,8 @@ public class ClientCombatantUI extends JFrame {
 	private static ClientCombatantUI instance = null;  
 
 	/**
-	 * Ability to gain an instance of this UI from outside
+	 * ClientCombatantUI is a singleton class.
+	 * Gain an instance of this UI from outside
 	 * areas in order to pass information or call methods
 	 * 
 	 * @return ClientCombatantUI an instance of this ClientCombatantUI
@@ -127,6 +128,8 @@ public class ClientCombatantUI extends JFrame {
 	}
 
 	/**
+	 * Since ClientCombtantUI is a singleton, you cannot instantiate it.
+	 * Use getInstance() instead.
 	 * Create the frame.
 	 */
 	private ClientCombatantUI() {
