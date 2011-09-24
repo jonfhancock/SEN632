@@ -3,7 +3,6 @@ package com.apps4you.client;
 //Client portion of a stream-socket connection between client and server.
 
 import java.io.EOFException;
-import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -227,7 +226,6 @@ public class Client {
 	 * the streams and socket connection.
 	 */
 	public void closeConnection() {
-//		displayMessage("\nClosing connection");
 		try {
 			output.close(); // close output stream
 			input.close(); // close input stream

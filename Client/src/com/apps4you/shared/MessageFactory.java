@@ -11,7 +11,7 @@ import org.codehaus.jackson.map.ObjectMapper;
  * Marshal Message objects to JSON strings and parse JSON strings back out to
  * Message objects.
  * 
- * @author jonfhancock
+ * @author Jon Hancock
  * 
  */
 public class MessageFactory {

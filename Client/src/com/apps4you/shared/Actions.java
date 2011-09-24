@@ -20,7 +20,10 @@ public enum Actions {
 	WHIPWITHTOWEL("Whip with Towel");
 
 	private final String chosenAction;
-
+    /**
+     * Setup the enum
+     * @param actionChoice
+     */
 	private Actions(String actionChoice) {
 		this.chosenAction = actionChoice;
 	}

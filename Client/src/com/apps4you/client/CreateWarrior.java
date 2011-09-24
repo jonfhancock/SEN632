@@ -81,6 +81,7 @@ public class CreateWarrior extends JDialog {
 		contentPanel.add(descTextField);
 		descTextField.setColumns(10);
 		
+		//Setup a Action Listener for all the buttons
 		ButtonHandler handler = new ButtonHandler();
 		
 		
@@ -105,7 +106,7 @@ public class CreateWarrior extends JDialog {
 	}
 	/**
 	 * Gets the name of the Newly created Warrior
-	 * @return
+	 * @return String that is the new warriors name
 	 */
 	private String getNewName()
 	{
@@ -146,7 +147,7 @@ public class CreateWarrior extends JDialog {
 			//OK Button was chosen
 			if (e.getSource() == okButton) 
 		    {
-				//Gather the new infomormation
+				//Gather the new information
 				Warrior nw = new Warrior(getNewName(), 
 						getOrigin(), 
 						getDescription());

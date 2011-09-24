@@ -56,7 +56,7 @@ public class Utils {
 		return combatant;
 	}
 	/**
-	 * The writting out of the warrior 
+	 * The writing out of the warrior 
 	 * @param warrior
 	 * @param file
 	 */

@@ -21,7 +21,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.apps4you.shared.Actions;
 import com.apps4you.shared.Message;
-import com.apps4you.shared.MessageFactory;
 import com.apps4you.shared.Warrior;
 
 /**
@@ -100,7 +99,7 @@ public class ClientCombatantUI extends JFrame {
 	}
 
 	/**
-	 * A convienence method to have text to be displayed to the user added
+	 * A convenience method to have text to be displayed to the user added
 	 * 
 	 * @param String text The text to be added to the moderators comments area
 	 */
@@ -319,13 +318,13 @@ public class ClientCombatantUI extends JFrame {
 					setWarrior(Utils.readFileToCreateWarrior(file));
 
 				} else {
-					//Identify if issues are occouring
+					//Identify if issues are occurring
 					if(Consts.LOGGING){
 						System.out.println("Open command cancelled by user./n");
 					}
 				}
 			}
-			//The opponoet button was selected so pick who to battle
+			//The oppononet button was selected so pick who to battle
 			else if (e.getSource() == opponentButton) {
 				//Get all the possible opponents
 				ArrayList<Warrior> opponentsList = new ArrayList<Warrior>();
@@ -378,7 +377,7 @@ public class ClientCombatantUI extends JFrame {
 				//Setup UI to manage workflow through the system
 				selectDataFileButton.setEnabled(true);
 			} 
-			//The connect button allows the user to identify what there preffered host server is 
+			//The connect button allows the user to identify what there preferred host server is 
 			else if (e.getSource() == connectButton) {
 
 				//Initiates a dialog that allows the user to pick their host server
@@ -428,6 +427,7 @@ public class ClientCombatantUI extends JFrame {
 				if ((client != null) && (mWarrior != null)) {
 					
 					Utils.saveWarriorToFile(mWarrior, getWarriorFile());
+					client.closeConnection();
 				}
 				//clean up and exit
 				dispose();

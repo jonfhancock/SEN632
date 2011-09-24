@@ -11,17 +11,21 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
-
+/**
+ * A UI module that just gives the end user insight into the server
+ * @author Craig Mersereau
+ *
+ */
 public class ModeratorUI extends JFrame {
 
 	private static final long serialVersionUID = -5171666511283832798L;
-	private JPanel contentPane;
-	private JButton closeButton = new JButton("Close");
-	private JLabel welcomeLabel = new JLabel("Welcome to the Apps4You Server.");
-	private static JTextArea combatantsConnectedArea = new JTextArea();
+	private JPanel contentPane; //Pane that holds the content for the window
+	private JButton closeButton = new JButton("Close"); //A close button for the server
+	private JLabel welcomeLabel = new JLabel("Welcome to the Apps4You Server."); //Label that explains what the intent of the window is
+	private static JTextArea combatantsConnectedArea = new JTextArea();//Area for the end user to se action occuring on the server
 
 	/**
-	 * Create the frame.
+	 * Create the frame for the Moderator
 	 */
 	public ModeratorUI() 
 	{
@@ -53,14 +57,24 @@ public class ModeratorUI extends JFrame {
 		setVisible( true ); // show window		
 	}
 	
+	/**
+	 * Allows other components to add messages to be displayed to the end user
+	 * @param text String of the text that the is desired to be shown to the end user
+	 */
     public void displayText(String text){
     	combatantsConnectedArea.append(text);
     }
 
-	
+	/**
+	 * Inner class that handles the Action Listener for the this UI
+	 * @author Craig Mersereau
+	 */
 	 private class EventHandler implements ActionListener
 	 {	
-	
+       /**
+        * Handles the close button event
+        * @param e is an ActionEvent that needs to be handled	
+        */
 	   public void actionPerformed (ActionEvent e)
 	   {
 		 //Handle Select button action.

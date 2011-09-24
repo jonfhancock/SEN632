@@ -8,7 +8,6 @@ import java.util.Random;
 import com.apps4you.client.Consts;
 import com.apps4you.shared.Actions;
 import com.apps4you.shared.Message;
-import com.apps4you.shared.MessageFactory;
 import com.apps4you.shared.Warrior;
 
 

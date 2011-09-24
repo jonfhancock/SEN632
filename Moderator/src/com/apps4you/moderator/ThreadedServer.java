@@ -5,7 +5,11 @@ import java.net.ServerSocket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-
+/**
+ * 
+ * @author Jon Hancock
+ *
+ */
 public class ThreadedServer {
 		private ServerSocket server; // server socket to connect with clients
 
