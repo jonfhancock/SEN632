@@ -192,9 +192,7 @@ public class Client {
 				case HEALTHUPDATE:
 					if(Consts.LOGGING){
 						System.out.println("Debugging ProcessConnection - Client - In HEALTHUPDATE case");}
-								
-//					displayMessage("\nBattle Outcome Between: "
-//							+ message.getWarrior().getName() + " Health is: " + message.getWarrior().getHealth());
+						
 					displayMessage("Battle Results:\n\n"
 							+ message.getOpponent().getName() + " used "+ message.getActions()[1]+".\nHealth: "+message.getOpponent().getHealth()+"\n\n"
 							+ message.getWarrior().getName() + " used "+ message.getActions()[0]+".\nHealth: "+message.getWarrior().getHealth()+"\n");
@@ -204,9 +202,7 @@ public class Client {
 						ClientCombatantUI.getInstance().updateMyHealth(message.getWarrior().getHealth());
 					} else {
 						ClientCombatantUI.getInstance().updateMyHealth(message.getOpponent().getHealth());
-					}
-
-									
+					}									
 					break;					
 					
 				default:
@@ -226,16 +222,6 @@ public class Client {
 		}
 	} // end method processConnection
 
-//	private void updateHealth(Warrior w){
-//		if(w.getHealth() <= 0){
-//			ClientCombatantUI.getInstance().updateMyHealth(0);
-//			
-//		} else {
-//			ClientCombatantUI.getInstance().updateMyHealth(w.getHealth());
-//			
-//		}
-//	}
-	
 	/**
 	 * To be called when the player is done with the connection. This will close
 	 * the streams and socket connection.
@@ -294,8 +280,7 @@ public class Client {
 		displayMessage("\nWarriors on the battlefield:\n");
 		StringBuilder s = new StringBuilder();
 		for (Warrior w : message.getOpponents()) {
-			s.append(w.toFormattedString());
-			
+			s.append(w.toFormattedString());			
 		}
 		displayMessage(s.toString());
 	}

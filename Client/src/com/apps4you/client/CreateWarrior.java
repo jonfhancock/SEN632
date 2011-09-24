@@ -19,17 +19,22 @@ import javax.swing.border.EmptyBorder;
 import com.apps4you.shared.Origins;
 import com.apps4you.shared.Warrior;
 
+/**
+ * Allows for the input from the user on new warriors
+ * @author Craig Mersereau
+ *
+ */
 public class CreateWarrior extends JDialog {
 
 	
 	private static final long serialVersionUID = -3237504880400716966L;
 	
-	private final JPanel contentPanel = new JPanel();
-	private JTextField nameTextField;
-	private JTextField descTextField;
-	private JButton okButton = new JButton("OK");
-	private JButton cancelButton = new JButton("Cancel");
-	private JComboBox originComboBox = new JComboBox();
+	private final JPanel contentPanel = new JPanel();//Panel that everything goes on
+	private JTextField nameTextField; //The name of the new warrior
+	private JTextField descTextField;//The description of the new warrior
+	private JButton okButton = new JButton("OK"); //The OK button
+	private JButton cancelButton = new JButton("Cancel"); //The Cancel Button
+	private JComboBox originComboBox = new JComboBox(); //The origin of the new warrior
 	
 	
 	/**
@@ -98,44 +103,67 @@ public class CreateWarrior extends JDialog {
 			}
 		} 
 	}
-	
+	/**
+	 * Gets the name of the Newly created Warrior
+	 * @return
+	 */
 	private String getNewName()
 	{
 		return this.nameTextField.getText();
 		
 	}
+	/**
+	 * Get the origin of the newly created warrior
+	 * @return
+	 */
 	private Origins getOrigin()
 	{
 		return (Origins) this.originComboBox.getSelectedItem();
 
 	}
+	/**
+	 * Get the description of the newly created warrior
+	 * @return
+	 */
 	private String getDescription()
 	{
 		return this.descTextField.getText();
 	}
 	
+	/**
+	 * Button Handler that handles the actions for this class
+	 * @author Craig Mersereau
+	 *
+	 */
     private class ButtonHandler implements ActionListener
     {
-
+    	/**
+    	 * The action performed overrirde
+    	 */
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
+			//OK Button was chosen
 			if (e.getSource() == okButton) 
 		    {
+				//Gather the new infomormation
 				Warrior nw = new Warrior(getNewName(), 
 						getOrigin(), 
 						getDescription());
 
-
-						File file = new File(getNewName()+".wdat");
-						if(Consts.LOGGING){
-							System.out.println("Wrote warrior to " + file.getAbsolutePath());
-						}
-						Utils.saveWarriorToFile(nw, file);
-						
-						ClientCombatantUI.getInstance().setWarrior(nw);
+				//Setup a new file for the warrior
+				File file = new File(getNewName()+".wdat");
+				if(Consts.LOGGING){
+					System.out.println("Wrote warrior to " + file.getAbsolutePath());
+				}
+				//Call the Utils to save the new warrior and specify the file to do it
+				Utils.saveWarriorToFile(nw, file);
+				//Set  the corresponding Client UI to have this new warrior
+				ClientCombatantUI.getInstance().setWarrior(nw);
+				//Set the UI visible		
 				CreateWarrior.this.setVisible(false);
 		    }
+			//Cancel out of this UI
 			else if (e.getSource() == cancelButton)
 		    {	    	
 				CreateWarrior.this.dispose();
