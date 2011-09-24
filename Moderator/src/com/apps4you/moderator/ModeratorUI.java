@@ -14,7 +14,6 @@ import javax.swing.border.EmptyBorder;
 /**
  * A UI module that just gives the end user insight into the server
  * @author Craig Mersereau
- *
  */
 public class ModeratorUI extends JFrame {
 
@@ -77,13 +76,12 @@ public class ModeratorUI extends JFrame {
         */
 	   public void actionPerformed (ActionEvent e)
 	   {
-		 //Handle Select button action.
-		    if (e.getSource() == closeButton)
-		    {
-		    	dispose();
-		    	System.exit(0);
-		    }
-	
+		  //The close button was selected.  Clean up and exit
+		  if (e.getSource() == closeButton)
+		  {
+		     dispose();
+		     System.exit(0);
+		  }	
 	   }
 	 }
 }

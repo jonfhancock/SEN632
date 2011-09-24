@@ -10,7 +10,13 @@ import com.apps4you.client.Consts;
 import com.apps4you.shared.Message;
 import com.apps4you.shared.MessageFactory;
 import com.apps4you.shared.Warrior;
-
+/**
+ * Warrior Connection - 
+ * Contains information both about warriors that are connected to the server, but also information about the connection itself
+ * That makes this class very powerful in that it can manage the message to its client counterpart
+ * @author Jon Hancock
+ *
+ */
 public class WarriorConnection implements Runnable {
 	private Warrior mWarrior;
 	private Socket mConnection;
@@ -19,33 +25,50 @@ public class WarriorConnection implements Runnable {
 	private Moderator mModerator;
 	private ModeratorUI mUiInstance;
 	
+	/**
+	 * WarriorConnection constructor
+	 * @param socket The socket that the client is connected on
+	 * @param moderator an link to the moderator for server
+	 * @param uiInstance an instance of the UI for the server
+	 */
 	public WarriorConnection(Socket socket,Moderator moderator,ModeratorUI uiInstance){
 		mConnection = socket;
 		mModerator = moderator;
 		mUiInstance = uiInstance;
+		
 		try {
+			//Initialize and in and out for the socket communication
 			inStream = new ObjectInputStream(socket.getInputStream());
 			outStream = new ObjectOutputStream(socket.getOutputStream());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * Get Method for a socket
+	 * @return Socket that this connectivity will be done on
+	 */
 	public Socket getSocket(){
 		return mConnection;
 	}
+	/**
+	 * Set method to setup the sockets to be used
+	 * @param socket The socket to be setup
+	 */
 	public void setSocket(Socket  socket){
-		mConnection = socket;
+		
+		mConnection = socket; //set the instance mConnection to the socket
 		try {
 
+			//Setup the socket streams
 			outStream = new ObjectOutputStream(socket.getOutputStream());
 			outStream.flush();
 			inStream = new ObjectInputStream(socket.getInputStream());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+	
 	public ObjectOutputStream getOutputStream(){
 		return outStream;
 	}
@@ -64,12 +87,13 @@ public class WarriorConnection implements Runnable {
 		while(!mConnection.isClosed()){
 			try {
 				jsonString = (String) inStream.readObject();
-				System.out.println("Debugging ProcessConnection - Message was: ***"+ jsonString + "***End Message***");
+				if(Consts.LOGGING){
+				System.out.println("Debugging ProcessConnection - Message was: ***"+ jsonString + "***End Message***");}
+				
 				Message message = MessageFactory.fromJSON(jsonString);
 				processMessage(message);
 			}catch (EOFException e){
-//				e.printStackTrace();
-				// The client disconnected, so we will just close the connection from our end.
+
 				try {
 					inStream.close();
 					outStream.close();
@@ -78,14 +102,11 @@ public class WarriorConnection implements Runnable {
 					Moderator.getInstance().broadCastWarriorList();
 					return;
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -103,11 +124,8 @@ public class WarriorConnection implements Runnable {
 			displayMessage("\nNew warrior added: "
 					+ inMessage.getWarrior().getName()); // display
 			mWarrior = inMessage.getWarrior();
-//			this.upgradeWarrior(inMessage.getWarrior());
 			sendData(new Message(Message.MessageCommand.GREETWARRIOR,mWarrior));
 			mModerator.processNewWarrior(inMessage,mWarrior);
-//			sendData(MessageFactory.toJSON(mModerator
-//					.processNewWarrior(inMessage,mWarrior)));
 
 			break;
 			
@@ -120,11 +138,6 @@ public class WarriorConnection implements Runnable {
 			WarriorConnection newOpponent = Moderator.getInstance().findById(inMessage.getOpponent().getWarriorId());
 			newOpponent.sendData(new Message(Message.MessageCommand.SELECTACTION,mWarrior,inMessage.getAction()));
 			break;
-//		case SELECTACTION:
-//			if(Consts.LOGGING){
-//				System.out.println("Debugging ProcessConnection - In SELECTACTION case");}
-//			sendData(new Message(Message.MessageCommand.SELECTACTION,mWarrior));
-//			break;
 		case DEFENSESELECTED:
 			if(Consts.LOGGING){
 				System.out.println("Debugging ProcessConnection - In DEFENSESELECTED case");}
@@ -136,16 +149,6 @@ public class WarriorConnection implements Runnable {
 			Moderator.getInstance().broadCastWarriorList();
 			
 			break;
-//		case HEALTHUPDATE:
-//			if(Consts.LOGGING){
-//				System.out.println("Debugging ProcessConnection - In HEALTHUPDATE case");}
-//			displayMessage("\nBattle Outcome Between: "
-//					+ inMessage.getWarrior().getName() + " and " + inMessage.getOpponent().getName()); // display
-//			displayMessage("\n "
-//					+ inMessage.getWarrior().getName() + " Health is: " + inMessage.getWarrior().getHealth() + " & " + inMessage.getOpponent().getName()+ " Health is: " + inMessage.getOpponent().getHealth() ); // display
-//			//TODO Update the health level of the warriors
-//			
-//			break;
 		default:  //Added for debugging to verify that the message was not falling out via not being handled.
 			if(Consts.LOGGING){
 			System.out.println("Debugging ProcessConnection -Default portion of Switch which does nothing");}
