@@ -47,7 +47,7 @@ public class ThreadedServer {
 	    */
 	   public void execute()
 	   {
-		 //Continuely loop looking for clients that wish to connect  
+		 //Continually loop looking for clients that wish to connect  
 	     while(true){
 	    	 try {
 	    		//Setup a WarriorConnection which is a client who wishes to participate in battles 

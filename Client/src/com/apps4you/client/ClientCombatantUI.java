@@ -239,12 +239,12 @@ public class ClientCombatantUI extends JFrame {
 			if(Consts.LOGGING){
 				System.out.println("\n The selected action as a defense was: "
 						+ battleAction.toString());
-				System.out.println("Warrior is: " + mWarrior.getName());
+				System.out.println("Warrior is: " + mWarrior.getName());}
+			
 			//Send the message that indicates that the defense was selected
 			Message message = new Message(Message.MessageCommand.DEFENSESELECTED,
 					mWarrior, new Actions[]{battleAction,action},whoSelectedMe);
-			client.sendData(message);
-		}
+			client.sendData(message);		
 	}
 
 	/**
