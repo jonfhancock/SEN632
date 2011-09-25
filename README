@@ -1,0 +1,10 @@
+There are three packages in this repo, moderator, client, and shared.
+
+Classes in both the client and moderator packages depend on the shared package.  
+To compile either the client or the moderator, com.apps4you.shared must be in the classpath.
+
+Included are the moderator.jar and client.jar.   
+To run, open one instance of moderator, and as many instances of client as you like.
+There are two warriors included (Arthur Dent.wdat and Marvin.wdat).  
+If you want to have more than two warriors, you must create new ones with the New Warrior button.
+wdat files for the warriors will automatically be saved in the current working directory using the warrior's name.
