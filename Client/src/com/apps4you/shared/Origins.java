@@ -12,7 +12,8 @@ public enum Origins{
 	VOGSPHERE("Vogsphere"),
 	EARTH("Earth"),
 	BREQUINDA("Brequinda"),
-	MAGRATHEA("Magrathea");
+	MAGRATHEA("Magrathea"),
+	SIRIUSTAU("Sirius Tau");
 	
 	//Variable that will hold the selected value of the origin
 	private final String origin;
