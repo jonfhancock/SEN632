@@ -4,7 +4,8 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -67,7 +68,7 @@ public class ClientCombatantUI extends JFrame {
 	 */
 	public File  getWarriorFile(){
 		if (file == null) {
-			file = new File(mWarrior.getName() + ".wdat");
+			file = new File(getJarFolder(),mWarrior.getName() + ".wdat");
 		}
 		return file;
 	}
@@ -301,13 +302,14 @@ public class ClientCombatantUI extends JFrame {
 				//Apply the filter
 				fc.setFileFilter(fileFilter);
 				File f;
-				try {
+//				try {
 					//Setup default start location and open the selected file
-					f = new File(new File(".").getCanonicalPath());
+//					getClass().getResource(".").getPath();
+					f = getJarFolder();
 					fc.setCurrentDirectory(f);
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
+//				} catch (IOException e1) {
+//					e1.printStackTrace();
+//				}
 				//Get the selected file
 				int returnVal = fc.showOpenDialog(ClientCombatantUI.this);
 
@@ -466,5 +468,19 @@ public class ClientCombatantUI extends JFrame {
 	 */
 	public void setWarriorMessage(String s){
 		welcomeLabel.setText(s);
+	}
+	
+	public File getJarFolder() {
+		String decodedPath = ".";
+		String path = getClass().getProtectionDomain().getCodeSource().getLocation().getPath(); 
+		try {
+			decodedPath = URLDecoder.decode(path, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		File jarFile = new File(decodedPath);
+		File basePath = jarFile.getParentFile();
+		return basePath;
 	}
 }

@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -153,7 +155,7 @@ public class CreateWarrior extends JDialog {
 						getDescription());
 
 				//Setup a new file for the warrior
-				File file = new File(getNewName()+".wdat");
+				File file = new File(getJarFolder(),getNewName()+".wdat");
 				if(Consts.LOGGING){
 					System.out.println("Wrote warrior to " + file.getAbsolutePath());
 				}
@@ -171,4 +173,18 @@ public class CreateWarrior extends JDialog {
 		    }
 		}
     }
+
+	public File getJarFolder() {
+		String decodedPath = ".";
+		String path = getClass().getProtectionDomain().getCodeSource().getLocation().getPath(); 
+		try {
+			decodedPath = URLDecoder.decode(path, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		File jarFile = new File(decodedPath);
+		File basePath = jarFile.getParentFile();
+		return basePath;
+	}
 }
